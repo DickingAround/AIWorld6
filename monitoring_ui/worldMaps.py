@@ -86,9 +86,9 @@ def worldMaps_draw(window,xOffset,yOffset,version):
 		return 0
 	speciesTree.prepNewSpeciesLevel()	
 	for line in f.readlines():
-		x,y,e,a,ld,bs = getAgentData(line)
+		x,y,e,a,gen,ld,bs = getAgentData(line)
 		drawAgentBrain(window,x+xOffset,y+yOffset+30,1,bs)
-		speciesTree.saveSpeciesData(e,a,ld,bs)	
+		speciesTree.saveSpeciesData(e,a,gen,ld,bs)	
 		drawAgentEnergy(window,x+xOffset,y+yOffset+350,1,e)
 		drawAgentDecision(window,x+xOffset+300,y+yOffset+350,1,ld)
 	speciesTree.drawSpeciesTree(window,xOffset+300,yOffset+30)

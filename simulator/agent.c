@@ -241,7 +241,7 @@ void agent_GROW(agent *ag) {
 //---------------------------------------
 // Creation and reproduction
 //---------------------------------------
-agent* agent_mallocAgent(int x, int y, float e) {
+agent* agent_mallocAgent(int x, int y, float e, unsigned long gen) {
  agent *a; 
  a = world_mallocAgent(&(sm.w),x,y); 
  if(a == NULL) {
@@ -250,6 +250,7 @@ agent* agent_mallocAgent(int x, int y, float e) {
  }
  a->energy = e;
  a->age = 0;
+ a->generation = gen;
  a->facingDirection = UP; 
  return a;
 }
@@ -262,7 +263,7 @@ void agent_mallocAgent_fromScratch(int x, int y, float e) {
   agent_kill(sm.w.locs[x][y].a);
   sm.smon.killedBySeeding += 1;  
  }
- a = agent_mallocAgent(x,y,e);
+ a = agent_mallocAgent(x,y,e,0);
  if(a == NULL)
   return;
  brain_makeFromScratch(&(a->br));
@@ -284,7 +285,7 @@ agent* agent_mallocAgent_checkAndMake(agent *a) {
  }  
  if( x > 0 ) { //We did find a location to put it in 
   e = a->energy*AG_REPLICATION_GIVE;
-  newA = agent_mallocAgent(x,y,e);
+  newA = agent_mallocAgent(x,y,e,(a->generation)+1);
   if(newA != NULL)
    a->energy -= e;
  }
@@ -308,14 +309,14 @@ void agent_print(agent *a) {
 // SAVING AND LOADING
 //--------------------
 void agent_save(agent *a, FILE *file) {
- fprintf(file,"AG xLoc,%i yLoc,%i energy,%f facingDirection,%i latestDecision,%i age,%i br,",a->xLoc,a->yLoc,a->energy,a->facingDirection,a->br.latestDecision,a->age);
+ fprintf(file,"AG xLoc,%i yLoc,%i energy,%f facingDirection,%i latestDecision,%i age,%lu generation,%lu br,",a->xLoc,a->yLoc,a->energy,a->facingDirection,a->br.latestDecision,a->age,a->generation);
  brain_save(&(a->br),file);
  fprintf(file,"\n");
 }
 
 void agent_load(char *str, int strLength) {
  agent *a;
- int ptr, namePtr, xLoc, yLoc, facingDirection, age = -1;
+ int ptr, namePtr, xLoc, yLoc, facingDirection, age = 0, generation = 0;
  float energy;
  char name[20];
  ptr = 2;
@@ -332,6 +333,8 @@ void agent_load(char *str, int strLength) {
     yLoc = atoi(str+ptr);
    if(strcmp(name,"age") == 0)
     age = atoi(str+ptr);
+   if(strcmp(name,"generation") == 0)
+    generation = atoi(str+ptr);
    if(strcmp(name,"facingDirection") == 0)
     facingDirection = atoi(str+ptr);
    if(strcmp(name,"energy") == 0)
@@ -346,6 +349,7 @@ void agent_load(char *str, int strLength) {
      a->energy = energy;
      a->facingDirection = facingDirection;
      a->age = age;
+     a->generation = generation;
      brain_load(&(a->br),str+ptr,strLength-ptr);
     }
    }  

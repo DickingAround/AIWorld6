@@ -10,7 +10,8 @@ typedef struct agent
  //float signals[AG_SIGNAL_NUMB];
  float energy; 
  brain br;
- int age;
+ unsigned long age;
+ unsigned long generation; 
 } agent; 
 
 void agent_makeDecision(agent *ag);

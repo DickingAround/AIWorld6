@@ -4,7 +4,7 @@ class statGraphs:
 	iterationsSeen = 0
 	statList = [0] * 100
 def statGraphs_draw(window,x,y,xSize,ySize):
-	stats = ['aveEnergy','attacks','replications','attackFailRate','killedByAttacks','killedByStarving']
+	stats = ['agents','attacks','attackFailRate','killedByAttacks','killedByStarving','aveEnergy']
 	for i in range(0,len(stats)):
 		statGraphs_drawAGraph(window,stats[i],x,y+i*ySize/len(stats),xSize,ySize/len(stats))
 	return 0

@@ -116,7 +116,9 @@ def getAgentData(line):
 				bs = stat[1]
 			if(stat[0] == 'age'):
 				a = int(stat[1])
-		return [x,y,e,a,ld,bs]
+			if(stat[0] == 'generation'):
+				gen = int(stat[1])
+		return [x,y,e,a,gen,ld,bs]
 	except:
 		print "Failed to understand agent"
 		return [-1,-1,-1,-1,-1,-1]

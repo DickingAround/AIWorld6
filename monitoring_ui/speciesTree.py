@@ -13,6 +13,7 @@ class speciesTree():
 	agentReplicates = [0 for x in xrange(width)]
 	agentEnergy = [0 for x in xrange(width)]
 	agentAge = [0 for x in xrange(width)]
+	agentGeneration = [0 for x in xrange(width)]
 
 def resetSpeciesStatCounters():
 	for i in range(0,speciesTree.width):
@@ -23,6 +24,8 @@ def resetSpeciesStatCounters():
 		speciesTree.agentReplicates[i] = 0
 		speciesTree.agentEnergy[i] = 0
 		speciesTree.agentAge[i] = 0
+		speciesTree.agentGeneration[i] = 0
+
 def prepNewSpeciesLevel():
 	#Clear this line
 	speciesTree.iterationsSeen += 1 
@@ -32,12 +35,13 @@ def prepNewSpeciesLevel():
 		speciesTree.agentCount[speciesTree.iterationsSeen][i] = 0
 	resetSpeciesStatCounters()
 
-def saveSpeciesData(e,a,ld,bs):
+def saveSpeciesData(e,a,gen,ld,bs):
 	numb = rgbToNumber(getBrainColor(bs))*speciesTree.width/maxRGBNumber
 	speciesTree.agentCount[speciesTree.iterationsSeen][numb] += 1
 	speciesTree.agentEnergy[numb] += e
 	speciesTree.agentAge[numb] += a
-	if(ld < 5):
+	speciesTree.agentGeneration[numb] += gen
+	if(ld < 5):#This is just an encoding of the last decision
 		speciesTree.agentMoves[numb] += 1
 	elif(ld < 6):
 		speciesTree.agentAttacks[numb] += 1
@@ -60,11 +64,8 @@ def detectSpeciesInGivenRound(roundsAgo):
 	speciesNumber = -1
 	gapNeeded = 5
 	minNumb = 10
-	#distanceFromSpecies = 0
 	waitingToSeeNewSpecies = False
 	speciesList = []
-	#totalCountForSpecies = 0
-	#Search for the first section where there's no species
 	distanceFromSpecies = 0
 	startingSpot = 0
 	#print speciesTree.agentCount[0]
@@ -111,20 +112,25 @@ def drawSpeciesStats(window,x,y,species,i):
 		energyLabel = "AveEnergy: %f"%(float(sum(speciesTree.agentEnergy[species[0]:species[1]]))/float(species[2]))
 		attackLabel = "AttackRate: %f"%(float(sum(speciesTree.agentAttacks[species[0]:species[1]]))/float(species[2]))
 		ageLabel = "Age: %f"%(float(sum(speciesTree.agentAge[species[0]:species[1]]))/float(species[2]))
+		generationLabel = "Generation: %f"%(float(sum(speciesTree.agentGeneration[species[0]:species[1]]))/float(species[2]))
 	else:	#The color from the max can wrap around past the min
 		color = convertCountIndexToRGB(int(((species[0]+species[1]+speciesTree.width)/2.0)%speciesTree.width))
 		agentsLabel = "Agents: %i"%species[2]
 		energyLabel = "AveEnergy: %f"%(float(sum(speciesTree.agentEnergy[:species[1]])+sum(speciesTree.agentEnergy[species[0]:]))/float(species[2]))
 		attackLabel = "AttackRate: %f"%(float(sum(speciesTree.agentAttacks[:species[1]])+sum(speciesTree.agentAttacks[species[0]:]))/float(species[2]))
 		ageLabel = "Age: %f"%(float(sum(speciesTree.agentAge[:species[1]])+sum(speciesTree.agentAge[species[0]:]))/float(species[2]))
+		generationLabel = "Generation: %f"%(float(sum(speciesTree.agentGeneration[:species[1]])+sum(speciesTree.agentGeneration[species[0]:]))/float(species[2]))
+	numbStats = 5
 	sur = font.render(agentsLabel,1,color)
-	window.blit(sur,(x,y+(4*fontSize)*i))
+	window.blit(sur,(x,y+(numbStats*fontSize)*i))
 	sur = font.render(energyLabel,1,color)
-	window.blit(sur,(x,y+fontSize+(4*fontSize)*i))
+	window.blit(sur,(x,y+fontSize+(numbStats*fontSize)*i))
 	sur = font.render(attackLabel,1,color)
-	window.blit(sur,(x,y+fontSize*2+(4*fontSize)*i))
+	window.blit(sur,(x,y+fontSize*2+(numbStats*fontSize)*i))
 	sur = font.render(ageLabel,1,color)
-	window.blit(sur,(x,y+fontSize*3+(4*fontSize)*i))
+	window.blit(sur,(x,y+fontSize*3+(numbStats*fontSize)*i))
+	sur = font.render(generationLabel,1,color)
+	window.blit(sur,(x,y+fontSize*4+(numbStats*fontSize)*i))
 
 #If a species has been around for 5 data-points and is at least 5 colors distant from any other, it's a species.
 #Every agent must be part of a species. The most-agents color is the color.	
