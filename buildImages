@@ -1,0 +1,4 @@
+#mogrify -resize 640x480 ./images/*.png
+#convert -delay 4 -loop 0 ./images/*.png ./images/newimage.gif
+#avconv -r 5 -i ./images/%04d.png ./images/movie.mp4
+avconv -r 5 -f image2 -i ./images_and_video/%04d.png -vcodec libx264 -crf 1 -r 24 movie.mov

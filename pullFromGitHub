@@ -1,0 +1,2 @@
+git fetch --all
+git fetch --hard origin/master

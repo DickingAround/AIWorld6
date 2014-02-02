@@ -1,0 +1,2 @@
+rm -f ./images_and_video/*
+rm -f ./data_from_simulations/*

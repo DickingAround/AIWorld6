@@ -1,0 +1,8 @@
+mv ./data_from_simulations/* ../tmp/
+#git branch
+git add *
+git commit -m "$1"
+git checkout master
+git merge devo
+git checkout devo
+

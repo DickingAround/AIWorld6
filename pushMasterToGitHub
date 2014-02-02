@@ -1,0 +1,4 @@
+git push -u github master
+git add/rm *
+git add -u
+git push origin master

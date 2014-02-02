@@ -1,0 +1,4 @@
+mv ./data_from_simulations/* ../tmp/
+#git branch
+git add *
+git commit -m "$1"
