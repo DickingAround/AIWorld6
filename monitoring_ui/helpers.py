@@ -33,37 +33,37 @@ import sys
 	except:
 		return (0,0,0)
 '''
-maxRGBNumber = 1535
+maxRGBNumber = 1530
 rgbToNumberDict = {}
 numberToRGBDict = {}
 #TODO: I know this function is slightly broken, try 0,255,254->254 and then 0,255,255->256; it's off by 1 on each round. The rounds are actually 255 wide, not 256 because they overlap with the next. But it's not a big functional difference.
 def initRGBToNumberDicts():
 	#have to cover every iteration or both single and doulbe 0s but with one always saturated
-	#b -> 255 (0  ,255,255) 0-255
-	#g -> 0   (0  ,0  ,255) 256-511
-	#r -> 255 (255,0  ,255) 512-767
-	#b -> 0	  (255,0  ,0  ) 768-1023
-	#g -> 255 (255,255,0  ) 1024-1279
-	#r -> 0   (0  ,255,0  ) 1280-1535
+	#b -> 255 (0  ,255,1  )(0  ,255,255) 0-254  -- this one is actually 265 wide, others are not becuase of overlap
+	#g -> 0   (0  ,254,255)(0  ,0  ,255) 255-509
+	#r -> 255 (1  ,0  ,255)(255,0  ,255) 510-764
+	#b -> 0	  (255,0  ,254)(255,0  ,0  ) 765-1019
+	#g -> 255 (255,1  ,0  )(255,255,0  ) 1020-1274
+	#r -> 0   (254,255,0  )(0  ,255,0  ) 1275-1529
 	for i in range(0,maxRGBNumber):
-		if(i < 256):
-			rgbToNumberDict[     (0    ,255  ,i)] = i
-			numberToRGBDict[i] = (0    ,255  ,i)
-		elif(i < 512):
-			rgbToNumberDict[     (0    ,255-(i-256),255)] = i
-			numberToRGBDict[i] = (0    ,255-(i-256),255)
-		elif(i < 768):
-			rgbToNumberDict[     (i-512    ,0    ,255)] = i
-			numberToRGBDict[i] = (i-512    ,0    ,255)
-		elif(i < 1024):
-			rgbToNumberDict[     (255  ,0    ,255-(i-768))] = i
-			numberToRGBDict[i] = (255  ,0    ,255-(i-768))
-		elif(i < 1280):
-			rgbToNumberDict[     (255  ,i-1024    ,0)] = i
-			numberToRGBDict[i] = (255  ,i-1024    ,0)
-		else: #1536
-			rgbToNumberDict[     (255-(i-1280),255  ,0)] = i
-			numberToRGBDict[i] = (255-(i-1280),255  ,0)
+		if(i < 255):
+			rgbToNumberDict[     (0    ,255  ,i+1)] = i
+			numberToRGBDict[i] = (0    ,255  ,i+1)
+		elif(i < 510):
+			rgbToNumberDict[     (0    ,255-(i-254),255)] = i
+			numberToRGBDict[i] = (0    ,255-(i-254),255)
+		elif(i < 765):
+			rgbToNumberDict[     (i-509    ,0    ,255)] = i
+			numberToRGBDict[i] = (i-509    ,0    ,255)
+		elif(i < 1020):
+			rgbToNumberDict[     (255  ,0    ,255-(i-764))] = i
+			numberToRGBDict[i] = (255  ,0    ,255-(i-764))
+		elif(i < 1275):
+			rgbToNumberDict[     (255  ,i-1019    ,0)] = i
+			numberToRGBDict[i] = (255  ,i-1019    ,0)
+		else: #1530
+			rgbToNumberDict[     (255-(i-1274),255  ,0)] = i
+			numberToRGBDict[i] = (255-(i-1274),255  ,0)
 initRGBToNumberDicts()
 def rgbToNumber(rgb):
 	return rgbToNumberDict[rgb]

@@ -62,13 +62,14 @@ def saveSpeciesData(e,a,gen,ld,bs):
 
 def detectSpeciesInGivenRound(roundsAgo):
 	speciesNumber = -1
-	gapNeeded = 5
-	minNumb = 10
+	gapNeeded = 5 #Min number of speaces between colors to count as different species
+	minNumb = 10 #Min number for this to be counted as occupied
 	waitingToSeeNewSpecies = False
 	speciesList = []
 	distanceFromSpecies = 0
 	startingSpot = 0
 	#print speciesTree.agentCount[0]
+	#Go till you find a detectable species, starting spot will be the exact number where a new one begins
 	for i in range(0,speciesTree.width):
 		count = speciesTree.agentCount[(speciesTree.iterationsSeen-roundsAgo)%speciesTree.duration][i]
 		if(count <= minNumb):
@@ -76,20 +77,20 @@ def detectSpeciesInGivenRound(roundsAgo):
 		else:
 			distanceFromSpecies = 0
 		if(distanceFromSpecies >= gapNeeded):
-			startingSpot = i
+			startingSpot = i - 1
 			waitingToSeeNewSpecies = True
 			break	
 	#print "starting at %i, going to %i"%(startingSpot,speciesTree.width+startingSpot+1)
 	if(not waitingToSeeNewSpecies): #Didn't find a gap
 		return []
-	#Then find the species
-	for i in range(startingSpot,speciesTree.width+startingSpot+1): #TODO: What about the cases where thie wraps around???
+	#Then start parsing to find the species
+	for i in range(startingSpot,speciesTree.width+startingSpot+gapNeeded):
 		count = speciesTree.agentCount[(speciesTree.iterationsSeen-roundsAgo)%speciesTree.duration][i%speciesTree.width]
 		if(count <= minNumb): #No agents here
-			distanceFromSpecies += 1
 			if(distanceFromSpecies >= gapNeeded and (not waitingToSeeNewSpecies)): #end of a species
 				waitingToSeeNewSpecies = True #Start looking for a new speices
-				speciesList[speciesNumber][1] = (i - gapNeeded)%speciesTree.width
+				speciesList[speciesNumber][1] = (i - gapNeeded)%speciesTree.width #The max is one past the real number
+			distanceFromSpecies += 1
 		else: #Agents here
 			distanceFromSpecies = 0
 			if(waitingToSeeNewSpecies): #New species found! (unless it wraps around)
