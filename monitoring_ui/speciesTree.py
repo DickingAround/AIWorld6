@@ -5,7 +5,7 @@ from helpers import *
 class speciesTree():
 	iterationsSeen = -1 #Get incremented immediately on prep
 	duration = 300
-	width = 298#Just a bit different to create errors if there are any
+	width = 383 #If the colors are at 1530 grainularity, this will be about 4 different collors into one bin
 	agentCount  = [[0 for x in xrange(width)] for x in xrange(duration)] 	
 	agentAttacks = [0 for x in xrange(width)]
 	agentGrows = [0 for x in xrange(width)]

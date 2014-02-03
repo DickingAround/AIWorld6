@@ -15,10 +15,13 @@ def getLocData(loc):
 		print loc
 		return 0,0,0,0,0,0,0
 
-def drawLocSignal(window,x,y,r,g,b):
+def drawLocSignal(window,x,y,p,r,g,b):
 	#print r,g,b
 	try:
-		window.set_at((x,y),(int((r+1)*127),int((g+1)*127),int((b+1)*127)))
+		if(p < -0.5): #Impassable terrain
+			window.set_at((x,y),(255,255,255))
+		else:
+			window.set_at((x,y),(int(abs(r)*255),int(abs(g)*255),int(abs(b)*255)))
 	except:
 		print "Land maps crashed"
 		print x,y,r,g,b
@@ -29,5 +32,5 @@ def drawLandMaps(window,xOffset,yOffset,version):
 		return 0
 	for loc in f.readlines():
 		x,y,p,f,s1,s2,s3 = getLocData(loc.strip())
-		if(x != 0 and y != 0 and p != 0 and f != 0):
-			drawLocSignal(window,int(x)+xOffset,int(y)+yOffset,float(s1),float(s2),float(s3))
+		if(not(x == 0 and y == 0 and p == 0 and f == 0)): #If the terrain was parsable
+			drawLocSignal(window,int(x)+xOffset,int(y)+yOffset,float(p),float(s1),float(s2),float(s3))

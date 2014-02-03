@@ -92,7 +92,7 @@ def worldMaps_draw(window,xOffset,yOffset,version):
 		drawAgentEnergy(window,x+xOffset,y+yOffset+350,1,e)
 		drawAgentDecision(window,x+xOffset+300,y+yOffset+350,1,ld)
 	speciesTree.drawSpeciesTree(window,xOffset+300,yOffset+30)
-	speciesTree.drawDetectedSpecies(window,xOffset+600,yOffset+30)
+	speciesTree.drawDetectedSpecies(window,xOffset+690,yOffset+30)
 	landMaps.drawLandMaps(window,xOffset+600,yOffset+350,version)
 	font = pygame.font.Font(None,25)
 	label = "Hash of agent's neural network"
