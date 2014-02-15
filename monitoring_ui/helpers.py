@@ -1,42 +1,13 @@
 import pygame
 import time
 import sys
-'''def getBrainColor(brainString):
-	#L1;4:5.4:3;L2;3:4:2,2	
-	try:
-		parts = brainString.split(';')
-		level = 0
-		r = 0
-		g = 0
-		b = 0
-		for part in parts:
-			if(part == "L1"):
-				level = 1
-			elif(part == "L2"):
-				level = 2
-			else:
-				conn = part.split(':')
-				if(level == 1):
-					r += int(conn[0])
-					b += int(conn[2])
-				elif(level == 2):
-					g += int(conn[2])
-		r = (r/2)%255
-		g = (g/2)%255	
-		b = (b/2)%255
-		#Saturate the colors, where at least 1 is 255 so that we can render the species tree using the saturation of the colors to show population %s
-		m = max(r,g,b)
-		r = (int)(r * 255.0/m)
-		g = (int)(g * 255.0/m)
-		g = (int)(b * 255.0/m)
-		return (r,g,b)
-	except:
-		return (0,0,0)
-'''
+
+# -----------------
+# -- BRAIN COLOR --
+# -----------------
 maxRGBNumber = 1530
 rgbToNumberDict = {}
 numberToRGBDict = {}
-#TODO: I know this function is slightly broken, try 0,255,254->254 and then 0,255,255->256; it's off by 1 on each round. The rounds are actually 255 wide, not 256 because they overlap with the next. But it's not a big functional difference.
 def initRGBToNumberDicts():
 	#have to cover every iteration or both single and doulbe 0s but with one always saturated
 	#b -> 255 (0  ,255,1  )(0  ,255,255) 0-254  -- this one is actually 265 wide, others are not becuase of overlap
@@ -93,7 +64,7 @@ def getBrainColor(brainString):
 				elif(level == 2):
 					i += 1
 					tot += int(conn[0])%50
-					tot += ((int(conn[2]))*i)%50 #There are few outputs
+					tot += ((int(conn[2]))*i)%50 #There are few outputs, but why the fuck use 'i'?
 		return numberToRGB(int(tot/2.0)%maxRGBNumber)
 	except:
 		print "GetBrainColor: Unexpected error: %i,%i,%i"%(tot,maxRGBNumber,int(tot/4.0)%maxRGBNumber), sys.exc_info()[0]
@@ -123,6 +94,38 @@ def getAgentData(line):
 		print "Failed to understand agent"
 		return [-1,-1,-1,-1,-1,-1]
 
+# -----------
+# -- STATS --
+# -----------
+def getStats():
+	try:
+		listOfStats = []
+		f = open("./data_from_simulations/monitor.txt")
+		line = list(f)[-1] #We only want the last line
+		pairs = line.split(' ');
+		for pair in pairs:
+			stat = pair.split(',')
+			if(len(stat) >= 2):
+				listOfStats.append([stat[0],stat[1]])
+		return listOfStats
+	except:
+		print "UI Error: I'm not finding the monitor file"
+		return 0 #The file might be corrupt because we're in the middle of reading it. That's ok, we'll just wait.
+
+def findStat(name,statList):
+	try:
+		for stat in statList:
+			if(stat[0] == name):
+				return stat[1]
+		print "UI Error: Didn't find the stat you wanted"
+		return None
+	except:
+		print "IU Error: Took an error when looking up a stat"
+		return None	
+
+# -------------------
+# -- FILE HANDLING --
+# -------------------
 def getLocationFile(version):
 	try:
 		if(version == 'a'):

@@ -20,8 +20,10 @@ typedef struct brain
  float multL2[AG_CONNS_L2];
  float mutationRate;
  unsigned char latestDecision;
+ unsigned int speciesHash;
 } brain; 
 
+void brain_computeHash(brain *b);
 void brain_makeFromScratch(brain *newB);
 void brain_makeFromAsex(brain *newB, brain *b);
 void brain_makeFromSex(brain *newB, brain *b, brain *c);

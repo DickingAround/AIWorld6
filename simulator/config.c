@@ -1,5 +1,9 @@
 #define EXP_NO_COMMUNICATION
 
+//GO_SLOW makes the system wait 20 seconds between iterations
+//#define GO_SLOW
+
+//Simulation settings
 #define NUMBER_OF_THREADS 4
 #define SIM_ITERATIONS 50000000
 #define SIM_REPORT_INTERVAL 5000
@@ -8,7 +12,8 @@
 #define SIM_SEED_DURATION 40000
 #define SIM_SEED_ENERGY 20
 #define SIM_SEED_SIZE 30
-
+#define NUMBER_OF_SPECIES_RECORDED 3
+//World settings
 #define AG_TOTAL_ALLOWED 60000
 #define AG_MAX_BUFFER_NEEDED 50000
 #define AG_STATUS_ALIVE 1
@@ -19,9 +24,8 @@
 #define PASS_IMPASSIBLE -1
 #define WORLD_BORDER 3
 #define WORLD_SIZE 300
-
+//Agent settings
 #define AG_MUTATION_RATE 0.10
-
 #define WORLD_PASS_COST_MULT 0.1
 #define WORLD_FOOD_MULT 1
 #define AG_MAX_ENERGY 10000
@@ -34,7 +38,6 @@
 #define AG_GROW_COST 0.1
 #define AG_REPLICATION_COST 0.5
 #define AG_REPLICATION_GIVE 0.3
-
 //Outputs from the brain
 #define AG_OUTPUTS 11
 #define AG_OUTPUTS_DECISIONS 9
@@ -79,9 +82,15 @@
 #define AG_CONNS_L1 500
 #define AG_CONNS_L2 500
 #define AG_CONN_END 130
-//#define AG_CONN_UNUSED 131
+//Species detection systems
+//500*50*4 = 100,000
+#define AG_HASH_MOD 50
+#define AG_MAX_HASH 100000
+#define SPECIES_DETECTION_POPULATION_MIN 10
+#define SPECIES_DETECTION_POPULATION_DIF_MIN 5
+#define SPECIES_MAX_TYPES 1000
+//Values for making decisions
 #define AG_INT_CONVERSION 0xFFFF
-
 #define UP 0
 #define RIGHT 1
 #define DOWN 2

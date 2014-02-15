@@ -58,28 +58,7 @@ def drawAgentBrain(window,x,y,size,brainString):
 	color = getBrainColor(brainString)
 #	pygame.draw.rect(window,color,(xLoc*size+xOffset,yLoc*size+yOffset,size,size))
 	window.set_at((x,y),color)
-'''def getAgentData(line):
- 	try:
-		pairs = line.split(' ')
-		for pair in pairs:
-			stat = pair.split(',')
-			if(stat[0] == 'xLoc'):
-				x = int(stat[1])
-			if(stat[0] == 'yLoc'):
-				y = int(stat[1])
-			if(stat[0] == 'energy'): 
-				e = float(stat[1])
-			if(stat[0] == 'latestDecision'):
-				ld = int(stat[1])
-			if(stat[0] == 'br'):
-				bs = stat[1]
-			if(stat[0] == 'age'):
-				a = int(stat[1])
-		return [x,y,e,a,ld,bs]
-	except:
-		print "Failed to understand agent"
-		return [-1,-1,-1,-1,-1,-1]
-'''
+
 def worldMaps_draw(window,xOffset,yOffset,version):
 	f = getWorldFile(version)
 	if( f == 0):

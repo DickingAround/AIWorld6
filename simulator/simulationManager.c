@@ -1,6 +1,7 @@
 #ifndef SIMULATIONMANAGER_C
 #define SIMULATIONMANAGER_C 
 #include <time.h>
+#include <unistd.h>
 #include "simulationManager.h"
 #include "simulationManager_thread.c"
 #include "threadManager.c"
@@ -79,6 +80,9 @@ void simulationManager_runIterations_advanced(int iterations, int seedInterval, 
   timerAction = clock();
   simulationManager_runAgentActions(); //Single-threaded
   actionMS += clock() - timerAction;
+  #ifdef GO_SLOW
+  sleep(20);
+  #endif
  } 
 }
 

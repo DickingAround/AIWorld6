@@ -52,6 +52,22 @@ void brain_makeDecision(brain *br)
 }
 
 //----------------------
+// Compute Species Hash
+//----------------------
+void brain_computeHash(brain *b) {
+ int i = 0;
+ int tot = 0;
+ while(inL1[i] != AG_CONN_END) {
+  tot += inL1[i]%AG_HASH_MOD + outL1[i]%AG_HASH_MOD; //We use a mod so later conn numbers aren't too high and take too much weight
+  i++;
+ } 
+ while(inL2[i] != AG_CONN_END) {
+  tot += inL2[i]%AG_HASH_MOD + (outL2[i]*10)%AG_HASH_MOD;
+  i++;
+ } 
+ b->hash = tot; 
+}
+//----------------------
 // Replication: Seeding 
 //----------------------
 void brain_fillRestWithNoOps(unsigned char *in, unsigned char *out, int connMax, int i) {
@@ -63,6 +79,7 @@ void brain_makeFromScratch(brain *newB) {
  newB->mutationRate = AG_MUTATION_RATE;
  brain_makeConnLvlFromScratch(newB->inL1,AG_INPUTS,newB->outL1,AG_MID_NODES,newB->multL1,newB->mutationRate,AG_CONNS_L1);  
  brain_makeConnLvlFromScratch(newB->inL2,AG_MID_NODES,newB->outL2,AG_OUTPUTS,newB->multL2,newB->mutationRate,AG_CONNS_L2);  
+ brain_computeHash(newB);
 }
 void brain_makeConnLvlFromScratch(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax) {
  int i;
@@ -84,6 +101,7 @@ void brain_makeFromAsex(brain *newB, brain *b) {
  newB->mutationRate = b->mutationRate;
  brain_makeConnLvlFromAsex(newB->inL1,AG_INPUTS,newB->outL1,AG_MID_NODES,newB->multL1,newB->mutationRate,AG_CONNS_L1,b->inL1,b->outL1,b->multL1); 
  brain_makeConnLvlFromAsex(newB->inL2,AG_MID_NODES,newB->outL2,AG_OUTPUTS,newB->multL2,newB->mutationRate,AG_CONNS_L2,b->inL2,b->outL2,b->multL2); 
+ brain_computeHash(newB);
 }
 
 void brain_makeConnLvlFromAsex(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, unsigned char *oldIn, unsigned char *oldOut, float *oldMult) {
@@ -173,6 +191,7 @@ void brain_makeFromSex(brain *newB, brain *b, brain *c) {
  newB->mutationRate = b->mutationRate;
  brain_makeConnLvlFromSex(newB->inL1,AG_INPUTS,newB->outL1,AG_MID_NODES,newB->multL1,newB->mutationRate,AG_CONNS_L1,b->inL1,b->outL1,b->multL1,c->inL1,c->outL1,c->multL1); 
  brain_makeConnLvlFromSex(newB->inL2,AG_MID_NODES,newB->outL2,AG_OUTPUTS,newB->multL2,newB->mutationRate,AG_CONNS_L2,b->inL2,b->outL2,b->multL2,c->inL2,c->outL2,c->multL2); 
+ brain_computeHash(newB);
 }
 void brain_makeConnLvlFromSex(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, unsigned char *oldInA, unsigned char *oldOutA, float *oldMultA, unsigned char *oldInB, unsigned char *oldOutB, float *oldMultB) {
  int i = 0; //There is an important edge case here where the system might skip the rest of the connections in a brain if there's only a single no-op at the end.
@@ -219,7 +238,8 @@ void brain_print(brain *b) {
 }
 void brain_save(brain *b, FILE *file) {
  //TODO: We're not saving the mutation rate!!!
- int i = 0; 
+ int i = 0;
+ fprintf(file,"M%f;H%i;",b->mutationRate,b->hash); 
  fprintf(file,"L1");
  while(b->inL1[i] != AG_CONN_END) {
   fprintf(file,";%i:%f:%i",b->inL1[i],b->multL1[i],b->outL1[i]); 
@@ -238,9 +258,26 @@ void brain_load(brain *b, char *str, int strLength) {
  b->mutationRate = AG_MUTATION_RATE;
  ptr = 0;
  while(str[ptr] != '\n' && ptr < strLength) { //This is clearly the beginning of a designator
-  if(str[ptr] == 'L' && str[ptr+1] == '1') {
-   lvl = 1;
+  if(str[ptr] == 'M') {
+   ptr += 1;
+   b->mutationRate = atof(str+ptr);
+   while(str[ptr] != ';')
+    ptr++;
+  }
+  else if(str[ptr] == ';' && str[ptr+1] == 'H') {
    ptr += 2;
+   //b->hash = atoi(str+ptr); We don't load the hash rate, we recompute it just in case the computation function changes
+   while(str[ptr] != ';')
+    ptr++;
+  }
+  else if(str[ptr] == 'L' && str[ptr+1] == '1') { //Check for the ';' or missing it since there's actually two file formats, one starts with L and the other starts with the M and H stuff
+   lvl = 1;
+   ptr += 2; //Advance the pointer to the ';' character
+   brainPtr = 0;
+  }
+  else if(str[ptr] == ';' && str[ptr+1] == 'L' && str[ptr+2] == '1' ) { //Check for the ';' or missing it since there's actually two file formats, one starts with L and the other starts with the M and H stuff
+   lvl = 1;
+   ptr += 3; //Advance the pointer to the ';' character
    brainPtr = 0;
   }
   else if(str[ptr] == ';' && str[ptr+1] == 'L' && str[ptr+2] == '2') {
@@ -288,6 +325,7 @@ void brain_load(brain *b, char *str, int strLength) {
   }
  } 
  brain_fillRestWithNoOps(b->inL2,b->outL2,AG_CONNS_L2,brainPtr);
+ brain_computeHash(b);
 }
 //---------
 // Testing 

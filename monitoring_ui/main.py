@@ -40,8 +40,9 @@ if __name__ == '__main__':
 		version = checkDataVersion()
 		if(version != 'x'):
 			clearDisplay(window)
+			autoCapture.checkForAndSaveSpecialSituations()
 			statList.statList_draw(window,10,10)
-			worldMaps.worldMaps_draw(window,375,0,version) #Draw world will clear the display if needed
+			worldMaps.worldMaps_draw(window,375,0,version) #NOLONGERTRUE? Draw world will clear the display if needed
 			statGraphs.statGraphs_draw(window,175,10,200,650)	
 			pygame.display.flip()	
 			if(imgNumb < imgMax):
