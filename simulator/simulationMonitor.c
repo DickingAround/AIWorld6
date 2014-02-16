@@ -227,13 +227,30 @@ int simulationMonitor_findSpecies(int speciesList[][3], int numberOfPossibleHash
  return speciesNumber;
 }
 
+void simulationMonitor_clear() {
+ int i,j;
+ sm.smon.addedCon = 0;
+ sm.smon.didntAddCon = 0;
+ sm.smon.removedCon = 0;
+ sm.smon.didntRemoveCon = 0;
+ for(i=0;i<AG_MAX_HASH;i++) {
+  for(j=0;j<SPECIES_NUMBER_OF_METRICS;j++) {
+   sm.smon.perHashMetrics[i][j] = 0;
+  }
+ }
+ for(i=0;i<SPECIES_TYPES_MAX;i++) {
+  for(j=0;j<SPECIES_NUMBER_OF_METRICS;j++) {
+   sm.smon.perSpeciesMetrics[i][j] = 0; 
+  }
+ }
+}
 void simulationMonitor_collectSpeciesMetrics(int speciesList[][3], int numberOfSpecies) {
  int speciesNumber,metricNumber,hashNumber;
  for(speciesNumber=0; speciesNumber < numberOfSpecies; speciesNumber++) {
-  //Clear the species metrics from last time
-  for(metricNumber =0; metricNumber < SPECIES_NUMBER_OF_METRICS; metricNumber++) {
+  //Clear the species metrics from last time - Don't need to anymore since the clear function works again
+  /*for(metricNumber =0; metricNumber < SPECIES_NUMBER_OF_METRICS; metricNumber++) {
    sm.smon.perSpeciesMetrics[speciesNumber][metricNumber] = 0; 
-  } 
+  } */
   //Compute the species metrics by adding up the metrics from all the hashes in that range
   for(hashNumber = speciesList[speciesNumber][0]; hashNumber < speciesList[speciesNumber][1]; hashNumber++) {
    for(metricNumber=0; metricNumber < SPECIES_NUMBER_OF_METRICS; metricNumber++) {
@@ -292,12 +309,12 @@ void simulationMonitor_writeMetricsFiles(int numberOfSpecies) {
   //Decision specific
   if(simulationMonitor_getMovesForSpecies(speciesNumber) > 0)
    fprintf(outFile," moveFailed,%f",((float)simulationMonitor_getFailedMovesForSpecies(speciesNumber))/((float)simulationMonitor_getMovesForSpecies(speciesNumber)));
-  if((simulationMonitor_getASexualReplicationForSpecies(speciesNumber) > 0) && (simulationMonitor_getASexualReplicationForSpecies(speciesNumber) > 0 ))
-   fprintf(outFile," replicationFailed,%f",((float)simulationMonitor_getFailedReplicationForSpecies(speciesNumber))/((float)simulationMonitor_getASexualReplicationsForSpecies(speciesNumber) +simulationMonitor_getSexualReplicationsForSpecies(speciesNumber)));
+  if((simulationMonitor_getASexualReplicationsForSpecies(speciesNumber) > 0) && (simulationMonitor_getASexualReplicationsForSpecies(speciesNumber) > 0 ))
+   fprintf(outFile," replicationFailed,%f",((float)simulationMonitor_getFailedReplicationsForSpecies(speciesNumber))/((float)simulationMonitor_getASexualReplicationsForSpecies(speciesNumber) +simulationMonitor_getSexualReplicationsForSpecies(speciesNumber)));
   if(simulationMonitor_getAttacksForSpecies(speciesNumber) > 0)
    fprintf(outFile," attackFailed,%f",((float)simulationMonitor_getFailedAttacksForSpecies(speciesNumber))/((float)simulationMonitor_getAttacksForSpecies(speciesNumber)));
   if(simulationMonitor_getGrowsForSpecies(speciesNumber) > 0)
-   fprintf(outFile," growFailed,%f",((float)simulationMonitor_getFailedGrowForSpecies(speciesNumber))/((float)simulationMonitor_getGrowsForSpecies(speciesNumber)));
+   fprintf(outFile," growFailed,%f",((float)simulationMonitor_getFailedGrowsForSpecies(speciesNumber))/((float)simulationMonitor_getGrowsForSpecies(speciesNumber)));
   fprintf(outFile," killedBySeeding,%i",simulationMonitor_getKilledBySeedingForSpecies(speciesNumber));
   fprintf(outFile," killedByAttacks,%i",simulationMonitor_getKilledByAttacksForSpecies(speciesNumber));
   fprintf(outFile," killedByStarving,%i",simulationMonitor_getKilledByStarvingForSpecies(speciesNumber));
@@ -322,7 +339,7 @@ int simulationMonitor_test() {
  sm.smon.perHashMetrics[7][0] = 100;
  sm.smon.perHashMetrics[8][0] = 100;
  sm.smon.perHashMetrics[19][0] = 100;
- simulationMonitor_findSpecies(speciesList,20) { //SpeciesList[SPECIES_TYPES_MAX][3]
+ simulationMonitor_findSpecies(speciesList,20); //SpeciesList[SPECIES_TYPES_MAX][3]
  printf("%i,%i,%i",speciesList[0][0],speciesList[0][1],speciesList[0][2]); 
  return 0;
 }

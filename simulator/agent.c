@@ -100,7 +100,7 @@ void agent_A_F(agent *ag) { //ATTACK
    ag->energy += otherAgent->energy * AG_ATTACK_EFF - 0.0001;
    agent_kill(otherAgent);
    #ifndef LESS_METRICS
-   simulationMonitor_addKilledByAttackForHash(ag->br.speciesHash,1);
+   simulationMonitor_addKilledByAttacksForHash(ag->br.speciesHash,1);
    #endif
   }
   else {

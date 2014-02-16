@@ -89,6 +89,7 @@ int simulationMonitor_getAveGenerationForSpecies(int species);
 void simulationMonitor_addNumberOfAgentsForHash(int hash, int x);
 int simulationMonitor_getNumberOfAgentsForSpecies(int species);
 
+void simulationMonitor_clear();
 
 int simulationMontior_test();
 void simulationMonitor_writeMetricsFiles(int numberOfSpecies);
