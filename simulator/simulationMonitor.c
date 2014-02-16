@@ -100,29 +100,30 @@ int simulationMonitor_getNewBrainForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][15];}
 */ //Legacy
 void simulationMonitor_addAveEnergyForHash(int hash, int x){
- sm.smon.perHashMetrics[hash][16] += x;}
+ sm.smon.perHashMetrics[hash][15] += x;}
 int simulationMonitor_getAveEnergyForSpecies(int species){
- return sm.smon.perSpeciesMetrics[species][16];}
+ return sm.smon.perSpeciesMetrics[species][15];}
 
 void simulationMonitor_addAveAgeForHash(int hash, int x){
- sm.smon.perHashMetrics[hash][17] += x;}
+ sm.smon.perHashMetrics[hash][16] += x;}
 int simulationMonitor_getAveAgeForSpecies(int species){
- return sm.smon.perSpeciesMetrics[species][17];}
+ return sm.smon.perSpeciesMetrics[species][16];}
 
 void simulationMonitor_addAveGenerationForHash(int hash, int x){
- sm.smon.perHashMetrics[hash][18] += x;}
+ sm.smon.perHashMetrics[hash][17] += x;}
 int simulationMonitor_getAveGenerationForSpecies(int species){
- return sm.smon.perSpeciesMetrics[species][18];}
+ return sm.smon.perSpeciesMetrics[species][17];}
 
-void simulationMonitor_addNumberOfAgentsForHash(int hash, int x){
+/*void simulationMonitor_addNumberOfAgentsForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][19] += x;}
 int simulationMonitor_getNumberOfAgentsForSpecies(int species){
- return sm.smon.perSpeciesMetrics[species][19];}
+ return sm.smon.perSpeciesMetrics[species][19];} */
 
 //-----------------------
 // The per agent metrics
 //-----------------------
-void simulationMonitor_findPerAgentMetrics() {
+//NOTE:All metrics are gathered and averaged on a per-decision-moment level
+/*void simulationMonitor_findPerAgentMetrics() {
  int i;
  for(i = 0; i < sm.w.numbAgents; i++) {
   if(sm.w.agents[i].status == AG_STATUS_ALIVE) {
@@ -133,96 +134,47 @@ void simulationMonitor_findPerAgentMetrics() {
    simulationMonitor_addAveBrainSizeForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].br.brainSize);
   }
  }
-}
+}*/
  
 
- //-----------------------------------------------------------
- //  Detect the species so we can collect the data into them. 
- //-----------------------------------------------------------
- /*        speciesNumber = -1
-        gapNeeded = 5 #Min number of speaces between colors to count as different species
-        minNumb = 10 #Min number for this to be counted as occupied
-        waitingToSeeNewSpecies = False
-        speciesList = []
-        distanceFromSpecies = 0
-        startingSpot = 0
-        #print speciesTree.agentCount[0]
-        #Go till you find a detectable species, starting spot will be the exact number where a new one begins
-        for i in range(0,speciesTree.width):
-                count = speciesTree.agentCount[(speciesTree.iterationsSeen-roundsAgo)%speciesTree.duration][i]
-                if(count <= minNumb):
-                        distanceFromSpecies += 1
-                else:
-                        distanceFromSpecies = 0
-                if(distanceFromSpecies >= gapNeeded):
-                        startingSpot = i - 1
-                        waitingToSeeNewSpecies = True
-                        break
-        #print "starting at %i, going to %i"%(startingSpot,speciesTree.width+startingSpot+1)
-        if(not waitingToSeeNewSpecies): #Didn't find a gap
-                return []
-        #Then start parsing to find the species
-        for i in range(startingSpot,speciesTree.width+startingSpot+gapNeeded):
-                count = speciesTree.agentCount[(speciesTree.iterationsSeen-roundsAgo)%speciesTree.duration][i%speciesTree.width]
-                if(count <= minNumb): #No agents here
-                        if(distanceFromSpecies >= gapNeeded and (not waitingToSeeNewSpecies)): #end of a species
-                                waitingToSeeNewSpecies = True #Start looking for a new speices
-                                speciesList[speciesNumber][1] = (i - gapNeeded)%speciesTree.width #The max is one past the real number
-                        distanceFromSpecies += 1
-                else: #Agents here
-                        distanceFromSpecies = 0
-                        if(waitingToSeeNewSpecies): #New species found! (unless it wraps around)
-                                waitingToSeeNewSpecies = False
-                                speciesList.append([i%speciesTree.width,-1,0]) #minColor, maxColor, counter(for sorting)
-                                speciesNumber += 1
-                        speciesList[speciesNumber][2] += count
-        #print speciesList
-        return speciesList */
- //Find the detectable species based on the decisions
-int simulationMonitor_findSpecies(int speciesList[][3], int numberOfPossibleHashes) { //SpeciesList[SPECIES_TYPES_MAX][3]
+//-----------------------------------------------------------
+//  Detect the species so we can collect the data into them. 
+//-----------------------------------------------------------
+//Find the detectable species based on the decisions
+int simulationMonitor_findSpecies(int speciesList[][2], int numberOfPossibleHashes) { //SpeciesList[SPECIES_TYPES_MAX][2]
  int i,c;
- int startingSpot;
  int distanceFromSpecies = 0;
- int waitingToSeeNewSpecies = 0;
+ int waitingToSeeNewSpecies = 1;
  int speciesNumber = 0;
- //Find the start of the first species 
  for(i=0; i < numberOfPossibleHashes; i++) {
+  printf("Checking spot %i, Species list is [0]:%i,%i\n",i,speciesList[0][0],speciesList[0][1]);
   c = simulationMonitor_getDecisionsForHash(i); 
   if(c <= SPECIES_DETECTION_POPULATION_MIN) {
    distanceFromSpecies++;
-  }
-  else {
-   distanceFromSpecies = 0; 
-  }
-  if(distanceFromSpecies >= SPECIES_DETECTION_POPULATION_DIF_MIN) {
-   startingSpot = i - 1;
-   waitingToSeeNewSpecies = 1;
-   break;
-  }
- }
- if(waitingToSeeNewSpecies == 0) { //Didn't find a species??
-  printf("Simulation Monitor: Didn't ever find the beginning of a new species...\n"); 
-  return 0; 
- }
- //Detect species as we go
- for(i=startingSpot; i < numberOfPossibleHashes + SPECIES_DETECTION_POPULATION_DIF_MIN; i++) {
-  c = simulationMonitor_getDecisionsForHash(i%numberOfPossibleHashes);
-  if(c <= SPECIES_DETECTION_POPULATION_MIN) {
-   if(distanceFromSpecies >= SPECIES_DETECTION_POPULATION_DIF_MIN && (!waitingToSeeNewSpecies)) {
-    waitingToSeeNewSpecies = 1; //Start looking for a new species
-    speciesList[speciesNumber][1] = (i - SPECIES_DETECTION_POPULATION_DIF_MIN)%numberOfPossibleHashes;
+   if(distanceFromSpecies >= SPECIES_DETECTION_POPULATION_DIF_MIN) { //This is a wide gap between species
+    if(waitingToSeeNewSpecies == 0) { //Was already looking at a species
+     speciesList[speciesNumber][1] = i-SPECIES_DETECTION_POPULATION_DIF_MIN+1; //Save the end location 
+     waitingToSeeNewSpecies = 1;
+     speciesNumber++; //Add here because this number is also the count of how many species found
+    }
    }
-   distanceFromSpecies++; 
   }
   else {
    distanceFromSpecies = 0;
-   if(waitingToSeeNewSpecies == 1) { //New species found (unless it wraps around)
+   if(waitingToSeeNewSpecies == 1) { //We were looking for a new species and now we found one
     waitingToSeeNewSpecies = 0;
-    speciesList[speciesNumber][0] = i%numberOfPossibleHashes;
-    speciesNumber++;
-   }
-   speciesList[speciesNumber][2] += c;
-  }
+    speciesList[speciesNumber][0] = i;
+   } 
+  } 
+ }
+ if(waitingToSeeNewSpecies == 0) { //We're in the middle of seeing a species when we reach the end of the hash list
+  speciesList[speciesNumber][1] = numberOfPossibleHashes;
+  speciesNumber++;
+ }
+ if(speciesNumber == 0) { //The whole band is one big confusing species 
+  speciesNumber = 1;
+  speciesList[0][0] = 0;
+  speciesList[0][1] = numberOfPossibleHashes;  
  }
  return speciesNumber;
 }
@@ -244,7 +196,7 @@ void simulationMonitor_clear() {
   }
  }
 }
-void simulationMonitor_collectSpeciesMetrics(int speciesList[][3], int numberOfSpecies) {
+void simulationMonitor_collectSpeciesMetrics(int speciesList[][2], int numberOfSpecies) {
  int speciesNumber,metricNumber,hashNumber;
  for(speciesNumber=0; speciesNumber < numberOfSpecies; speciesNumber++) {
   //Clear the species metrics from last time - Don't need to anymore since the clear function works again
@@ -261,10 +213,10 @@ void simulationMonitor_collectSpeciesMetrics(int speciesList[][3], int numberOfS
 }
 
 void simulationMonitor_emitMonitors() {
- int speciesList[SPECIES_TYPES_MAX][3];
+ int speciesList[SPECIES_TYPES_MAX][2];
  int numberOfSpecies;
- //Gather the per-agent metrics
- simulationMonitor_findPerAgentMetrics();
+ //Gather the per-agent metrics -- All metrics are now gathered per decision moment
+ //simulationMonitor_findPerAgentMetrics();
  //Find the species
  numberOfSpecies = simulationMonitor_findSpecies(speciesList,AG_MAX_HASH);
  if(numberOfSpecies <= 0)
@@ -277,6 +229,7 @@ void simulationMonitor_emitMonitors() {
 
 void simulationMonitor_writeMetricsFiles(int numberOfSpecies) {
  int speciesNumber;
+ int numberOfAgents;
  FILE *outFile;
  //Output the file
  outFile = fopen(MONITOR_FILE_LOC,"a");
@@ -288,24 +241,23 @@ void simulationMonitor_writeMetricsFiles(int numberOfSpecies) {
   fprintf(outFile," addConRate,%f",(float)sm.smon.addedCon/(float)(sm.smon.addedCon + sm.smon.didntAddCon));
  if((sm.smon.removedCon + sm.smon.didntRemoveCon) != 0)
   fprintf(outFile," removedConRate,%f",(float)sm.smon.removedCon/(float)(sm.smon.removedCon + sm.smon.didntRemoveCon)); 
+ //Per species Metrics
  for(speciesNumber = 0; speciesNumber < numberOfSpecies; speciesNumber++) {
-  //Per agent
   fprintf(outFile," speciesNumber,%i",speciesNumber);
-  fprintf(outFile," numberOfAgents,%i",simulationMonitor_getNumberOfAgentsForSpecies(speciesNumber));
-  if(simulationMonitor_getNumberOfAgentsForSpecies(speciesNumber) > 0) { 
-   fprintf(outFile," aveAge,%f",((float)simulationMonitor_getAveAgeForSpecies(speciesNumber))/((float)simulationMonitor_getNumberOfAgentsForSpecies(speciesNumber)));
-   fprintf(outFile," aveGeneration,%f",((float)simulationMonitor_getAveGenerationForSpecies(speciesNumber))/((float)simulationMonitor_getNumberOfAgentsForSpecies(speciesNumber)));
-   fprintf(outFile," aveEnergy,%f",((float)simulationMonitor_getAveEnergyForSpecies(speciesNumber))/((float)simulationMonitor_getNumberOfAgentsForSpecies(speciesNumber)));
-  }
-  //Per decision
-  if(simulationMonitor_getDecisionsForSpecies(speciesNumber) > 0) {
-   fprintf(outFile," moves,%f",((float)simulationMonitor_getMovesForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
-   fprintf(outFile," turns,%f",((float)simulationMonitor_getTurnsForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
-   fprintf(outFile," attacks,%f",((float)simulationMonitor_getAttacksForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
-   fprintf(outFile," grows,%f",((float)simulationMonitor_getGrowsForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
-   fprintf(outFile," asexReplications,%f",((float)simulationMonitor_getASexualReplicationsForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
-   fprintf(outFile," sexReplications,%f",((float)simulationMonitor_getSexualReplicationsForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
-  }
+  if(simulationMonitor_getDecisionsForSpecies(speciesNumber) == 0)
+   printf("SimulaitonMonitor: Error: Getting species with zero decisions, but that shouldn't be possible since species are differentiated based on decision count\n"); 
+  numberOfAgents = (int)(((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)) / (float)SIM_REPORT_INTERVAL);
+  fprintf(outFile," numberOfAgents,%i",numberOfAgents);
+  fprintf(outFile," aveAge,%f",((float)simulationMonitor_getAveAgeForSpecies(speciesNumber))/(float)numberOfAgents);
+  fprintf(outFile," aveGeneration,%f",((float)simulationMonitor_getAveGenerationForSpecies(speciesNumber))/(float)numberOfAgents);
+  fprintf(outFile," aveEnergy,%f",((float)simulationMonitor_getAveEnergyForSpecies(speciesNumber))/(float)numberOfAgents);
+  fprintf(outFile," moves,%f",((float)simulationMonitor_getMovesForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
+  fprintf(outFile," turns,%f",((float)simulationMonitor_getTurnsForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
+  fprintf(outFile," attacks,%f",((float)simulationMonitor_getAttacksForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
+  fprintf(outFile," grows,%f",((float)simulationMonitor_getGrowsForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
+  fprintf(outFile," asexReplications,%f",((float)simulationMonitor_getASexualReplicationsForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
+  fprintf(outFile," sexReplications,%f",((float)simulationMonitor_getSexualReplicationsForSpecies(speciesNumber))/((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)));
+  
   //Decision specific
   if(simulationMonitor_getMovesForSpecies(speciesNumber) > 0)
    fprintf(outFile," moveFailed,%f",((float)simulationMonitor_getFailedMovesForSpecies(speciesNumber))/((float)simulationMonitor_getMovesForSpecies(speciesNumber)));
@@ -332,15 +284,21 @@ void simulationMonitor_runIntelligenceTests() { //These are all simulations, the
 //-----------
 int simulationMonitor_test() {
  int i; 
- int speciesList[2][3];
+ int speciesList[2][2];
  for(i = 0;i<20;i++)
   sm.smon.perHashMetrics[i][0] = 0;
  sm.smon.perHashMetrics[6][0] = 100;
  sm.smon.perHashMetrics[7][0] = 100;
  sm.smon.perHashMetrics[8][0] = 100;
  sm.smon.perHashMetrics[19][0] = 100;
- simulationMonitor_findSpecies(speciesList,20); //SpeciesList[SPECIES_TYPES_MAX][3]
- printf("%i,%i,%i",speciesList[0][0],speciesList[0][1],speciesList[0][2]); 
+ for(i=0;i<20;i++)
+  printf("%i:%i - ",i,simulationMonitor_getDecisionsForHash(i));
+ printf("\n"); 
+ i = simulationMonitor_findSpecies(speciesList,20); //SpeciesList[SPECIES_TYPES_MAX][3]
+ printf("%i species, first is %i,%i\n",i,speciesList[0][0],speciesList[0][1]); 
+ printf("%i species, second is %i,%i\n",i,speciesList[1][0],speciesList[1][1]); 
+ simulationMonitor_collectSpeciesMetrics(speciesList,i);
+ printf("Agents per species: %i,%i",simulationMonitor_getDecisionsForSpecies(0),simulationMonitor_getDecisionsForSpecies(1));
  return 0;
 }
 #endif

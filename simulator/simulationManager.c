@@ -85,7 +85,6 @@ void simulationManager_runIterations_advanced(int iterations, int seedInterval, 
   #endif
  } 
 }
-
 void simulationManager_seedAgents() { 
  int i,j;
  for(i = WORLD_BORDER; i < SIM_SEED_SIZE; i += 2) {
@@ -94,7 +93,6 @@ void simulationManager_seedAgents() {
   }
  } 
 }
-
 void simulationManager_signalThreadsToGo() {
  int i;
  for(i = 0; i < NUMBER_OF_THREADS; i++)  {
@@ -104,7 +102,6 @@ void simulationManager_signalThreadsToGo() {
    blockOnChildFinishingWork(&(sm.threadControls[i]));  //This will block
  }
 }
-
 void simulationManager_runAgentDecisions() { //Multi-threaded
  int i;
  for(i = 0; i < NUMBER_OF_THREADS; i++) {
@@ -115,7 +112,6 @@ void simulationManager_runAgentDecisions() { //Multi-threaded
 void simulationManager_runAgentActions() { //Single threaded
  int i;
  int j,k;
-  //printf("Did nothing to run agent actions\n");
  for(i = 0; i < sm.w.numbAgents && sm.w.agents[i].status != AG_STATUS_END_OF_LIST; i++) {
   if(sm.w.agents[i].status == AG_STATUS_ALIVE) {
    if(sm.w.agents[i].energy >= AG_MAX_ENERGY) {
@@ -128,16 +124,13 @@ void simulationManager_runAgentActions() { //Single threaded
     #endif
    }
    else {
-    /*if(sm.w.locs[sm.w.agents[i].xLoc][sm.w.agents[i].yLoc].a != &(sm.w.agents[i])) {
-     printf("WARNING: Simulation manager has found agent thinks he's at %i %i but is at..\n");
-     for(j = 0; j < 100; j++) {
-      for(k = 0; k < 100; k++) {
-       if(sm.w.locs[j][k].a == &(sm.w.agents[i]))
-        printf("Found at %i %i\n",j,k);
-      }
-     }
-     printf("Done searching\n");
-    }*/
+    #ifndef LESS_METRICS
+    simulationMonitor_addDecisionsForHash(sm.w.agents[i].br.speciesHash,1);
+    simulationMonitor_addAveGenerationForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].generation);
+    simulationMonitor_addAveAgeForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].age);
+    simulationMonitor_addAveEnergyForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].energy);
+    simulationMonitor_addAveBrainSizeForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].br.brainSize);
+    #endif
     agent_performDecidedAction(&(sm.w.agents[i]));
    }
   }

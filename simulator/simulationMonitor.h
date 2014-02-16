@@ -86,9 +86,6 @@ int simulationMonitor_getAveAgeForSpecies(int species);
 void simulationMonitor_addAveGenerationForHash(int hash, int x);
 int simulationMonitor_getAveGenerationForSpecies(int species);
 
-void simulationMonitor_addNumberOfAgentsForHash(int hash, int x);
-int simulationMonitor_getNumberOfAgentsForSpecies(int species);
-
 void simulationMonitor_clear();
 
 int simulationMontior_test();
