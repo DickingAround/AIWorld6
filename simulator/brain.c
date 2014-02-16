@@ -56,16 +56,19 @@ void brain_makeDecision(brain *br)
 //----------------------
 void brain_computeHash(brain *b) {
  int i = 0;
- int tot = 0;
- while(inL1[i] != AG_CONN_END) {
-  tot += inL1[i]%AG_HASH_MOD + outL1[i]%AG_HASH_MOD; //We use a mod so later conn numbers aren't too high and take too much weight
+ int hash = 0;
+ int brainSize = 0;
+ while(b->inL1[i] != AG_CONN_END) {
+  hash += b->inL1[i]%AG_HASH_MOD + b->outL1[i]%AG_HASH_MOD; //We use a mod so later conn numbers aren't too high and take too much weight
+  i++;
+ }
+ brainSize = i; 
+ while(b->inL2[i] != AG_CONN_END) {
+  hash += b->inL2[i]%AG_HASH_MOD + (b->outL2[i]*10)%AG_HASH_MOD;
   i++;
  } 
- while(inL2[i] != AG_CONN_END) {
-  tot += inL2[i]%AG_HASH_MOD + (outL2[i]*10)%AG_HASH_MOD;
-  i++;
- } 
- b->hash = tot; 
+ b->speciesHash = hash; 
+ b->brainSize = brainSize + i;
 }
 //----------------------
 // Replication: Seeding 
@@ -116,10 +119,6 @@ void brain_makeConnLvlFromAsex(unsigned char *in, unsigned char inMax, unsigned 
  i = brain_considerRemovingAConn(in,inMax,out,outMax,mult,mutationRate,connMax,i);
  i = brain_considerAddingAConn(in,inMax,out,outMax,mult,mutationRate,connMax,i);
  brain_fillRestWithNoOps(in,out,connMax,i);
- #ifndef LESS_METRICS
- sm.smon.newBrainSize += i;
- sm.smon.newBrains += 1;
- #endif
 }
 void brain_considerMutatingConn(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, int i) { //Make sure the connections don't exceed the max
  if(rand() / (float)RAND_MAX < mutationRate) { //+x%?
@@ -143,7 +142,7 @@ int brain_considerRemovingAConn(unsigned char *in, unsigned char inMax, unsigned
   in[connNumb] = 0;
   mult[connNumb] = 0; 
   out[connNumb] = 0;
-  #ifndef LESS_METRICS 
+  #ifndef LESS_METRICS  
   sm.smon.removedCon++;
   #endif
   if(in[connNumb+1] == AG_CONN_END) { //This is the last, delete it
@@ -212,10 +211,6 @@ void brain_makeConnLvlFromSex(unsigned char *in, unsigned char inMax, unsigned c
  i = brain_considerRemovingAConn(in,inMax,out,outMax,mult,mutationRate,connMax,i);
  i = brain_considerAddingAConn(in,inMax,out,outMax,mult,mutationRate,connMax,i);
  brain_fillRestWithNoOps(in,out,connMax,i);
- #ifndef LESS_METRICS
- sm.smon.newBrainSize += i;
- sm.smon.newBrains += 1;
- #endif
 }
 //---------------------
 // Saving and loading
@@ -239,7 +234,7 @@ void brain_print(brain *b) {
 void brain_save(brain *b, FILE *file) {
  //TODO: We're not saving the mutation rate!!!
  int i = 0;
- fprintf(file,"M%f;H%i;",b->mutationRate,b->hash); 
+ fprintf(file,"M%f;H%i;",b->mutationRate,b->speciesHash); 
  fprintf(file,"L1");
  while(b->inL1[i] != AG_CONN_END) {
   fprintf(file,";%i:%f:%i",b->inL1[i],b->multL1[i],b->outL1[i]); 

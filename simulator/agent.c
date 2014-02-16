@@ -83,7 +83,7 @@ void agent_A_F(agent *ag) { //ATTACK
  otherAgent = NULL;
  ag->energy -= AG_ATTACK_COST;
  #ifndef LESS_METRICS
-  sm.smon.attacks++; 
+  simulationMonitor_addAttacksForHash(ag->br.speciesHash,1); 
  #endif
  switch(ag->facingDirection) {
   case(UP):    otherAgent = sm.w.locs[ag->xLoc-1][ag->yLoc  ].a; break;
@@ -100,7 +100,7 @@ void agent_A_F(agent *ag) { //ATTACK
    ag->energy += otherAgent->energy * AG_ATTACK_EFF - 0.0001;
    agent_kill(otherAgent);
    #ifndef LESS_METRICS
-   sm.smon.killedByAttacks++;
+   simulationMonitor_addKilledByAttackForHash(ag->br.speciesHash,1);
    #endif
   }
   else {
@@ -110,7 +110,7 @@ void agent_A_F(agent *ag) { //ATTACK
  }
  #ifndef LESS_METRICS
  else { //The other agent was empty
-  sm.smon.failedAttacks++;
+  simulationMonitor_addFailedAttacksForHash(ag->br.speciesHash,1);
  } 
  #endif
 }
@@ -118,7 +118,7 @@ void agent_M(agent *ag, int x, int y) {
  location *newLoc;
  newLoc = &(sm.w.locs[x][y]);
  #ifndef LESS_METRICS
-  sm.smon.moves += 1; 
+  simulationMonitor_addMovesForHash(ag->br.speciesHash,1);
  #endif
  ag->energy -= AG_MOVE_COST;
  if(newLoc->a == NULL) {
@@ -134,7 +134,7 @@ void agent_M(agent *ag, int x, int y) {
  }
  #ifndef LESS_METRICS
  else { //The othe square is already occupied
-  sm.smon.failedMoves++;
+  simulationMonitor_addFailedMovesForHash(ag->br.speciesHash,1); 
  }
  #endif
 }
@@ -170,7 +170,7 @@ void agent_M_R(agent *ag) {
 }
 void agent_T_R(agent *ag) { //TURN
  #ifndef LESS_METRICS
-  sm.smon.turns += 1; 
+  simulationMonitor_addTurnsForHash(ag->br.speciesHash,1); 
  #endif
  ag->energy -= AG_TURN_COST;
  switch(ag->facingDirection) {
@@ -182,7 +182,7 @@ void agent_T_R(agent *ag) { //TURN
 }
 void agent_T_L(agent *ag) {
  #ifndef LESS_METRICS
-  sm.smon.turns += 1; 
+  simulationMonitor_addTurnsForHash(ag->br.speciesHash,1);
  #endif
  ag->energy -= AG_TURN_COST;
  switch(ag->facingDirection) {
@@ -194,14 +194,14 @@ void agent_T_L(agent *ag) {
 }
 void agent_R(agent* ag) {
  #ifndef LESS_METRICS
-  sm.smon.replications += 1; 
+  simulationMonitor_addASexualReplicationsForHash(ag->br.speciesHash,1); 
  #endif
  ag->energy -= AG_REPLICATION_COST; 
  agent_mallocAgent_fromAsex(ag);
 }
 void agent_R_F(agent* ag) {
  #ifndef LESS_METRICS
-  sm.smon.replications += 1; 
+  simulationMonitor_addSexualReplicationsForHash(ag->br.speciesHash,1);
  #endif
  agent* otherAg;
  ag->energy -= AG_REPLICATION_COST;
@@ -216,21 +216,21 @@ void agent_R_F(agent* ag) {
  }
  #ifndef LESS_METRICS
  else { 
-  sm.smon.failedReplications++;
+  simulationMonitor_addFailedReplicationsForHash(ag->br.speciesHash,1);
  }
  #endif
 }
 void agent_GROW(agent *ag) {
  int i,j;
  #ifndef LESS_METRICS
-  sm.smon.grows += 1; 
+  simulationMonitor_addGrowsForHash(ag->br.speciesHash,1);
  #endif
  for(i = -1; i <= 1; i++) {
   for(j = -1; j <= 1; j++) {
    if(sm.w.locs[ag->xLoc+i][ag->yLoc+j].a != NULL && (i != 0 && j != 0)) { //If found agent, and not at the origin
     ag->energy -= AG_GROW_COST;
     #ifndef LESS_METRICS
-    sm.smon.failedGrows++;
+     simulationMonitor_addFailedGrowsForHash(ag->br.speciesHash,1);
     #endif
     return; 
    }
@@ -261,7 +261,9 @@ void agent_mallocAgent_fromScratch(int x, int y, float e) {
    printf("Agent doesn't know where he is, world says %i %i, agent says %i %i\n",x,y,sm.w.locs[x][y].a->xLoc,sm.w.locs[x][y].a->yLoc);
   }
   agent_kill(sm.w.locs[x][y].a);
-  sm.smon.killedBySeeding += 1;  
+  #ifndef LESS_METRICS
+  simulationMonitor_addKilledBySeedingForHash(sm.w.locs[x][y].a->br.speciesHash,1); 
+  #endif
  }
  a = agent_mallocAgent(x,y,e,0);
  if(a == NULL)

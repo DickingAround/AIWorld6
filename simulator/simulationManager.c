@@ -123,7 +123,9 @@ void simulationManager_runAgentActions() { //Single threaded
    } 
    if(sm.w.agents[i].energy <= 0) {
     agent_kill(&(sm.w.agents[i]));
-    sm.smon.killedByStarving++;
+    #ifndef LESS_METRICS 
+    simulationMonitor_addKilledByStarvingForHash(sm.w.agents[i].br.speciesHash,1);
+    #endif
    }
    else {
     /*if(sm.w.locs[sm.w.agents[i].xLoc][sm.w.agents[i].yLoc].a != &(sm.w.agents[i])) {

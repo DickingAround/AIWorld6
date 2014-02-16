@@ -21,6 +21,7 @@ typedef struct brain
  float mutationRate;
  unsigned char latestDecision;
  unsigned int speciesHash;
+ unsigned int brainSize;
 } brain; 
 
 void brain_computeHash(brain *b);

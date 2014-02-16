@@ -83,6 +83,8 @@ void runTests()
 {
  world *w;
  w = &(sm.w);
+ 
+ /*
  if(threadManager_test() == 1)
    printf("Passed: Thread manager tests\n");
  else
@@ -102,7 +104,7 @@ void runTests()
  if(world_test() == 1)
    printf("Passed: World tests\n");
  else
-   printf("Failed: World tests\n");
+   printf("Failed: World tests\n");*/
  if(simulationMonitor_test() == 1)
    printf("Passed: IntelTest tests\n");
  else
