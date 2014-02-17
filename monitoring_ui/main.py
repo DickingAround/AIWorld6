@@ -41,9 +41,12 @@ if __name__ == '__main__':
 		if(version != 'x'):
 			clearDisplay(window)
 			autoCapture.checkForAndSaveSpecialSituations()
-			statList.statList_draw(window,10,10)
-			worldMaps.worldMaps_draw(window,375,0,version) #NOLONGERTRUE? Draw world will clear the display if needed
-			statGraphs.statGraphs_draw(window,175,10,200,650)	
+			worldMaps.drawMain(window,0,0) #600 x 600
+			worldMaps.drawEnergy(window,600,0) #200 x 200
+			worldMaps.drawSignal(window,600,200) #200 x 200
+			speciesTree.drawTree(window,600,400) #200 x 320	
+			speciesStats.drawStats(window,0,800) #480 x 720
+			simulationStats.drawStats(window,0,600) #120 x 600
 			pygame.display.flip()	
 			if(imgNumb < imgMax):
 				saveScreen(window,imgNumb)

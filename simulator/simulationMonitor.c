@@ -224,10 +224,10 @@ void simulationMonitor_emitMonitors() {
  //Collect the metrics based on the species
  simulationMonitor_collectSpeciesMetrics(speciesList, numberOfSpecies);
  //Emit the metrics files
- simulationMonitor_writeMetricsFiles(numberOfSpecies);
+ simulationMonitor_writeMetricsFiles(speciesList,numberOfSpecies);
 }
 
-void simulationMonitor_writeMetricsFiles(int numberOfSpecies) {
+void simulationMonitor_writeMetricsFiles(int speciesList[][2],int numberOfSpecies) {
  int speciesNumber;
  int numberOfAgents;
  FILE *outFile;
@@ -244,6 +244,8 @@ void simulationMonitor_writeMetricsFiles(int numberOfSpecies) {
  //Per species Metrics
  for(speciesNumber = 0; speciesNumber < numberOfSpecies; speciesNumber++) {
   fprintf(outFile," speciesNumber,%i",speciesNumber);
+  fprintf(outFile," speciesHashMin,%i",speciesList[speciesNumber][0]);
+  fprintf(outFile," speciesHashMax,%i",speciesList[speciesNumber][1]);
   if(simulationMonitor_getDecisionsForSpecies(speciesNumber) == 0)
    printf("SimulaitonMonitor: Error: Getting species with zero decisions, but that shouldn't be possible since species are differentiated based on decision count\n"); 
   numberOfAgents = (int)(((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)) / (float)SIM_REPORT_INTERVAL);

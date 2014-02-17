@@ -39,7 +39,7 @@ initRGBToNumberDicts()
 def rgbToNumber(rgb):
 	return rgbToNumberDict[rgb]
 def numberToRGB(number):
-	return numberToRGBDict[number]	
+	return numberToRGBDict[number%maxRGBNumber]	
 	
 def getBrainColor(brainString):
 	#L1;4:5.4:3;L2;3:4:2,2	
@@ -156,3 +156,10 @@ def getWorldFile(version):
 		return 0
 	return f
 
+def getMonitorFile():
+	try:
+		f = open("./data_from_simulations/monitor.txt")
+	except:
+		print "Failed to open the monitor file\n"
+		return 0
+	return f	
