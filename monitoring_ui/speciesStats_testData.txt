@@ -1,0 +1,4 @@
+more previous data
+previous data
+some other data
+iterations,100 speed,110 speciesNumber,1 speciesHashMin,1000, speciesHashMax,1010, numberOfAgents,10, aveAge,11, aveGeneration,12, aveEnergy,13, attacks,14, grows,15, asexReplications,16, sexReplications,17 speciesNumber,2 speciesHashMin,2000, speciesHashMax,2010, numberOfAgents,20, aveAge,21, aveGeneration,22, aveEnergy,23, attacks,24, grows,25, asexReplications,26, sexReplications,27 speciesNumber,3 speciesHashMin,3000, speciesHashMax,3010, numberOfAgents,30, aveAge,31, aveGeneration,32, aveEnergy,33, attacks,34, grows,35, asexReplications,36, sexReplications,37

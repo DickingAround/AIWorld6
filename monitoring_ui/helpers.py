@@ -156,6 +156,8 @@ def getWorldFile(version):
 		return 0
 	return f
 
+def getMonitorFileName():
+	return "./data_from_simulations/monitor.txt"
 def getMonitorFile():
 	try:
 		f = open("./data_from_simulations/monitor.txt")
