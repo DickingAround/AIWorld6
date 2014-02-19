@@ -41,12 +41,15 @@ if __name__ == '__main__':
 		if(version != 'x'):
 			clearDisplay(window)
 			autoCapture.checkForAndSaveSpecialSituations()
-			worldMaps.drawMain(window,0,0) #600 x 600
-			worldMaps.drawEnergy(window,600,0) #200 x 200
-			worldMaps.drawSignal(window,600,200) #200 x 200
-			speciesTree.drawTree(window,600,400) #200 x 320	
-			speciesStats.drawStats(window,0,800) #480 x 720
-			simulationStats.drawStats(window,0,600) #120 x 600
+			listOfAgents = helpers.getListOfAgents()
+			simulationStats, speciesStats = helpers.getListsOfStats()
+			worldMaps.drawMain(window,0,0,listOfAgents) #600 x 600
+			#worldMaps.drawEnergy(window,600,0) #200 x 200
+			#worldMaps.drawSignal(window,600,200) #200 x 200
+			speciesTree.saveNewSetOfAgents(listOfAgents)
+			speciesTree.drawTree(window,600,400) #200 x 320
+			speciesStats.drawStats(window,0,800,speciesStats) #480 x 720
+			simulationStats.drawStats(window,0,600,simulationStats) #120 x 600
 			pygame.display.flip()	
 			if(imgNumb < imgMax):
 				saveScreen(window,imgNumb)

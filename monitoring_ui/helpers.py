@@ -69,6 +69,48 @@ def getBrainColor(brainString):
 	except:
 		print "GetBrainColor: Unexpected error: %i,%i,%i"%(tot,maxRGBNumber,int(tot/4.0)%maxRGBNumber), sys.exc_info()[0]
 		return (0,0,0)
+
+
+# ------------------
+# -- Data getters --
+# ------------------
+def getListOfAgents():
+	worldFile = helpers.getWorldFile()
+	listOfAgents = []
+	for line in worldFile.readlines():listOfAgents = getListOfAgentsFromWorld()
+		a = agent(line)
+		listOfAgents.append(a)
+	return listOfAgents
+
+import os
+def tail(f):
+	stdin,stdout = os.popen2("tail -n 1 "+f)
+	stdin.close()
+	lines = stdout.readlines(); stdout.close()
+	return lines[0]
+
+def getListsOfStats(f):
+	lastLine = tail(f)
+	speciesNumber = -1
+	speciesStatList = []
+	simulationStatList = []
+	for stat in lastLine.split(' '):
+		keyValuePair = stat.split(',')
+		key = keyValuePair[0]
+		value = keyValuePair[1]
+		if(key == 'speciesNumber'):
+			speciesNumber += 1
+			speciesStatList.append({}) #Add the dictionary
+			speciesStatList[speciesNumber]['speciesNumber'] = float(value) #Save the real species number just in case
+		elif(speciesNumber >= 0):
+			speciesStatList[speciesNumber][key] = float(value)
+		elif(speciesNumber == -1):
+			simulationStatList[key] = value
+	return simulationStatList, speciesStatList
+
+
+
+
 	
 def getAgentData(line):
  	try:

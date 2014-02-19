@@ -4,14 +4,10 @@ from helpers import *
 import speciesTree
 import landMaps
 
-def drawMain(window,x,y):
-	#Parse the agents file to find them all
-	#Parse the terrain file to find anything we want to show there. (Make the land green? Even just a little??)
-	worldFile = helpers.getWorldFile()	
-	for line in worldFile.readlines():listOfAgents = getListOfAgentsFromWorld()
-		a = agent(line)
+def drawMain(window,x,y,listOfAgents):
+	#TODO: Also we want to draw the terrain
+	for a in listOfAgents:
 		a.draw(window,x,y)
-	
 
 def drawAgentDecision(window,x,y,size,d):
 	color = (0,0,0)

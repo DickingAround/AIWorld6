@@ -2,29 +2,6 @@ import pygame
 import helpers
 #Draw the species stats in the color of the species
 
-import os
-def tail(f):
-  stdin,stdout = os.popen2("tail -n 1 "+f)
-  stdin.close()
-  lines = stdout.readlines(); stdout.close()
-  return lines[0]
-
-def getTopSpeciesStats(f):
-	lastLine = tail(f)
-	speciesNumber = -1
-	statList = []
-	for stat in lastLine.split(' '):
-		keyValuePair = stat.split(',')
-		key = keyValuePair[0]
-		value = keyValuePair[1]
-		if(key == 'speciesNumber'):
-			speciesNumber += 1
-			statList.append({}) #Add the dictionary
-			statList[speciesNumber]['speciesNumber'] = float(value) #Save the real species number just in case
-		elif(speciesNumber >= 0):
-			statList[speciesNumber][key] = float(value)
-	return statList	
-
 def drawSpeciesStats(window,x,y,statDict,positionNumber):
 	#Get the location to draw them in (we only draw up to four)
 	xOffset = 0
@@ -49,8 +26,7 @@ def drawSpeciesStats(window,x,y,statDict,positionNumber):
 		window.blit(sur,(x+xOffset,y+yOffset+(fontSize)*i))
 		i += 1
 
-def drawStats(window,x,y):
-	speciesStatList = getTopSpeciesStats(helpers.getMonitorFileName()) #This should be an array of ductionaries.
+def drawStats(window,x,y,speciesStatList):
 	for i in range(0,len(speciesStatList)):
 		drawSpeciesStats(window,x,y,speciesStatList[i],i)
 

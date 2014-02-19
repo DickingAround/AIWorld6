@@ -1,4 +1,5 @@
 import pygame
+import agent
 from helpers import *
 
 #Just a color chart, forever scrolling, with how many things are in each bucket.
@@ -14,6 +15,11 @@ class speciesTree():
 	agentEnergy = [0 for x in xrange(width)]
 	agentAge = [0 for x in xrange(width)]
 	agentGeneration = [0 for x in xrange(width)]
+
+def drawTree(window,x,y,listOfAgents):
+	#Save the agents
+	
+	#Show the tree
 
 def resetSpeciesStatCounters():
 	for i in range(0,speciesTree.width):
