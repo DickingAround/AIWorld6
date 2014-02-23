@@ -4,10 +4,10 @@ from helpers import *
 import speciesTree
 import landMaps
 
-def drawMain(window,x,y,listOfAgents):
+def drawMain(window,x,y,listOfAgents,spacing):
 	#TODO: Also we want to draw the terrain
 	for a in listOfAgents:
-		a.draw(window,x,y)
+		a.draw(window,x,y,spacing)
 
 def drawAgentDecision(window,x,y,size,d):
 	color = (0,0,0)

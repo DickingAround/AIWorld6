@@ -12,7 +12,7 @@ def checkForAndSaveSpecialSituations():
 	#Auto-capture if there's been a die-off
 	oldNumberOfAgents = helpers.findStat("agents",autoCapture.oldListOfStats)
 	newNumberOfAgents = helpers.findStat("agents",newListOfStats)
-	if(oldNumberOfAgnets != None and newNumberOfAgents != None):
+	if(oldNumberOfAgents != None and newNumberOfAgents != None):
 		if( float(oldNumberOfAgents) > 15000 and float(newNumberOfAgents) < 5000 ):
 			os.system('cp -f ./data_from_simulations/* ./data_from_simulations/auto_capture_before_last_dieoff/')
 

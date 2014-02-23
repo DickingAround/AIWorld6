@@ -16,9 +16,12 @@ class speciesTree():
 	agentAge = [0 for x in xrange(width)]
 	agentGeneration = [0 for x in xrange(width)]
 
-def drawTree(window,x,y,listOfAgents):
+def saveNewSetOfAgents(listOfAgents):
+	print "DIdn't do anything to save the list of agents"
+
+def drawTree(window,x,y):
 	#Save the agents
-	
+	print "Just a test"	
 	#Show the tree
 
 def resetSpeciesStatCounters():

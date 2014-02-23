@@ -3,6 +3,11 @@ import time
 import worldMaps
 import statList
 import statGraphs
+import autoCapture
+import helpers
+import speciesTree
+import speciesStats
+#import simulationStats
 def clearDisplay(window):
 	window.fill((0,0,0))
 
@@ -41,15 +46,15 @@ if __name__ == '__main__':
 		if(version != 'x'):
 			clearDisplay(window)
 			autoCapture.checkForAndSaveSpecialSituations()
-			listOfAgents = helpers.getListOfAgents()
-			simulationStats, speciesStats = helpers.getListsOfStats()
-			worldMaps.drawMain(window,0,0,listOfAgents) #600 x 600
+			listOfAgents = helpers.getListOfAgents(version)
+			simulationStatsDict, speciesStatsList = helpers.getListsOfStats(helpers.getMonitorFileName())
+			worldMaps.drawMain(window,0,0,listOfAgents,3) #600 x 600, spacing = 3
 			#worldMaps.drawEnergy(window,600,0) #200 x 200
 			#worldMaps.drawSignal(window,600,200) #200 x 200
 			speciesTree.saveNewSetOfAgents(listOfAgents)
 			speciesTree.drawTree(window,600,400) #200 x 320
-			speciesStats.drawStats(window,0,800,speciesStats) #480 x 720
-			simulationStats.drawStats(window,0,600,simulationStats) #120 x 600
+			speciesStats.drawStats(window,0,800,speciesStatsList) #480 x 720
+			#simulationStats.drawStats(window,0,600,simulationStatsDict) #120 x 600
 			pygame.display.flip()	
 			if(imgNumb < imgMax):
 				saveScreen(window,imgNumb)

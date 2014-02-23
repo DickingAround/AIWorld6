@@ -1,7 +1,7 @@
 import pygame
 import time
 import sys
-
+import agent
 # -----------------
 # -- BRAIN COLOR --
 # -----------------
@@ -39,7 +39,7 @@ initRGBToNumberDicts()
 def rgbToNumber(rgb):
 	return rgbToNumberDict[rgb]
 def numberToRGB(number):
-	return numberToRGBDict[number%maxRGBNumber]	
+	return numberToRGBDict[int(number)%maxRGBNumber]	
 	
 def getBrainColor(brainString):
 	#L1;4:5.4:3;L2;3:4:2,2	
@@ -74,11 +74,11 @@ def getBrainColor(brainString):
 # ------------------
 # -- Data getters --
 # ------------------
-def getListOfAgents():
-	worldFile = helpers.getWorldFile()
+def getListOfAgents(version):
+	worldFile = getWorldFile(version)
 	listOfAgents = []
-	for line in worldFile.readlines():listOfAgents = getListOfAgentsFromWorld()
-		a = agent(line)
+	for line in worldFile.readlines():
+		a = agent.agent(line)
 		listOfAgents.append(a)
 	return listOfAgents
 
@@ -93,7 +93,7 @@ def getListsOfStats(f):
 	lastLine = tail(f)
 	speciesNumber = -1
 	speciesStatList = []
-	simulationStatList = []
+	simulationStatDict = {}
 	for stat in lastLine.split(' '):
 		keyValuePair = stat.split(',')
 		key = keyValuePair[0]
@@ -105,8 +105,8 @@ def getListsOfStats(f):
 		elif(speciesNumber >= 0):
 			speciesStatList[speciesNumber][key] = float(value)
 		elif(speciesNumber == -1):
-			simulationStatList[key] = value
-	return simulationStatList, speciesStatList
+			simulationStatDict[key] = value
+	return simulationStatDict, speciesStatList
 
 
 
