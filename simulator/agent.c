@@ -346,7 +346,9 @@ void agent_load(char *str, int strLength) {
      printf("World loading: All the agent's parameters aren't here\n");
      //error_handler();  
     }
-    a = world_mallocAgent(&sm.w,xLoc,yLoc);
+    a == NULL; //Next, make sure the agent fits in the world somewhere, in case we've resized the world since this save point
+    if(xLoc >= WORLD_BORDER || xLoc <= sm.w.worldSize - WORLD_BORDER ||xLoc >= WORLD_BORDER || xLoc <= sm.w.worldSize - WORLD_BORDER)
+     a = world_mallocAgent(&sm.w,xLoc,yLoc);
     if(a != NULL) {
      a->energy = energy;
      a->facingDirection = facingDirection;
