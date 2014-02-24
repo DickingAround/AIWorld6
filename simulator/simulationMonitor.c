@@ -19,104 +19,109 @@ void simulationMonitor_writeTimeStamp(FILE *f) {
 //-----------------------------------------------
 void simulationMonitor_addDecisionsForHash(int hash, int x) {
  sm.smon.perHashMetrics[hash][0] += x; }
-int simulationMonitor_getDecisionsForHash(int hash){
+unsigned long long simulationMonitor_getDecisionsForHash(int hash){
  return sm.smon.perHashMetrics[hash][0];}
-int simulationMonitor_getDecisionsForSpecies(int species){
+unsigned long long simulationMonitor_getDecisionsForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][0];}
+
+unsigned long long simulationMonitor_getAgentsForHash(int hash) {
+ return (int)((float)sm.smon.perHashMetrics[hash][0] / (float)SIM_REPORT_INTERVAL);}
+unsigned long long simulationMonitor_getAgentsForSpecies(int species) {
+ return (int)((float)sm.smon.perSpeciesMetrics[species][0]/(float)SIM_REPORT_INTERVAL);}
 
 void simulationMonitor_addMovesForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][1] += x;}
-int simulationMonitor_getMovesForSpecies(int species){
+unsigned long long simulationMonitor_getMovesForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][1];}
 
 void simulationMonitor_addTurnsForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][2] += x;}
-int simulationMonitor_getTurnsForSpecies(int species){
+unsigned long long simulationMonitor_getTurnsForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][2];}
 
 void simulationMonitor_addAttacksForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][3] += x;}
-int simulationMonitor_getAttacksForSpecies(int species){
+unsigned long long simulationMonitor_getAttacksForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][3];}
 
 void simulationMonitor_addGrowsForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][4] += x;}
-int simulationMonitor_getGrowsForSpecies(int species){
+unsigned long long simulationMonitor_getGrowsForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][4];}
 
 void simulationMonitor_addASexualReplicationsForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][5] += x;}
-int simulationMonitor_getASexualReplicationsForSpecies(int species){
+unsigned long long simulationMonitor_getASexualReplicationsForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][5];}
 
 void simulationMonitor_addSexualReplicationsForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][6] += x;}
-int simulationMonitor_getSexualReplicationsForSpecies(int species){
+unsigned long long simulationMonitor_getSexualReplicationsForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][6];}
 
 void simulationMonitor_addFailedMovesForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][7] += x;}
-int simulationMonitor_getFailedMovesForSpecies(int species){
+unsigned long long simulationMonitor_getFailedMovesForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][7];}
 
 void simulationMonitor_addFailedReplicationsForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][8] += x;}
-int simulationMonitor_getFailedReplicationsForSpecies(int species){
+unsigned long long simulationMonitor_getFailedReplicationsForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][8];}
 
 void simulationMonitor_addFailedAttacksForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][9] += x;}
-int simulationMonitor_getFailedAttacksForSpecies(int species){
+unsigned long long simulationMonitor_getFailedAttacksForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][9];}
 
 void simulationMonitor_addFailedGrowsForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][10] += x;}
-int simulationMonitor_getFailedGrowsForSpecies(int species){
+unsigned long long simulationMonitor_getFailedGrowsForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][10];}
 
 void simulationMonitor_addKilledBySeedingForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][11] += x;}
-int simulationMonitor_getKilledBySeedingForSpecies(int species){
+unsigned long long simulationMonitor_getKilledBySeedingForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][11];}
 
 void simulationMonitor_addKilledByAttacksForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][12] += x;}
-int simulationMonitor_getKilledByAttacksForSpecies(int species){
+unsigned long long simulationMonitor_getKilledByAttacksForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][12];}
 
 void simulationMonitor_addKilledByStarvingForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][13] += x;}
-int simulationMonitor_getKilledByStarvingForSpecies(int species){
+unsigned long long simulationMonitor_getKilledByStarvingForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][13];}
 
 void simulationMonitor_addAveBrainSizeForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][14] += x;}
-int simulationMonitor_getAveBrainSizeForSpecies(int species){
+unsigned long long simulationMonitor_getAveBrainSizeForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][14];}
 
 /*void simulationMonitor_addNewBrainForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][15] += x;}
-int simulationMonitor_getNewBrainForSpecies(int species){
+unsigned long long simulationMonitor_getNewBrainForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][15];}
 */ //Legacy
 void simulationMonitor_addAveEnergyForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][15] += x;}
-int simulationMonitor_getAveEnergyForSpecies(int species){
+unsigned long long simulationMonitor_getAveEnergyForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][15];}
 
 void simulationMonitor_addAveAgeForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][16] += x;}
-int simulationMonitor_getAveAgeForSpecies(int species){
+unsigned long long simulationMonitor_getAveAgeForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][16];}
 
 void simulationMonitor_addAveGenerationForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][17] += x;}
-int simulationMonitor_getAveGenerationForSpecies(int species){
+unsigned long long simulationMonitor_getAveGenerationForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][17];}
 
 /*void simulationMonitor_addNumberOfAgentsForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][19] += x;}
-int simulationMonitor_getNumberOfAgentsForSpecies(int species){
+unsigned long long simulationMonitor_getNumberOfAgentsForSpecies(int species){
  return sm.smon.perSpeciesMetrics[species][19];} */
 
 //-----------------------
@@ -146,9 +151,12 @@ int simulationMonitor_findSpecies(int speciesList[][2], int numberOfPossibleHash
  int distanceFromSpecies = 0;
  int waitingToSeeNewSpecies = 1;
  int speciesNumber = 0;
+ FILE *outFile;
+ outFile = fopen(SPECIES_HIST_FILE_LOC,"w");
  for(i=0; i < numberOfPossibleHashes; i++) {
-  printf("Checking spot %i, Species list is [0]:%i,%i\n",i,speciesList[0][0],speciesList[0][1]);
-  c = simulationMonitor_getDecisionsForHash(i); 
+  c = simulationMonitor_getAgentsForHash(i);
+  if(c > 0) //Save the full historgram for the python clustering code
+   fprintf(outFile,"%i\t%i\n",i,c);
   if(c <= SPECIES_DETECTION_POPULATION_MIN) {
    distanceFromSpecies++;
    if(distanceFromSpecies >= SPECIES_DETECTION_POPULATION_DIF_MIN) { //This is a wide gap between species
@@ -176,6 +184,7 @@ int simulationMonitor_findSpecies(int speciesList[][2], int numberOfPossibleHash
   speciesList[0][0] = 0;
   speciesList[0][1] = numberOfPossibleHashes;  
  }
+ fclose(outFile);
  return speciesNumber;
 }
 
@@ -248,7 +257,8 @@ void simulationMonitor_writeMetricsFiles(int speciesList[][2],int numberOfSpecie
   fprintf(outFile," speciesHashMax,%i",speciesList[speciesNumber][1]);
   if(simulationMonitor_getDecisionsForSpecies(speciesNumber) == 0)
    printf("SimulaitonMonitor: Error: Getting species with zero decisions, but that shouldn't be possible since species are differentiated based on decision count\n"); 
-  numberOfAgents = (int)(((float)simulationMonitor_getDecisionsForSpecies(speciesNumber)) / (float)SIM_REPORT_INTERVAL);
+  numberOfAgents = simulationMonitor_getAgentsForSpecies(speciesNumber);
+  printf("printing species %i, with %i agents, min:%i, max:%i\n",speciesNumber,numberOfAgents,speciesList[speciesNumber][0],speciesList[speciesNumber][1]);
   fprintf(outFile," numberOfAgents,%i",numberOfAgents);
   fprintf(outFile," aveAge,%f",((float)simulationMonitor_getAveAgeForSpecies(speciesNumber))/(float)numberOfAgents);
   fprintf(outFile," aveGeneration,%f",((float)simulationMonitor_getAveGenerationForSpecies(speciesNumber))/(float)numberOfAgents);
@@ -269,9 +279,9 @@ void simulationMonitor_writeMetricsFiles(int speciesList[][2],int numberOfSpecie
    fprintf(outFile," attackFailed,%f",((float)simulationMonitor_getFailedAttacksForSpecies(speciesNumber))/((float)simulationMonitor_getAttacksForSpecies(speciesNumber)));
   if(simulationMonitor_getGrowsForSpecies(speciesNumber) > 0)
    fprintf(outFile," growFailed,%f",((float)simulationMonitor_getFailedGrowsForSpecies(speciesNumber))/((float)simulationMonitor_getGrowsForSpecies(speciesNumber)));
-  fprintf(outFile," killedBySeeding,%i",simulationMonitor_getKilledBySeedingForSpecies(speciesNumber));
-  fprintf(outFile," killedByAttacks,%i",simulationMonitor_getKilledByAttacksForSpecies(speciesNumber));
-  fprintf(outFile," killedByStarving,%i",simulationMonitor_getKilledByStarvingForSpecies(speciesNumber));
+  fprintf(outFile," killedBySeeding,%llu",simulationMonitor_getKilledBySeedingForSpecies(speciesNumber));
+  fprintf(outFile," killedByAttacks,%llu",simulationMonitor_getKilledByAttacksForSpecies(speciesNumber));
+  fprintf(outFile," killedByStarving,%llu",simulationMonitor_getKilledByStarvingForSpecies(speciesNumber));
  }
  fprintf(outFile,"\n"); 
  fclose(outFile);
@@ -294,13 +304,13 @@ int simulationMonitor_test() {
  sm.smon.perHashMetrics[8][0] = 100;
  sm.smon.perHashMetrics[19][0] = 100;
  for(i=0;i<20;i++)
-  printf("%i:%i - ",i,simulationMonitor_getDecisionsForHash(i));
+  printf("%i:%llu - ",i,simulationMonitor_getDecisionsForHash(i));
  printf("\n"); 
  i = simulationMonitor_findSpecies(speciesList,20); //SpeciesList[SPECIES_TYPES_MAX][3]
  printf("%i species, first is %i,%i\n",i,speciesList[0][0],speciesList[0][1]); 
  printf("%i species, second is %i,%i\n",i,speciesList[1][0],speciesList[1][1]); 
  simulationMonitor_collectSpeciesMetrics(speciesList,i);
- printf("Agents per species: %i,%i",simulationMonitor_getDecisionsForSpecies(0),simulationMonitor_getDecisionsForSpecies(1));
+ printf("Agents per species: %llu,%llu",simulationMonitor_getDecisionsForSpecies(0),simulationMonitor_getDecisionsForSpecies(1));
  return 0;
 }
 #endif

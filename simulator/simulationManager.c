@@ -81,7 +81,7 @@ void simulationManager_runIterations_advanced(int iterations, int seedInterval, 
   simulationManager_runAgentActions(); //Single-threaded
   actionMS += clock() - timerAction;
   #ifdef GO_SLOW
-  sleep(20);
+  sleep(4);
   #endif
  } 
 }
@@ -130,6 +130,9 @@ void simulationManager_runAgentActions() { //Single threaded
     simulationMonitor_addAveAgeForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].age);
     simulationMonitor_addAveEnergyForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].energy);
     simulationMonitor_addAveBrainSizeForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].br.brainSize);
+    //TODO: Remove this if it never fires 
+    if(sm.w.agents[i].generation < 0 || sm.w.agents[i].age < 0 || sm.w.agents[i].energy < 0 || sm.w.agents[i].br.brainSize < 0)
+     printf("Problem with an agent giving metrics.. gen:%lu, age:%lu, ene:%f, brain:%i\n",sm.w.agents[i].generation, sm.w.agents[i].age, sm.w.agents[i].energy, sm.w.agents[i].br.brainSize );
     #endif
     agent_performDecidedAction(&(sm.w.agents[i]));
    }

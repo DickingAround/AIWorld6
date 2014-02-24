@@ -1,12 +1,12 @@
 #define EXP_NO_COMMUNICATION
 
 //GO_SLOW makes the system wait 20 seconds between iterations
-//#define GO_SLOW
+#define GO_SLOW
 
 //Simulation settings
 #define NUMBER_OF_THREADS 4
 #define SIM_ITERATIONS 50000000
-#define SIM_REPORT_INTERVAL 5000
+#define SIM_REPORT_INTERVAL 1
 #define SIM_INTEL_TEST_INTERVAL 100000
 #define SIM_SEED_INTERVAL 100
 #define SIM_SEED_DURATION 0
@@ -23,7 +23,7 @@
 #define PASS_IMPASSIBLE_INIT -1
 #define PASS_IMPASSIBLE -1
 #define WORLD_BORDER 3
-#define WORLD_SIZE 300
+#define WORLD_SIZE 200
 //Agent settings
 #define AG_MUTATION_RATE 0.10
 #define WORLD_PASS_COST_MULT 0.1
@@ -86,8 +86,8 @@
 //500*50*4 = 100,000
 #define AG_HASH_MOD 50
 #define AG_MAX_HASH 100000
-#define SPECIES_DETECTION_POPULATION_MIN 10
-#define SPECIES_DETECTION_POPULATION_DIF_MIN 5
+#define SPECIES_DETECTION_POPULATION_MIN 1
+#define SPECIES_DETECTION_POPULATION_DIF_MIN 6
 #define SPECIES_TYPES_MAX 1000
 #define SPECIES_NUMBER_OF_METRICS 18
 //Values for making decisions
@@ -99,6 +99,7 @@
 
 #define INTELTESTS_FILE_LOC "./data_from_simulations/intelTests.txt" 
 #define MONITOR_FILE_LOC "./data_from_simulations/monitor.txt"
+#define SPECIES_HIST_FILE_LOC "./data_from_simulations/speciesHist.txt"
 //The world files switch off between A and B in order to maintain consistency in case we kill the process in the middle of saving.
 #define WORLD_AGENTS_FILE_LOC_A "./data_from_simulations/world_agents_a.txt"
 #define WORLD_AGENTS_FILE_LOC_B "./data_from_simulations/world_agents_b.txt"

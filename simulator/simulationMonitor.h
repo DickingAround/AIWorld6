@@ -12,8 +12,8 @@ typedef struct simulationMonitor
  int addedCon, didntAddCon, removedCon, didntRemoveCon;
  double speed, speedDecision, speedAction, speedSeed, speedIntelTests;
 
- int perHashMetrics[AG_MAX_HASH][SPECIES_NUMBER_OF_METRICS];
- int perSpeciesMetrics[SPECIES_TYPES_MAX][SPECIES_NUMBER_OF_METRICS];
+ unsigned long long perHashMetrics[AG_MAX_HASH][SPECIES_NUMBER_OF_METRICS];
+ unsigned long long perSpeciesMetrics[SPECIES_TYPES_MAX][SPECIES_NUMBER_OF_METRICS];
 
  // -- ALL HASHES METRICS -- 
  //Decisions 
@@ -28,68 +28,68 @@ typedef struct simulationMonitor
  //unsigned int species_failedMoves[SPECIES_TYPES_MAX], species_failedReplications[SPECIES_TYPES_MAX], species_failedAttacks[SPECIES_TYPES_MAX], species_failedGrows[SPECIES_TYPES_MAX], species_killedBySeeding[SPECIES_TYPES_MAX], species_killedByAttacks[SPECIES_TYPES_MAX], species_killedByStarving[SPECIES_TYPES_MAX], species_newBrainSize[SPECIES_TYPES_MAX], species_newBrains[SPECIES_TYPES_MAX];
 
  // -- PER EXISTING AGENT METRICS BY SPECIES --
- unsigned int species_aveEnergy[SPECIES_TYPES_MAX], species_aveAge[SPECIES_TYPES_MAX], species_aveGeneration[SPECIES_TYPES_MAX];
+ //unsigned int species_aveEnergy[SPECIES_TYPES_MAX], species_aveAge[SPECIES_TYPES_MAX], species_aveGeneration[SPECIES_TYPES_MAX];
 } simulationMonitor; 
 
 void simulationMonitor_addDecisionsForHash(int hash, int x);
-int simulationMonitor_getDecisionsForHash(int hash);
-int simulationMonitor_getDecisionsForSpecies(int species);
+unsigned long long simulationMonitor_getDecisionsForHash(int hash);
+unsigned long long simulationMonitor_getDecisionsForSpecies(int species);
 
 void simulationMonitor_addMovesForHash(int hash, int x);
-int simulationMonitor_getMovesForSpecies(int species);
+unsigned long long simulationMonitor_getMovesForSpecies(int species);
 
 void simulationMonitor_addTurnsForHash(int hash, int x);
-int simulationMonitor_getTurnsForSpecies(int species);
+unsigned long long simulationMonitor_getTurnsForSpecies(int species);
 
 void simulationMonitor_addAttacksForHash(int hash, int x);
-int simulationMonitor_getAttacksForSpecies(int species);
+unsigned long long simulationMonitor_getAttacksForSpecies(int species);
 
 void simulationMonitor_addGrowsForHash(int hash, int x);
-int simulationMonitor_getGrowsForSpecies(int species);
+unsigned long long simulationMonitor_getGrowsForSpecies(int species);
 
 void simulationMonitor_addASexualReplicationsForHash(int hash, int x);
-int simulationMonitor_getASexualReplicationsForSpecies(int species);
+unsigned long long simulationMonitor_getASexualReplicationsForSpecies(int species);
 
 void simulationMonitor_addSexualReplicationsForHash(int hash, int x);
-int simulationMonitor_getSexualReplicationsForSpecies(int species);
+unsigned long long simulationMonitor_getSexualReplicationsForSpecies(int species);
 
 void simulationMonitor_addFailedMovesForHash(int hash, int x);
-int simulationMonitor_getFailedMovesForSpecies(int species);
+unsigned long long simulationMonitor_getFailedMovesForSpecies(int species);
 
 void simulationMonitor_addFailedReplicationsForHash(int hash, int x);
-int simulationMonitor_getFailedReplicationsForSpecies(int species);
+unsigned long long simulationMonitor_getFailedReplicationsForSpecies(int species);
 
 void simulationMonitor_addFailedAttacksForHash(int hash, int x);
-int simulationMonitor_getFailedAttacksForSpecies(int species);
+unsigned long long simulationMonitor_getFailedAttacksForSpecies(int species);
 
 void simulationMonitor_addFailedGrowsForHash(int hash, int x);
-int simulationMonitor_getFailedGrowsForSpecies(int species);
+unsigned long long simulationMonitor_getFailedGrowsForSpecies(int species);
 
 void simulationMonitor_addKilledBySeedingForHash(int hash, int x);
-int simulationMonitor_getKilledBySeedingForSpecies(int species);
+unsigned long long simulationMonitor_getKilledBySeedingForSpecies(int species);
 
 void simulationMonitor_addKilledByAttacksForHash(int hash, int x);
-int simulationMonitor_getKilledByAttacksForSpecies(int species);
+unsigned long long simulationMonitor_getKilledByAttacksForSpecies(int species);
 
 void simulationMonitor_addKilledByStarvingForHash(int hash, int x);
-int simulationMonitor_getKilledByStarvingForSpecies(int species);
+unsigned long long simulationMonitor_getKilledByStarvingForSpecies(int species);
 
 void simulationMonitor_addAveBrainSizeForHash(int hash, int x);
-int simulationMonitor_getAveBrainSizeForSpecies(int species);
+unsigned long long simulationMonitor_getAveBrainSizeForSpecies(int species);
 
 void simulationMonitor_addAveEnergyForHash(int hash, int x);
-int simulationMonitor_getAveEnergyForSpecies(int species);
+unsigned long long simulationMonitor_getAveEnergyForSpecies(int species);
 
 void simulationMonitor_addAveAgeForHash(int hash, int x);
-int simulationMonitor_getAveAgeForSpecies(int species);
+unsigned long long simulationMonitor_getAveAgeForSpecies(int species);
 
 void simulationMonitor_addAveGenerationForHash(int hash, int x);
-int simulationMonitor_getAveGenerationForSpecies(int species);
+unsigned long long simulationMonitor_getAveGenerationForSpecies(int species);
 
 void simulationMonitor_clear();
 
 int simulationMontior_test();
-void simulationMonitor_writeMetricsFiles(int numberOfSpecies);
+void simulationMonitor_writeMetricsFiles(int speciesList[][2],int numberOfSpecies);
 void simulationMonitor_emitMonitors();
 void simulationMonitor_runIntelligenceTests(); //These are all simulations, the static analysis should be done continously.
 #endif

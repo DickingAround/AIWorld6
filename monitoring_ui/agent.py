@@ -85,51 +85,39 @@ class agent:
 			return([[[-2,-1],[-2,0],[-1,0],[-1,1],[0,1],[0,2],[1,0],[1,1],[2,-1],[2,0]],[[-2,-2],[-1,-2],[-1,-1],[0,-2],[0,-1],[0,0],[1,-2],[1,-1],[2,-2]]])
 		elif(self.facingDirection == 3): #LEFT
 			return([[[0,-2],[1,-2],[-1,-1],[0,-1],[-2,0],[-1,0],[-1,1],[0,1],[0,2],[1,2]],[[2,-2],[1,-1],[2,-1],[0,0],[1,0],[2,0],[1,1],[2,1],[2,2]]])
+
+	#TODO: Clean this up. This got very complex due to the fact that rendering happens iwth X along the horizontal axis and we planned the c code with x along verticle axis
 	
 	def getPoints_moveLeft(self):
-		return([[-1,0],[0,-1],[0,0],[0,1],[1,-2],[1,-1],[1,0],[1,1],[1,2]])
-	def getPoints_moveRight(self):
-		return([[-1,-2],[-1,-1],[-1,0],[-1,1],[-1,2],[0,-1],[0,0],[0,1],[1,0]])
-	def getPoints_moveDown(self):
-		return([[-2,-1],[-1,-1],[0,-1],[1,-1],[2,-1],[-1,0],[0,0],[1,0],[0,1]])
-	def getPoints_moveUp(self):
 		return([[-2,1],[-1,1],[0,1],[1,1],[2,1],[-1,0],[0,0],[1,0],[0,-1]])
+	def getPoints_moveRight(self):
+		return([[-2,-1],[-1,-1],[0,-1],[1,-1],[2,-1],[-1,0],[0,0],[1,0],[0,1]])
+	def getPoints_moveDown(self):
+		return([[-1,-2],[-1,-1],[-1,0],[-1,1],[-1,2],[0,-1],[0,0],[0,1],[1,0]])
+	def getPoints_moveUp(self):
+		return([[-1,0],[0,-1],[0,0],[0,1],[1,-2],[1,-1],[1,0],[1,1],[1,2]])
 	def getPoints_attackLeft(self):
-		return([[-3,-2],[-2,-2],[-1,-2],[0,-2],[1,-2],[0,-1],[1,-1],[1,0],[0,1],[1,1],[-3,2],[-2,2],[-1,2],[0,2],[1,2]])
-	def getPoints_attackUp(self):
 		return([[-2,-3],[-2,-2],[-2,-1],[-2,0],[-2,1],[-1,0],[-1,1],[0,1],[1,0],[1,1],[2,-3],[2,-2],[2,-1],[2,0],[2,1]])
+	def getPoints_attackUp(self):
+		return([[-3,-2],[-2,-2],[-1,-2],[0,-2],[1,-2],[0,-1],[1,-1],[1,0],[0,1],[1,1],[-3,2],[-2,2],[-1,2],[0,2],[1,2]])
 	def getPoints_attackDown(self):
-		return([[-2,3],[-2,2],[-2,1],[-2,0],[-2,-1],[-1,0],[-1,-1],[0,-1],[1,0],[1,-1],[2,3],[2,2],[2,1],[2,0],[2,-1]])
-	def getPoints_attackRight(self):
 		return([[3,-2],[2,-2],[1,-2],[0,-2],[-1,-2],[0,-1],[-1,-1],[-1,0],[0,1],[-1,1],[3,2],[2,2],[1,2],[0,2],[-1,2]])
+	def getPoints_attackRight(self):
+		return([[-2,3],[-2,2],[-2,1],[-2,0],[-2,-1],[-1,0],[-1,-1],[0,-1],[1,0],[1,-1],[2,3],[2,2],[2,1],[2,0],[2,-1]])
 	def getPoints_grow(self):
 		return([[0,-1],[-1,0],[0,0],[1,0],[0,1]])
 	def getPoints_replicate(self):
 		return([[-1,-2],[0,-2],[1,-2],[-2,-1],[-1,-1],[1,-1],[2,-1],[-2,0],[2,0],[-2,1],[-1,1],[1,1],[2,1],[-1,2],[0,2],[1,2]])
 	def getPoints_replicateLeft(self):
-		return([[-1,-2],[0,-2],[1,-2],[-2,-1],[-1,-1],[1,-1],[2,-1],[1,0],[2,0],[-2,1],[-1,1],[1,1],[2,1],[-1,2],[0,2],[1,2]])
-	def getPoints_replicateRight(self):
-		return([[-1,-2],[0,-2],[1,-2],[-2,-1],[-1,-1],[1,-1],[2,-1],[-2,0],[-1,0],[-2,1],[-1,1],[1,1],[2,1],[-1,2],[0,2],[1,2]])
-	def getPoints_replicateUp(self):
 		return([[-1,-2],[0,1],[1,-2],[-2,-1],[-1,-1],[1,-1],[2,-1],[-2,0],[2,0],[-2,1],[-1,1],[1,1],[2,1],[-1,2],[0,2],[1,2]])
-	def getPoints_replicateDown(self):
+	def getPoints_replicateRight(self):
 		return([[-1,-2],[0,-2],[1,-2],[-2,-1],[-1,-1],[1,-1],[2,-1],[-2,0],[2,0],[-2,1],[-1,1],[1,1],[2,1],[-1,2],[0,-1],[1,2]])
-	def getPoints_turnLeftFromLeft(self):
-		return([[-1,1],[-1,0],[0,-1],[0,0],[1,-1],[1,0],[1,1]])
-	def getPoints_turnRightFromLeft(self):
-		return([[-1,-1],[-1,0],[0,1],[0,0],[1,-1],[1,0],[1,1]])
-	def getPoints_turnLeftFromUp(self):
-		return([[-1,-1],[0,-1],[0,0],[1,0],[-1,1],[0,1],[1,1]])
-	def getPoints_turnRightFromUp(self):
-		return([[1,-1],[0,-1],[0,0],[-1,0],[-1,1],[0,1],[1,1]])
-	def getPoints_turnLeftFromDown(self):
-		return([[-1,-1],[0,-1],[1,-1],[-1,0],[0,0],[0,1],[1,1]])
-	def getPoints_turnRightFromDown(self):
-		return([[-1,-1],[0,-1],[1,-1],[0,0],[1,0],[-1,1],[0,1]])
-	def getPoints_turnLeftFromRight(self):
-		return([[-1,-1],[-1,0],[-1,1],[0,0],[1,0],[1,-1],[1,0]])
-	def getPoints_turnRightFromRight(self):
-		return([[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[1,0],[1,1]])
+	def getPoints_replicateUp(self):
+		return([[-1,-2],[0,-2],[1,-2],[-2,-1],[-1,-1],[1,-1],[2,-1],[1,0],[2,0],[-2,1],[-1,1],[1,1],[2,1],[-1,2],[0,2],[1,2]])
+	def getPoints_replicateDown(self):
+		return([[-1,-2],[0,-2],[1,-2],[-2,-1],[-1,-1],[1,-1],[2,-1],[-2,0],[-1,0],[-2,1],[-1,1],[1,1],[2,1],[-1,2],[0,2],[1,2]])
+	def getPoints_turn(self):
+		return([[-1,-1],[1,-1],[0,0],[-1,1],[1,1]])
 	def getPointsToDraw(self):
 		d = self.latestDecision
 		if(d == 0): #Move foreward
@@ -159,24 +147,8 @@ class agent:
 				return self.getPoints_moveLeft()
 			elif(self.facingDirection == 3): #Left
 				return self.getPoints_moveUp()
-		elif(d == 3): #Turn left
-			if(self.facingDirection == 0): #UP
-				return self.getPoints_turnLeftFromUp()
-			elif(self.facingDirection == 1): #Right
-				return self.getPoints_turnLeftFromRight()
-			elif(self.facingDirection == 2): #Down
-				return self.getPoints_turnLeftFromDown()
-			elif(self.facingDirection == 3): #Left
-				return self.getPoints_turnLeftFromLeft()	
-		elif(d == 4): #Turn right
-			if(self.facingDirection == 0): #UP
-				return self.getPoints_turnRightFromUp()
-			elif(self.facingDirection == 1): #Right
-				return self.getPoints_turnRightFromRight()
-			elif(self.facingDirection == 2): #Down
-				return self.getPoints_turnRightFromDown()
-			elif(self.facingDirection == 3): #Left
-				return self.getPoints_turnRightFromLeft()	
+		elif(d == 3 or d == 4): #Turn
+			return self.getPoints_turn()
 		elif(d == 5): #attack
 			if(self.facingDirection == 0): #UP
 				return self.getPoints_attackUp()
@@ -209,6 +181,8 @@ class agent:
 	       	for point in points: 
 			#print "Drawing species at %i,%i"%(x+self.xLoc+point[0],y+self.yLoc+point[1])
 			window.set_at((x+self.xLoc*spacing+point[0],y+self.yLoc*spacing+point[1]),speciesColor)
+			# Had to transpose these because X is actually along the top and y is down, which is not how I expected and this is easier than reprogramming all the directions
+			#window.set_at((y+self.yLoc*spacing+point[1],x+self.xLoc*spacing+point[0]),speciesColor)
 
 	def draw2(self,window,x,y,spacing):
 		decisionColor = self.getDecisionColor()

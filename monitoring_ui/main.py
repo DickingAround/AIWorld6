@@ -51,9 +51,9 @@ if __name__ == '__main__':
 			worldMaps.drawMain(window,0,0,listOfAgents,3) #600 x 600, spacing = 3
 			#worldMaps.drawEnergy(window,600,0) #200 x 200
 			#worldMaps.drawSignal(window,600,200) #200 x 200
-			speciesTree.saveNewSetOfAgents(listOfAgents)
-			speciesTree.drawTree(window,600,400) #200 x 320
-			speciesStats.drawStats(window,0,800,speciesStatsList) #480 x 720
+			#speciesTree.saveNewSetOfAgents(listOfAgents)
+			#speciesTree.drawTree(window,400,600) #200 x 320
+			#speciesStats.drawStats(window,800,0,speciesStatsList) #480 x 720
 			#simulationStats.drawStats(window,0,600,simulationStatsDict) #120 x 600
 			pygame.display.flip()	
 			if(imgNumb < imgMax):

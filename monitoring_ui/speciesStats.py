@@ -16,19 +16,28 @@ def drawSpeciesStats(window,x,y,statDict,positionNumber):
 	#Get the species color
 	color = helpers.numberToRGB((statDict['speciesHashMin']+statDict['speciesHashMax'])/2)
 	#Draw out the stats we care about
-	statList = ['numberOfAgents','aveAge','aveGeneration','aveEnergy','attacks','grows','asexReplications','sexReplications']
+	statList = ['numberOfAgents','aveAge','aveGeneration','aveEnergy','attacks','grows','asexReplications','sexReplications','speciesHashMin','speciesHashMax']
 	fontSize = 18
         font = pygame.font.Font(None,fontSize)
 	i = 0
 	for stat in statList:
 		label = "%s:%f"%(stat,statDict[stat])
-		sur = font.render(label,1,color)
+		if(stat == 'speciesHashMin'):
+			sur = font.render(label,1,helpers.numberToRGB(statDict['speciesHashMin']))
+		elif(stat == 'speciesHashMax'):
+			sur = font.render(label,1,helpers.numberToRGB(statDict['speciesHashMax']))
+		else:
+			sur = font.render(label,1,color)
 		window.blit(sur,(x+xOffset,y+yOffset+(fontSize)*i))
 		i += 1
 
 def drawStats(window,x,y,speciesStatList):
 	for i in range(0,len(speciesStatList)):
-		drawSpeciesStats(window,x,y,speciesStatList[i],i)
+		print " %i of %i ------------------------------------------- "%(i,len(speciesStatList))
+		print speciesStatList[i]
+	newStatList = sorted(speciesStatList, key=lambda k: k['numberOfAgents'], reverse=True)
+	for i in range(0,min(len(newStatList),4)):
+		drawSpeciesStats(window,x,y,newStatList[i],i)
 
 def test2():
 	displayX = 1280 #300 for text, 450 more for graphs (750), 900-1200 is time graphs

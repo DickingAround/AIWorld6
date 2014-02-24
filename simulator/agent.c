@@ -347,7 +347,7 @@ void agent_load(char *str, int strLength) {
      //error_handler();  
     }
     a == NULL; //Next, make sure the agent fits in the world somewhere, in case we've resized the world since this save point
-    if(xLoc >= WORLD_BORDER || xLoc <= sm.w.worldSize - WORLD_BORDER ||xLoc >= WORLD_BORDER || xLoc <= sm.w.worldSize - WORLD_BORDER)
+    if(xLoc >= WORLD_BORDER && xLoc < sm.w.worldSize - WORLD_BORDER && yLoc >= WORLD_BORDER && yLoc < sm.w.worldSize - WORLD_BORDER)
      a = world_mallocAgent(&sm.w,xLoc,yLoc);
     if(a != NULL) {
      a->energy = energy;
