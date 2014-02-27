@@ -1,15 +1,15 @@
 #define EXP_NO_COMMUNICATION
 
 //GO_SLOW makes the system wait 20 seconds between iterations
-#define GO_SLOW
+//#define GO_SLOW
 
 //Simulation settings
 #define NUMBER_OF_THREADS 4
 #define SIM_ITERATIONS 50000000
-#define SIM_REPORT_INTERVAL 1
+#define SIM_REPORT_INTERVAL 5000
 #define SIM_INTEL_TEST_INTERVAL 100000
 #define SIM_SEED_INTERVAL 100
-#define SIM_SEED_DURATION 0
+#define SIM_SEED_DURATION 60000
 #define SIM_SEED_ENERGY 20
 #define SIM_SEED_SIZE 30
 #define NUMBER_OF_SPECIES_RECORDED 3

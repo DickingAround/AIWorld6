@@ -262,7 +262,8 @@ void agent_mallocAgent_fromScratch(int x, int y, float e) {
   }
   agent_kill(sm.w.locs[x][y].a);
   #ifndef LESS_METRICS
-  simulationMonitor_addKilledBySeedingForHash(sm.w.locs[x][y].a->br.speciesHash,1); 
+  //TODO: This doesn't work since there's not even a brain yet.
+  //simulationMonitor_addKilledBySeedingForHash(sm.w.locs[x][y].a->br.speciesHash,1); 
   #endif
  }
  a = agent_mallocAgent(x,y,e,0);

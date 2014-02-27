@@ -258,7 +258,7 @@ void simulationMonitor_writeMetricsFiles(int speciesList[][2],int numberOfSpecie
   if(simulationMonitor_getDecisionsForSpecies(speciesNumber) == 0)
    printf("SimulaitonMonitor: Error: Getting species with zero decisions, but that shouldn't be possible since species are differentiated based on decision count\n"); 
   numberOfAgents = simulationMonitor_getAgentsForSpecies(speciesNumber);
-  printf("printing species %i, with %i agents, min:%i, max:%i\n",speciesNumber,numberOfAgents,speciesList[speciesNumber][0],speciesList[speciesNumber][1]);
+  //printf("printing species %i, with %i agents, min:%i, max:%i\n",speciesNumber,numberOfAgents,speciesList[speciesNumber][0],speciesList[speciesNumber][1]);
   fprintf(outFile," numberOfAgents,%i",numberOfAgents);
   fprintf(outFile," aveAge,%f",((float)simulationMonitor_getAveAgeForSpecies(speciesNumber))/(float)numberOfAgents);
   fprintf(outFile," aveGeneration,%f",((float)simulationMonitor_getAveGenerationForSpecies(speciesNumber))/(float)numberOfAgents);
