@@ -7,6 +7,7 @@ import autoCapture
 import helpers
 import speciesTree
 import speciesStats
+import simulationStats
 #import simulationStats
 def clearDisplay(window):
 	window.fill((0,0,0))
@@ -47,14 +48,15 @@ if __name__ == '__main__':
 			clearDisplay(window)
 			autoCapture.checkForAndSaveSpecialSituations()
 			listOfAgents = helpers.getListOfAgents(version)
-			simulationStatsDict, speciesStatsList = helpers.getListsOfStats(helpers.getMonitorFileName())
+			#The speciesStats is a list of dictionaries, one for each species. The simulationStats is list of pairs
+			simulationStatsList, speciesStatsList = helpers.getListsOfStats(helpers.getMonitorFileName())
 			worldMaps.drawMain(window,0,0,listOfAgents,3) #600 x 600, spacing = 3
 			#worldMaps.drawEnergy(window,600,0) #200 x 200
 			#worldMaps.drawSignal(window,600,200) #200 x 200
 			#speciesTree.saveNewSetOfAgents(listOfAgents)
 			#speciesTree.drawTree(window,400,600) #200 x 320
 			#speciesStats.drawStats(window,800,0,speciesStatsList) #480 x 720
-			#simulationStats.drawStats(window,0,600,simulationStatsDict) #120 x 600
+			simulationStats.drawStats(window,0,600,simulationStatsList,120) #120 x 600 (this function needs to know where the bottom is)
 			pygame.display.flip()	
 			if(imgNumb < imgMax):
 				saveScreen(window,imgNumb)

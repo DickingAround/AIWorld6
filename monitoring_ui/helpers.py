@@ -93,7 +93,7 @@ def getListsOfStats(f):
 	lastLine = tail(f)
 	speciesNumber = -1
 	speciesStatList = []
-	simulationStatDict = {}
+	simulationStatList = []
 	for stat in lastLine.split(' '):
 		keyValuePair = stat.split(',')
 		key = keyValuePair[0]
@@ -105,8 +105,8 @@ def getListsOfStats(f):
 		elif(speciesNumber >= 0):
 			speciesStatList[speciesNumber][key] = float(value)
 		elif(speciesNumber == -1):
-			simulationStatDict[key] = value
-	return simulationStatDict, speciesStatList
+			simulationStatList.append([key,value])
+	return simulationStatList, speciesStatList
 
 
 
