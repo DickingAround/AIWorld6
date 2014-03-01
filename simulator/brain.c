@@ -71,21 +71,22 @@ void brain_makeDecision(brain *br)
  b->brainSize = brainSize + i;
 }*/
 int brain_makeUpSpeciesHash() {
- return (int)(rand() / (float)RAND_MAX * SPECIES_HASH_INIT_MAX);
+ return (unsigned long)((rand() / (float)RAND_MAX * SPECIES_HASH_INIT_MAX) + SPECIES_HASH_INIT_MIN);
 }
-long long brain_makeUpSpeciesHashFromParent(brain *b) {
+unsigned long brain_augmentSpeciesHash(unsigned long speciesHash) {
  if( rand() < 0.5 )
-  return b->speciesHash + 1;
+  return (speciesHash + 1)%SPECIES_HASH_MAX;
  else
-  return b->speciesHash - 1;
+  if((long long)speciesHash - 1 < 0)
+   return SPECIES_HASH_MAX;
+  else
+   return speciesHash - 1;
 }
-long long brain_makeUpSpeciesHashFromParents(brain *ba, brain *bb) {
- long long tmpHash;
- tmpHash = (long long)((ba->speciesHash + bb->speciesHash) / 2.0);
- if( rand() < 0.5 )
-  return tmpHash + 1;
- else
-  return tmpHash - 1;
+unsigned long brain_makeUpSpeciesHashFromParent(brain *b) {
+ return brain_augmentSpeciesHash(b->speciesHash);
+}
+unsigned long brain_makeUpSpeciesHashFromParents(brain *ba, brain *bb) {
+ return brain_augmentSpeciesHash( (unsigned long)((ba->speciesHash + bb->speciesHash) / 2.0) );
 }
 
 //----------------------

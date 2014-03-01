@@ -2,9 +2,9 @@ TODO:
 * The new UI
 ** DONE - Add the simulation parameters
 ** DONE - Add the singnal/energy 
-** Upgrade the color of the species to include what we now know
-** Add the species data
-** Considering totally upgrading the system of species tracking
+** Upgrade the species detection to use the new algorithm. (We may have to dive in and actually understand that algorithm in order to do this)
+*** DONE - Have the simulation program emit the per-hash metrics
+*** Have the UI program parse the metrics, do species calculations on them, and emit species data
 
 * Add lineage to the agents
 * Show communication patterns
@@ -105,6 +105,7 @@ IMPLEMENTATION: Species
 *** 3 conn: x - a b b	d	e
 * Did a proof of concept and I bet this is going to work. The species do wander all over the damn place. So, now we're going to give every agent a number. And over time, that number is going to wander. Initially people get a set of numbers at random (across the spectrum of color). We let the numbers wander *anywhere*. When we display them, we hash them down. When we do species, we can look at the real numbers and run a clustering algorithm. (we may need to learn how to implement that algorithm). We'll probably also need a number-wander modifier. Perhaps they shouldn't be an int but instead a float?? Nah. With an int, we can still compress the color spectrum as much as we want.
 * It's even ok to have a variable color spectrum I think. 
+* Now we have a speciation hash we trust. How do we use the species algorithm to learn about them?? We have the algorithm in python, we could try finding a version in C. We could implement a version in C. Is there any way we could gather the per-agent data in C and implement it later? Of course. But we'll have to emit the statistics based on the hash algorithm. We can't roll them up on species anymore. 
 
 IMPLEMENTAION: Agent function
 * The world has to chang just enough to prevent long-term stagnation. Changing climate? Are we going to stick with the 'you must be alone to grow' concept? it does force long-term thought and movement past eachother... what are the alternatives? 

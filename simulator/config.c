@@ -83,13 +83,17 @@
 #define AG_CONNS_L2 500
 #define AG_CONN_END 130
 //Species detection systems
-#define SPECIES_HASH_INIT_MAX 100
+//The color spectrum is 0 to 1530 (not including it)
+//#define SPECIES_HASH_MIN 0 - assumed to be zero
+#define SPECIES_HASH_MAX 15300
+#define SPECIES_HASH_INIT_MIN 7000
+#define SPECIES_HASH_INIT_MAX 7100
 
-#define AG_HASH_MOD 50
-#define AG_MAX_HASH 100000
-#define SPECIES_DETECTION_POPULATION_MIN 1
-#define SPECIES_DETECTION_POPULATION_DIF_MIN 6
-#define SPECIES_TYPES_MAX 1000
+//#define AG_HASH_MOD 50
+//#define AG_MAX_HASH 100000
+//#define SPECIES_DETECTION_POPULATION_MIN 1
+//#define SPECIES_DETECTION_POPULATION_DIF_MIN 6
+//#define SPECIES_TYPES_MAX 1000
 #define SPECIES_NUMBER_OF_METRICS 18
 //Values for making decisions
 #define AG_INT_CONVERSION 0xFFFF
@@ -100,8 +104,9 @@
 
 #define INTELTESTS_FILE_LOC "./data_from_simulations/intelTests.txt" 
 #define MONITOR_FILE_LOC "./data_from_simulations/monitor.txt"
+#define SPECIES_STATS_FILE_LOC "./data_from_simulations/speciesStats.txt"
 #define SPECIES_HIST_FILE_LOC "./data_from_simulations/speciesHist.txt"
-//The world files switch off between A and B in order to maintain consistency in case we kill the process in the middle of saving.
+//The world files switch off between A and B in order to maintain consistency in case we kill the process in the middle of saving. We only have to do this for things we might load from.
 #define WORLD_AGENTS_FILE_LOC_A "./data_from_simulations/world_agents_a.txt"
 #define WORLD_AGENTS_FILE_LOC_B "./data_from_simulations/world_agents_b.txt"
 #define WORLD_LOCS_FILE_LOC_A "./data_from_simulations/world_locs_a.txt"

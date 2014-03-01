@@ -33,7 +33,7 @@ def drawMain(window,x,y,listOfAgents,spacing):
 	#TODO: Also we want to draw the terrain
 	for a in listOfAgents:
 		a.drawAgent(window,x,y,spacing)
-
+"""
 def drawAgentDecision(window,x,y,size,d):
 	color = (0,0,0)
 	if(d >= 0 and d <= 2):
@@ -135,3 +135,5 @@ def worldMaps_draw(window,xOffset,yOffset,version):
 	sur = font.render(label,1,(255,0,255));
 	window.blit(sur,(xOffset+545,yOffset+650))
 	f.close()
+
+"""
