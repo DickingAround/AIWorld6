@@ -97,10 +97,14 @@ IMPEMENTATION GOALS:
 * Allocate all memory at the beginning
 * Multi-threading in the C itself
 
-IMPLEMENTATION: Classes
-* Main - Runs the simulation, runs the tests, runs the display system, allows options for debug, timing, etc
-* World - 2D array of locations, can save and load itself
-* Location - Attributes of that locations, including the creature pointer * SimulationManager - Lists of threads, syncs threads as needed, runs iterations on the world, calls to get metrics. Threads stripe the world and thus must be synced.  * AgentManager - List of all agents, get and release the memory needed for them * Agent
+IMPLEMENTATION: Species
+* We are throwing away a lot of species data. We know there's commonalities in their brains. How might we discover what the brains are exactly?
+** Connections are location persistent. We could look at what locations are most common. For the most common connection, who has it. Who doesnt? Build a tree. Lets say the population is a[1,2,3] , b[1,2,2] , c[1,2,4] , d[3,2,9] , e[3,4,10]
+*** 1 conn: 2 - a,b,c,d		e
+*** 0 conn: 1 - a,b,c	d	e
+*** 3 conn: x - a b b	d	e
+* Did a proof of concept and I bet this is going to work. The species do wander all over the damn place. So, now we're going to give every agent a number. And over time, that number is going to wander. Initially people get a set of numbers at random (across the spectrum of color). We let the numbers wander *anywhere*. When we display them, we hash them down. When we do species, we can look at the real numbers and run a clustering algorithm. (we may need to learn how to implement that algorithm). We'll probably also need a number-wander modifier. Perhaps they shouldn't be an int but instead a float?? Nah. With an int, we can still compress the color spectrum as much as we want.
+* It's even ok to have a variable color spectrum I think. 
 
 IMPLEMENTAION: Agent function
 * The world has to chang just enough to prevent long-term stagnation. Changing climate? Are we going to stick with the 'you must be alone to grow' concept? it does force long-term thought and movement past eachother... what are the alternatives? 

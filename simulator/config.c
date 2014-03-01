@@ -83,7 +83,8 @@
 #define AG_CONNS_L2 500
 #define AG_CONN_END 130
 //Species detection systems
-//500*50*4 = 100,000
+#define SPECIES_HASH_INIT_MAX 100
+
 #define AG_HASH_MOD 50
 #define AG_MAX_HASH 100000
 #define SPECIES_DETECTION_POPULATION_MIN 1

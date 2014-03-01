@@ -54,7 +54,7 @@ void brain_makeDecision(brain *br)
 //----------------------
 // Compute Species Hash
 //----------------------
-void brain_computeHash(brain *b) {
+/*void brain_computeHash(brain *b) {
  int i = 0;
  int hash = 0;
  int brainSize = 0;
@@ -69,7 +69,25 @@ void brain_computeHash(brain *b) {
  } 
  b->speciesHash = hash; 
  b->brainSize = brainSize + i;
+}*/
+int brain_makeUpSpeciesHash() {
+ return (int)(rand() / (float)RAND_MAX * SPECIES_HASH_INIT_MAX);
 }
+long long brain_makeUpSpeciesHashFromParent(brain *b) {
+ if( rand() < 0.5 )
+  return b->speciesHash + 1;
+ else
+  return b->speciesHash - 1;
+}
+long long brain_makeUpSpeciesHashFromParents(brain *ba, brain *bb) {
+ long long tmpHash;
+ tmpHash = (long long)((ba->speciesHash + bb->speciesHash) / 2.0);
+ if( rand() < 0.5 )
+  return tmpHash + 1;
+ else
+  return tmpHash - 1;
+}
+
 //----------------------
 // Replication: Seeding 
 //----------------------
@@ -82,7 +100,7 @@ void brain_makeFromScratch(brain *newB) {
  newB->mutationRate = AG_MUTATION_RATE;
  brain_makeConnLvlFromScratch(newB->inL1,AG_INPUTS,newB->outL1,AG_MID_NODES,newB->multL1,newB->mutationRate,AG_CONNS_L1);  
  brain_makeConnLvlFromScratch(newB->inL2,AG_MID_NODES,newB->outL2,AG_OUTPUTS,newB->multL2,newB->mutationRate,AG_CONNS_L2);  
- brain_computeHash(newB);
+ brain_makeUpSpeciesHash(newB);
 }
 void brain_makeConnLvlFromScratch(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax) {
  int i;
@@ -104,7 +122,7 @@ void brain_makeFromAsex(brain *newB, brain *b) {
  newB->mutationRate = b->mutationRate;
  brain_makeConnLvlFromAsex(newB->inL1,AG_INPUTS,newB->outL1,AG_MID_NODES,newB->multL1,newB->mutationRate,AG_CONNS_L1,b->inL1,b->outL1,b->multL1); 
  brain_makeConnLvlFromAsex(newB->inL2,AG_MID_NODES,newB->outL2,AG_OUTPUTS,newB->multL2,newB->mutationRate,AG_CONNS_L2,b->inL2,b->outL2,b->multL2); 
- brain_computeHash(newB);
+ brain_makeUpSpeciesHashFromParent(b);
 }
 
 void brain_makeConnLvlFromAsex(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, unsigned char *oldIn, unsigned char *oldOut, float *oldMult) {
@@ -190,7 +208,7 @@ void brain_makeFromSex(brain *newB, brain *b, brain *c) {
  newB->mutationRate = b->mutationRate;
  brain_makeConnLvlFromSex(newB->inL1,AG_INPUTS,newB->outL1,AG_MID_NODES,newB->multL1,newB->mutationRate,AG_CONNS_L1,b->inL1,b->outL1,b->multL1,c->inL1,c->outL1,c->multL1); 
  brain_makeConnLvlFromSex(newB->inL2,AG_MID_NODES,newB->outL2,AG_OUTPUTS,newB->multL2,newB->mutationRate,AG_CONNS_L2,b->inL2,b->outL2,b->multL2,c->inL2,c->outL2,c->multL2); 
- brain_computeHash(newB);
+ brain_makeUpSpeciesHashFromParents(b,c);
 }
 void brain_makeConnLvlFromSex(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, unsigned char *oldInA, unsigned char *oldOutA, float *oldMultA, unsigned char *oldInB, unsigned char *oldOutB, float *oldMultB) {
  int i = 0; //There is an important edge case here where the system might skip the rest of the connections in a brain if there's only a single no-op at the end.
@@ -234,7 +252,7 @@ void brain_print(brain *b) {
 void brain_save(brain *b, FILE *file) {
  //TODO: We're not saving the mutation rate!!!
  int i = 0;
- fprintf(file,"M%f;H%i;",b->mutationRate,b->speciesHash); 
+ fprintf(file,"M%f;H%lli;",b->mutationRate,b->speciesHash); 
  fprintf(file,"L1");
  while(b->inL1[i] != AG_CONN_END) {
   fprintf(file,";%i:%f:%i",b->inL1[i],b->multL1[i],b->outL1[i]); 
@@ -261,7 +279,7 @@ void brain_load(brain *b, char *str, int strLength) {
   }
   else if(str[ptr] == ';' && str[ptr+1] == 'H') {
    ptr += 2;
-   //b->hash = atoi(str+ptr); We don't load the hash rate, we recompute it just in case the computation function changes
+   b->speciesHash = atoi(str+ptr); 
    while(str[ptr] != ';')
     ptr++;
   }
@@ -320,7 +338,7 @@ void brain_load(brain *b, char *str, int strLength) {
   }
  } 
  brain_fillRestWithNoOps(b->inL2,b->outL2,AG_CONNS_L2,brainPtr);
- brain_computeHash(b);
+ //brain_computeHash(b); We no longer compute the function, since it's a variable not basedo n the brain but based on geneology
 }
 //---------
 // Testing 
