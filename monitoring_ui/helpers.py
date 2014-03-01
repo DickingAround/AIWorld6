@@ -2,6 +2,7 @@ import pygame
 import time
 import sys
 import agent
+import location
 # -----------------
 # -- BRAIN COLOR --
 # -----------------
@@ -81,6 +82,15 @@ def getListOfAgents(version):
 		a = agent.agent(line)
 		listOfAgents.append(a)
 	return listOfAgents
+
+def getListOfLocations(version):
+	locationFile = getLocationFile(version)
+	listOfLocations = []
+	locationFile.readline() #Read the first line and throw it away, it's just world size and whatnot
+	for line in locationFile.readlines():
+		l = location.location(line)
+		listOfLocations.append(l)
+	return listOfLocations
 
 import os
 def tail(f):

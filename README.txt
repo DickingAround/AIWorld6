@@ -1,20 +1,23 @@
 TODO:
-* Make the agent detection number paginating so that we can see it different even when they wrap around. 
-* Make the entire UI based on the species (do we need to have species within the C code??!)
+* The new UI
+** DONE - Add the simulation parameters
+** DONE - Add the singnal/energy 
+** Upgrade the color of the species to include what we now know
+** Add the species data
+** Considering totally upgrading the system of species tracking
+
 * Add lineage to the agents
 * Show communication patterns
 
-* Add age to the agents
-* Add mutation rate measure to the agents - DONE
+
 * Create the first test, running many iterations and then an *automatic* analysis of it. What metics were statistically significantly different? 
 ** The first test is: Are they using their signaling or not? We turn off signaling. What then?? Or perhaps even, howe long does it take for them to react without it?? No, the real first test is an A/A test!... but then signaling.
-* Show on the output their signals
 * Load needs to also load the terrain
 
 -----------------------------------
 GETTING STARTED
 -----------------------------------
-* You will need to install the python library 'pygame' to launch the UI (search for 'apt-get pygame' for how to do this)
+* You will need to install 'sudo apt-get install python-pygame' which is use for the UI and rendering
 * You will need to install 'sudo apt-get libav-tools' which is used when turning all the images into a movie
 * You will need to install imageMagic which is used for turning all the images into a gif
 * Run the command 'bash make' to build and run the program.

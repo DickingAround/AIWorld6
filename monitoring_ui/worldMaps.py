@@ -4,10 +4,29 @@ from helpers import *
 import speciesTree
 import landMaps
 
+
+
+# ------------------
+# -- Map of energy--
+# ------------------
+def drawEnergy(window,x,y,listOfAgents):
+	for a in listOfAgents:
+		a.drawEnergy(window,x,y)
+
+# -------------------
+# -- Map of signal --
+# -------------------
+def drawSignal(window,x,y,listOfLocations):
+	for l in listOfLocations:
+		l.drawSignal(window,x,y)
+
+# ---------------------------
+# -- Map of action/species --
+# ---------------------------
 def drawMain(window,x,y,listOfAgents,spacing):
 	#TODO: Also we want to draw the terrain
 	for a in listOfAgents:
-		a.draw(window,x,y,spacing)
+		a.drawAgent(window,x,y,spacing)
 
 def drawAgentDecision(window,x,y,size,d):
 	color = (0,0,0)
