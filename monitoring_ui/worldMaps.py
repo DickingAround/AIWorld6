@@ -10,15 +10,21 @@ import landMaps
 # -- Map of energy--
 # ------------------
 def drawEnergy(window,x,y,listOfAgents):
+	font = pygame.font.SysFont(None,20)
+	sur = font.render("Energy map (low:red,high:green)",1,(150,150,150))
+	window.blit(sur,(x,y+5))	
 	for a in listOfAgents:
-		a.drawEnergy(window,x,y)
+		a.drawEnergy(window,x,y+30)
 
 # -------------------
 # -- Map of signal --
 # -------------------
 def drawSignal(window,x,y,listOfLocations):
+	font = pygame.font.SysFont(None,20)
+	sur = font.render("Signal map",1,(150,150,150))
+	window.blit(sur,(x,y+5))	
 	for l in listOfLocations:
-		l.drawSignal(window,x,y)
+		l.drawSignal(window,x,y+30)
 
 # ---------------------------
 # -- Map of action/species --

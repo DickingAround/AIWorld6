@@ -52,8 +52,8 @@ if __name__ == '__main__':
 			#The speciesStats is a list of dictionaries, one for each species. The simulationStats is list of pairs
 			simulationStatsList, speciesStatsList = helpers.getListsOfStats(helpers.getMonitorFileName())
 			worldMaps.drawMain(window,0,0,listOfAgents,3) #600 x 600, spacing = 3
-			worldMaps.drawEnergy(window,600,0,listOfAgents) #200 x 200
-			worldMaps.drawSignal(window,600,200,listOfLocations) #200 x 200
+			worldMaps.drawEnergy(window,600,0,listOfAgents) #200 x 230
+			worldMaps.drawSignal(window,600,230,listOfLocations) #200 x 230, we leave 30 room for the labels
 			#speciesTree.saveNewSetOfAgents(listOfAgents)
 			#speciesTree.drawTree(window,400,600) #200 x 320
 			#speciesStats.drawStats(window,800,0,speciesStatsList) #480 x 720
