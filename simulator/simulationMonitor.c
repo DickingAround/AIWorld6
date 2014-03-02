@@ -17,6 +17,7 @@ void simulationMonitor_writeTimeStamp(FILE *f) {
 //-----------------------------------------------
 //  The set/get functions for the data structure
 //-----------------------------------------------
+//0:decisions, 1:Moves, 2:Turns, 3:Attacks, 4:Grows, 5:AsexReps, 6:SexReps, 7:FailedMoves, 8:FailedReps, 9:FailedAttacks, 10:FailedGrows, 11:SimReportSize, 12:KilledByAttack, 13:KilledByStarving, 14:AveBrainSize, 15:AveEnergy, 16:AveAge, 17:AveGen
 void simulationMonitor_addDecisionsForHash(int hash, int x) {
  sm.smon.perHashMetrics[hash][0] += x; }
 unsigned long long simulationMonitor_getDecisionsForHash(int hash){
@@ -79,11 +80,12 @@ void simulationMonitor_addFailedGrowsForHash(int hash, int x){
 //unsigned long long simulationMonitor_getFailedGrowsForSpecies(int species){
 // return sm.smon.perSpeciesMetrics[species][10];}
 
-void simulationMonitor_addKilledBySeedingForHash(int hash, int x){
+// 11 is now the sim report interval
+/*void simulationMonitor_addKilledBySeedingForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][11] += x;}
 //unsigned long long simulationMonitor_getKilledBySeedingForSpecies(int species){
 // return sm.smon.perSpeciesMetrics[species][11];}
-
+*/
 void simulationMonitor_addKilledByAttacksForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][12] += x;}
 //unsigned long long simulationMonitor_getKilledByAttacksForSpecies(int species){
@@ -99,11 +101,6 @@ void simulationMonitor_addAveBrainSizeForHash(int hash, int x){
 //unsigned long long simulationMonitor_getAveBrainSizeForSpecies(int species){
 // return sm.smon.perSpeciesMetrics[species][14];}
 
-/*void simulationMonitor_addNewBrainForHash(int hash, int x){
- sm.smon.perHashMetrics[hash][15] += x;}
-unsigned long long simulationMonitor_getNewBrainForSpecies(int species){
- return sm.smon.perSpeciesMetrics[species][15];}
-*/ //Legacy
 void simulationMonitor_addAveEnergyForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][15] += x;}
 //unsigned long long simulationMonitor_getAveEnergyForSpecies(int species){
@@ -248,7 +245,10 @@ void simulationMonitor_writeSpeciesStatsFile() {
    //We're even expecting the UI consumer to understand that they're aggregates. For example, energy is the sum of energy for every agent in that hash for every turn. 
    if(j > 0) //This keeps us from having a comma and then an endline after it
     fprintf(outFile,",");
-   fprintf(outFile,"%llu",sm.smon.perHashMetrics[i][j]);
+   if(j == 15)
+    fprintf(outFile,"%i",SIM_REPORT_INTERVAL); //Nothing else reports the sim internal, but we still need it
+   else
+    fprintf(outFile,"%llu",sm.smon.perHashMetrics[i][j]);
   }
   fprintf(outFile,"\n");
  }

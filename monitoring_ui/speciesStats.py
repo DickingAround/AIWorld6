@@ -2,7 +2,27 @@ import pygame
 import helpers
 #Draw the species stats in the color of the species
 
-def drawSpeciesStats(window,x,y,statDict,positionNumber):
+speciesHashRangeList
+def detectSpecies(speciesStatList):
+	#TODO: Run some sort of speciation code.
+	#Return [[minHash,maxHash],[minHash,maxHash]]
+
+statsBySpecies
+def collectStatsBySpecies(speciesStatList,speciesHashRangeList):
+	statsBySpecies = []
+	for speciesLimits in enumerate(speciesHashRangeList):
+		statsBySpecies.append([speciesLimits[1][0],speciesLimits[1][1]]) #First thing, save the species hash limits
+		#Init the metrics for this species to all zeros
+		for statNumber in range(0,len(speciesStatList[0])):
+			statsBySpecies[speciesLimits[0]].append(0)
+		#For each hash, get all the metrics
+		for hashNumber in range(speciesLimits[1][0],speciesLimits[1][1]):
+			for statNumber in range(0,len(speciesStatList[0])):
+				statsBySpecies[speciesLimits[0]][statNumber] = speciesHashRangeList[hashNumber][statNumber]
+	return statsBySpecies
+	
+#TODO: This is almost certaintly wrong, fix it
+def drawSpeciesStats(window,x,y,speciesStats,positionNumber):
 	#Get the location to draw them in (we only draw up to four)
 	xOffset = 0
 	yOffset = 0	
@@ -14,31 +34,48 @@ def drawSpeciesStats(window,x,y,statDict,positionNumber):
 		xOffset = 200
 		yOffset = 350
 	#Get the species color
-	color = helpers.numberToRGB((statDict['speciesHashMin']+statDict['speciesHashMax'])/2)
+	color = helpers.getColorOfHash((speciesStats[0]+speciesStats[1])/2)
 	#Draw out the stats we care about
-	statList = ['numberOfAgents','aveAge','aveGeneration','aveEnergy','attacks','grows','asexReplications','sexReplications','speciesHashMin','speciesHashMax']
+	statList = [['numberOfAgents',speciesStats[2]]]
+	numberOfAgents = speciesStats[2]/speciesStats[13] #The number of decisions divided by the number of iterations 
+	statList.append(['aveAge',speciesStats[18]/numberOfAgents])
+	statList.append(['aveGeneration',speciesStats[19]/numberOfAgents])
+	statList.append(['aveEnergy',speciesStats[17]/numberOfAgnets])
+	statList.append(['attacks',speciesStats[5]/speciesStats[2]])
+	statList.append(['grows',speciesStats[6]/speciesStats[2]])
+	statList.append(['asexReplications',speciesStats[7]/speciesStats[2]])
+	statList.append(['sexReplications',speciesStats[8]/speciesStats[2]])
+	statList.append(['speciesHashMin',speciesStats[0]])
+	statList.append(['speciesHashMax',speciesStats[1]])
 	fontSize = 18
         font = pygame.font.Font(None,fontSize)
 	i = 0
 	for stat in statList:
 		label = "%s:%f"%(stat,statDict[stat])
-		if(stat == 'speciesHashMin'):
-			sur = font.render(label,1,helpers.numberToRGB(statDict['speciesHashMin']))
-		elif(stat == 'speciesHashMax'):
-			sur = font.render(label,1,helpers.numberToRGB(statDict['speciesHashMax']))
+		if(stat[0] == 'speciesHashMin' or stat[0] == 'speciesHashMax'):
+			sur = font.render(label,1,helpers.getColorOfHash(stat[1])
 		else:
-			sur = font.render(label,1,color)
+			sur = font.render(label,1,helpers.color)
+		label = "%s:%f"%(stat,statDict[stat])
 		window.blit(sur,(x+xOffset,y+yOffset+(fontSize)*i))
-		i += 1
 
+#0:decisions, 1:Moves, 2:Turns, 3:Attacks, 4:Grows, 5:AsexReps, 6:SexReps, 7:FailedMoves, 8:FailedReps, 9:FailedAttacks, 10:FailedGrows, 11:SimReportSize, 12:KilledByAttack, 13:KilledByStarving, 14:AveBrainSize, 15:AveEnergy, 16:AveAge, 17:AveGen
 def drawStats(window,x,y,speciesStatList):
+	#Do clustering
+	speciesHashRangeList = detectSpecies(speciesStatList)
+	statsBySpecies = collectStatsBySpecies(speciesStatList,speciesHashRangeList)
+	sortedStats = sorted(statsBySpecies, key=lambda k: k[0], reverse=True)
+	for statList in sortedStats:
+		drawSpeciesStats(window,x,y,statList)
+	
+'''	#Do stat printing
 	for i in range(0,len(speciesStatList)):
 		print " %i of %i ------------------------------------------- "%(i,len(speciesStatList))
 		print speciesStatList[i]
 	newStatList = sorted(speciesStatList, key=lambda k: k['numberOfAgents'], reverse=True)
 	for i in range(0,min(len(newStatList),4)):
 		drawSpeciesStats(window,x,y,newStatList[i],i)
-
+'''
 def test2():
 	displayX = 1280 #300 for text, 450 more for graphs (750), 900-1200 is time graphs
 	displayY = 720 #WorldGraph is 400ish

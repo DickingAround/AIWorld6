@@ -41,7 +41,10 @@ def rgbToNumber(rgb):
 	return rgbToNumberDict[rgb]
 def numberToRGB(number):
 	return numberToRGBDict[int(number)%maxRGBNumber]	
-	
+
+def getColorOfHash(number):
+	return numberToRGB(number) #This is where we'd modify the equation. 
+"""	
 def getBrainColor(brainString):
 	#L1;4:5.4:3;L2;3:4:2,2	
 	try:
@@ -70,13 +73,15 @@ def getBrainColor(brainString):
 	except:
 		print "GetBrainColor: Unexpected error: %i,%i,%i"%(tot,maxRGBNumber,int(tot/4.0)%maxRGBNumber), sys.exc_info()[0]
 		return (0,0,0)
+"""
 
-
-# ------------------
-# -- Data getters --
-# ------------------
+# -------------------------
+# -- Simple Data Getters --
+# -------------------------
 def getListOfAgents(version):
 	worldFile = getWorldFile(version)
+	if(worldFile == 0):
+		return []
 	listOfAgents = []
 	for line in worldFile.readlines():
 		a = agent.agent(line)
@@ -85,12 +90,24 @@ def getListOfAgents(version):
 
 def getListOfLocations(version):
 	locationFile = getLocationFile(version)
+	if(locationFile == 0):
+		return [];
 	listOfLocations = []
 	locationFile.readline() #Read the first line and throw it away, it's just world size and whatnot
 	for line in locationFile.readlines():
 		l = location.location(line)
 		listOfLocations.append(l)
 	return listOfLocations
+
+def getListOfSpeciesStats():
+	f = getSpeciesStatFile():
+	if(f == 0):
+		return []
+	speciesStats = [] #List of lists
+	for line in f.readlines():
+		sl = line.split(',')
+		speciesStats.append(sl)
+	return speciesStats	
 
 import os
 def tail(f):
@@ -99,7 +116,8 @@ def tail(f):
 	lines = stdout.readlines(); stdout.close()
 	return lines[0]
 
-def getListsOfStats(f):
+def getListOfSimulationStats(f):
+	#TODO: The species section here is totally unused at this point
 	lastLine = tail(f)
 	speciesNumber = -1
 	speciesStatList = []
@@ -119,10 +137,7 @@ def getListsOfStats(f):
 	return simulationStatList, speciesStatList
 
 
-
-
-	
-def getAgentData(line):
+"""def getAgentData(line):
  	try:
 		pairs = line.split(' ')
 		for pair in pairs:
@@ -145,7 +160,6 @@ def getAgentData(line):
 	except:
 		print "Failed to understand agent"
 		return [-1,-1,-1,-1,-1,-1]
-
 # -----------
 # -- STATS --
 # -----------
@@ -174,7 +188,7 @@ def findStat(name,statList):
 	except:
 		print "IU Error: Took an error when looking up a stat"
 		return None	
-
+"""
 # -------------------
 # -- FILE HANDLING --
 # -------------------
@@ -189,6 +203,17 @@ def getLocationFile(version):
 			return 0
 	except:
 		print "Failed to find and or open the loc file\n"
+		return 0
+	return f
+
+def getSpeciesStatFile():
+	try:
+		f = open("./data_from_simulations/speciesStats.txt")
+		else:
+			print "Failed to get a valid speciesStat version\n"
+			return 0
+	except:
+		print "Failed to find and or open the speciesStat file\n"
 		return 0
 	return f
 
