@@ -20,7 +20,7 @@ typedef struct brain
  float multL2[AG_CONNS_L2];
  float mutationRate;
  unsigned char latestDecision;
- long long speciesHash;
+ unsigned long speciesHash;
  unsigned int brainSize;
 } brain; 
 
