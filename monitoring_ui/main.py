@@ -46,17 +46,17 @@ if __name__ == '__main__':
 		version = checkDataVersion()
 		if(version != 'x'):
 			clearDisplay(window)
-			autoCapture.checkForAndSaveSpecialSituations()
+			#autoCapture.checkForAndSaveSpecialSituations()
 			listOfAgents = helpers.getListOfAgents(version)
 			listOfLocations = helpers.getListOfLocations(version)
-			listOfSimulationStats = helpers.getListsOfStats(helpers.getMonitorFileName())
+			listOfSimulationStats = helpers.getListOfSimulationStats(helpers.getMonitorFileName())
 			listOfSpeciesStats = helpers.getListOfSpeciesStats()
 			worldMaps.drawMain(window,0,0,listOfAgents,3) #600 x 600, spacing = 3
 			worldMaps.drawEnergy(window,600,0,listOfAgents) #200 x 230
 			worldMaps.drawSignal(window,600,230,listOfLocations) #200 x 230, we leave 30 room for the labels
 			#speciesTree.saveNewSetOfAgents(listOfAgents)
 			#speciesTree.drawTree(window,400,600) #200 x 320
-			speciesStats.drawStats(window,800,0,listOfSpeciesStats) #480 x 720
+			speciesStats.drawStats(window,810,0,listOfSpeciesStats) #480 x 720
 			simulationStats.drawStats(window,0,600,listOfSimulationStats,120) #120 x 600 (this function needs to know where the bottom is)
 			pygame.display.flip()	
 			if(imgNumb < imgMax):

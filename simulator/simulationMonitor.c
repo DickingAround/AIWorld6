@@ -245,7 +245,7 @@ void simulationMonitor_writeSpeciesStatsFile() {
    //We're even expecting the UI consumer to understand that they're aggregates. For example, energy is the sum of energy for every agent in that hash for every turn. 
    if(j > 0) //This keeps us from having a comma and then an endline after it
     fprintf(outFile,",");
-   if(j == 15)
+   if(j == 11)
     fprintf(outFile,"%i",SIM_REPORT_INTERVAL); //Nothing else reports the sim internal, but we still need it
    else
     fprintf(outFile,"%llu",sm.smon.perHashMetrics[i][j]);

@@ -100,7 +100,7 @@ def getListOfLocations(version):
 	return listOfLocations
 
 def getListOfSpeciesStats():
-	f = getSpeciesStatFile():
+	f = getSpeciesStatFile()
 	if(f == 0):
 		return []
 	speciesStats = [] #List of lists
@@ -117,24 +117,13 @@ def tail(f):
 	return lines[0]
 
 def getListOfSimulationStats(f):
-	#TODO: The species section here is totally unused at this point
 	lastLine = tail(f)
 	speciesNumber = -1
-	speciesStatList = []
 	simulationStatList = []
 	for stat in lastLine.split(' '):
 		keyValuePair = stat.split(',')
-		key = keyValuePair[0]
-		value = keyValuePair[1]
-		if(key == 'speciesNumber'):
-			speciesNumber += 1
-			speciesStatList.append({}) #Add the dictionary
-			speciesStatList[speciesNumber]['speciesNumber'] = float(value) #Save the real species number just in case
-		elif(speciesNumber >= 0):
-			speciesStatList[speciesNumber][key] = float(value)
-		elif(speciesNumber == -1):
-			simulationStatList.append([key,value])
-	return simulationStatList, speciesStatList
+		simulationStatList.append(keyValuePair)
+	return simulationStatList
 
 
 """def getAgentData(line):
@@ -209,9 +198,6 @@ def getLocationFile(version):
 def getSpeciesStatFile():
 	try:
 		f = open("./data_from_simulations/speciesStats.txt")
-		else:
-			print "Failed to get a valid speciesStat version\n"
-			return 0
 	except:
 		print "Failed to find and or open the speciesStat file\n"
 		return 0

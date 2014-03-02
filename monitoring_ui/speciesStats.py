@@ -2,12 +2,10 @@ import pygame
 import helpers
 #Draw the species stats in the color of the species
 
-speciesHashRangeList
 def detectSpecies(speciesStatList):
 	#TODO: Run some sort of speciation code.
-	#Return [[minHash,maxHash],[minHash,maxHash]]
+	return [[0,10000]]
 
-statsBySpecies
 def collectStatsBySpecies(speciesStatList,speciesHashRangeList):
 	statsBySpecies = []
 	for speciesLimits in enumerate(speciesHashRangeList):
@@ -18,11 +16,12 @@ def collectStatsBySpecies(speciesStatList,speciesHashRangeList):
 		#For each hash, get all the metrics
 		for hashNumber in range(speciesLimits[1][0],speciesLimits[1][1]):
 			for statNumber in range(0,len(speciesStatList[0])):
-				statsBySpecies[speciesLimits[0]][statNumber] = speciesHashRangeList[hashNumber][statNumber]
+				statsBySpecies[speciesLimits[0]][statNumber+2] += float(speciesStatList[hashNumber][statNumber])
 	return statsBySpecies
 	
 #TODO: This is almost certaintly wrong, fix it
 def drawSpeciesStats(window,x,y,speciesStats,positionNumber):
+	print "drawing species stat",x,y,positionNumber
 	#Get the location to draw them in (we only draw up to four)
 	xOffset = 0
 	yOffset = 0	
@@ -33,6 +32,8 @@ def drawSpeciesStats(window,x,y,speciesStats,positionNumber):
 	elif(positionNumber == 3):
 		xOffset = 200
 		yOffset = 350
+	elif(positionNumber >= 4):
+		return 0  #We only display 4
 	#Get the species color
 	color = helpers.getColorOfHash((speciesStats[0]+speciesStats[1])/2)
 	#Draw out the stats we care about
@@ -40,7 +41,7 @@ def drawSpeciesStats(window,x,y,speciesStats,positionNumber):
 	numberOfAgents = speciesStats[2]/speciesStats[13] #The number of decisions divided by the number of iterations 
 	statList.append(['aveAge',speciesStats[18]/numberOfAgents])
 	statList.append(['aveGeneration',speciesStats[19]/numberOfAgents])
-	statList.append(['aveEnergy',speciesStats[17]/numberOfAgnets])
+	statList.append(['aveEnergy',speciesStats[17]/numberOfAgents])
 	statList.append(['attacks',speciesStats[5]/speciesStats[2]])
 	statList.append(['grows',speciesStats[6]/speciesStats[2]])
 	statList.append(['asexReplications',speciesStats[7]/speciesStats[2]])
@@ -51,22 +52,24 @@ def drawSpeciesStats(window,x,y,speciesStats,positionNumber):
         font = pygame.font.Font(None,fontSize)
 	i = 0
 	for stat in statList:
-		label = "%s:%f"%(stat,statDict[stat])
+		label = "%s:%f"%(stat[0],stat[1])
 		if(stat[0] == 'speciesHashMin' or stat[0] == 'speciesHashMax'):
-			sur = font.render(label,1,helpers.getColorOfHash(stat[1])
+			sur = font.render(label,1,helpers.getColorOfHash(stat[1]))
 		else:
-			sur = font.render(label,1,helpers.color)
-		label = "%s:%f"%(stat,statDict[stat])
+			sur = font.render(label,1,color)
 		window.blit(sur,(x+xOffset,y+yOffset+(fontSize)*i))
+		i += 1
 
 #0:decisions, 1:Moves, 2:Turns, 3:Attacks, 4:Grows, 5:AsexReps, 6:SexReps, 7:FailedMoves, 8:FailedReps, 9:FailedAttacks, 10:FailedGrows, 11:SimReportSize, 12:KilledByAttack, 13:KilledByStarving, 14:AveBrainSize, 15:AveEnergy, 16:AveAge, 17:AveGen
 def drawStats(window,x,y,speciesStatList):
 	#Do clustering
 	speciesHashRangeList = detectSpecies(speciesStatList)
 	statsBySpecies = collectStatsBySpecies(speciesStatList,speciesHashRangeList)
+	print "statsBySpecies is", statsBySpecies
 	sortedStats = sorted(statsBySpecies, key=lambda k: k[0], reverse=True)
-	for statList in sortedStats:
-		drawSpeciesStats(window,x,y,statList)
+	for statList in enumerate(sortedStats):
+		print "About to draw some stats for", statList
+		drawSpeciesStats(window,x,y,statList[1],statList[0])
 	
 '''	#Do stat printing
 	for i in range(0,len(speciesStatList)):
