@@ -39,7 +39,7 @@
 #define AG_REPLICATION_COST 0.5
 #define AG_REPLICATION_GIVE 0.3
 //Outputs from the brain
-#define AG_OUTPUTS 11
+#define AG_OUTPUTS 32
 #define AG_OUTPUTS_DECISIONS 9
 #define AG_M_F 0 
 #define AG_M_L 1
@@ -52,8 +52,8 @@
 #define AG_GROW 8
 #define AG_SIGNAL 9
 #define AG_SIGNAL_NUMB 3
-#define AG_MEM 0
-#define AG_MEM_NUMB 0
+#define AG_MEM_OUT 12
+#define AG_MEM_NUMB 20
 //Remmber, total options is 0-based
 
 //Inputs to the brain - facing down
@@ -63,13 +63,16 @@
 //v 10 11 12 13 14
 //  15 16 17 18 19
 //x 20 21 22 23 24
-#define AG_INPUTS 125
+#define AG_INPUTS 177
 #define AG_INPUT_TYPE_SIZE 25
 #define AG_IN_RAND 0
-#define AG_IN_FOOD 1
-#define AG_IN_PASS 26
-#define AG_IN_AGENE 51
-#define AG_IN_SIGNAL 76
+#define AG_IN_CONST 1
+#define AG_IN_FOOD 2
+#define AG_IN_PASS 27
+#define AG_IN_AGENE 52
+#define AG_IN_SIGNAL 77
+//The signal is actually 25*3 =75 deep, mem is 20 deep as noted in AG_MEM_NUMB
+#define AG_IN_MEM 152
 
 #define AG_INPUT_MAX 0xFF
 //#define AG_INPUT_MIN -- No inputs are possible to be lower numbers
@@ -81,7 +84,7 @@
 #define AG_CONNS_INIT 90
 #define AG_CONNS_L1 500
 #define AG_CONNS_L2 500
-#define AG_CONN_END 130
+#define AG_CONN_END 130 //AG_CONN_END must be larger than the number of inputs or outputs
 //Species detection systems
 //The color spectrum is 0 to 1530 (not including it)
 //#define SPECIES_HASH_MIN 0 - assumed to be zero

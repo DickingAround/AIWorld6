@@ -18,10 +18,13 @@ void agent_kill(agent *ag) {
 void agent_gatherInputs(agent *ag) {
  int i,j,k;
  location *tmpLoc;
+ // ---------- Static inputs -----------------------
  ag->br.inputs[AG_IN_RAND] = rand() / (float)RAND_MAX;
+ ag->br.inputs[AG_IN_CONST] = AG_INT_CONVERSION; //1 * the conversion
+ // ---------- Location based inputs ---------------
  for(i = 0; i < 5; i++) {
   for(j = 0; j < 5; j++) {
-   if(ag->facingDirection == DOWN)//Set the location we're talking about here
+   if(ag->facingDirection == DOWN) //Set the location we're talking about
     tmpLoc = &(sm.w.locs[ag->xLoc-1+i][ag->yLoc-2+j]);
    if(ag->facingDirection == UP)
     tmpLoc = &(sm.w.locs[ag->xLoc+1-i][ag->yLoc+2-j]);
@@ -38,9 +41,9 @@ void agent_gatherInputs(agent *ag) {
     if(tmpLoc->a->energy/20 > AG_INPUT_MAX)//Special case check to make sure the energy number isn't over the limits of the math
      ag->br.inputs[AG_IN_AGENE+i*5+j] = AG_INPUT_MAX*AG_INT_CONVERSION;
     else
-     ag->br.inputs[AG_IN_AGENE+i*5+j] = tmpLoc->a->energy/20*AG_INT_CONVERSION;  //Energy is reduced cuz its a big eumber ususally
+     ag->br.inputs[AG_IN_AGENE+i*5+j] = tmpLoc->a->energy/20*AG_INT_CONVERSION;  //Energy is reduced cuz its a big number ususally
    }
-   for(k = 0; k < AG_SIGNAL_NUMB; k++) {
+   for(k = 0; k < AG_SIGNAL_NUMB; k++) { //Signals
     #ifndef EXP_NO_COMMUNICATION
     ag->br.inputs[AG_IN_SIGNAL+AG_INPUT_TYPE_SIZE*k+i*5+j] = tmpLoc->s[k]*AG_INT_CONVERSION;  
     #endif
@@ -49,6 +52,10 @@ void agent_gatherInputs(agent *ag) {
     #endif
    }
   }
+ }
+ // ------------ Memory -------------
+ for( i = 0; i < AG_MEM_NUMB; i++) {
+  ag->br.inputs[AG_IN_MEM+i] = ag->br.mem[i]; //Memory is always in it's raw, post conversion form
  }
 }
 
@@ -61,11 +68,15 @@ void agent_makeDecision(agent *ag) {
  
 void agent_performDecidedAction(agent *ag) {
  int i;
+ //------ Save signals -------
  for(i = 0; i < AG_SIGNAL_NUMB; i++) { //Perform the signals
   sm.w.locs[ag->xLoc][ag->yLoc].s[i] = (float)(ag->br.outputs[AG_SIGNAL+i])/(float)AG_INT_CONVERSION;
   //if(ag->br.outputs[AG_SIGNAL+i] < -0.001 || ag->br.outputs[AG_SIGNAL+i] > 0.001)
    //printf("Found outputs being printed %i, %i %i, %i, %f\n",AG_SIGNAL+i,ag->xLoc,ag->yLoc,ag->br.outputs[AG_SIGNAL+i],(float)(ag->br.outputs[AG_SIGNAL+i])/(float)AG_INT_CONVERSION);
  }
+ //------ Save memory --------
+ // This can and is done inside the brain because it doesn't affect the others, thus there are no race conditions when doing it in parallel 
+ //------ Save decision ------
  switch(ag->br.latestDecision) {//Each of these is it's own function because they're in the tight loop and every comparison statement counts
   case(AG_M_F):  agent_M_F(ag); break;
   case(AG_M_L):  agent_M_L(ag); break;

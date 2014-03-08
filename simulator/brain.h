@@ -22,6 +22,8 @@ typedef struct brain
  unsigned char latestDecision;
  unsigned long speciesHash;
  unsigned int brainSize;
+ //Memory
+ unsigned char mem[AG_MEM_NUMB]; //Memory is always kept in raw, brain processing form
 } brain; 
 
 void brain_computeHash(brain *b);

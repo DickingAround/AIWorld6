@@ -36,12 +36,18 @@ void brain_makeDecision(brain *br)
   outs[outL2[i]] += mids[inL2[i]] * multL2[i]; 
   i++;
  }
- //NOTE: Only need to apply sigmoid to the signals
+ //------- Signals ------
+ //NOTE: Only need to apply sigmoid to the signals decisions are just a max calculation and memory is saved raw
  for(i = AG_SIGNAL; i < (AG_SIGNAL+AG_SIGNAL_NUMB); i++) {
   outs[i] = quickSigmoid_Sigmoid(outs[i]);// Conversion must be done outsidethe brain, since this is an int/(float)AG_INT_CONVERSION;
   //if((float)outs[i]/(float)AG_INT_CONVERSION > 0.001 || (float)outs[i]/(float)AG_INT_CONVERSION < -0.001)
   //printf("Finally found a brain outputting %i, %i\n",i,outs[i]);
  }
+ //-------- Memory ------
+ for(i = 0; i < AG_MEM_NUMB; i++) {
+  br->mem[i] = outs[AG_MEM_OUT + i]; //Saved in their raw form because they're consumed in the raw formed
+ }
+ //-------- Decision ----
  max = INT_MIN;
  for(i = 0; i < AG_OUTPUTS_DECISIONS; i++) {
   if(outs[i] > max) {
@@ -238,23 +244,22 @@ void brain_print(brain *b) {
  int i = 0;
  printf("L1");
  while(b->inL1[i] != AG_CONN_END) {
-  printf(";%i:%f:%i",b->inL1[i],b->multL1[i],b->outL1[i]); 
+  printf(",%i:%f:%i",b->inL1[i],b->multL1[i],b->outL1[i]); 
   i++;
  }
  printf(" L1 had %i connections",i);
  printf(";L2");
  i = 0; 
  while(b->inL2[i] != AG_CONN_END) {
-  printf(";%i:%f:%i",b->inL2[i],b->multL2[i],b->outL2[i]); 
+  printf(",%i:%f:%i",b->inL2[i],b->multL2[i],b->outL2[i]); 
   i++;
  }
  printf(" L2 had %i connections\n",i);
 }
 void brain_save(brain *b, FILE *file) {
- //TODO: We're not saving the mutation rate!!!
  int i = 0;
- fprintf(file,"M%f;H%lu;",b->mutationRate,b->speciesHash); 
- fprintf(file,"L1");
+ fprintf(file,"M%f;H%lu",b->mutationRate,b->speciesHash); 
+ fprintf(file,";L1");
  while(b->inL1[i] != AG_CONN_END) {
   fprintf(file,";%i:%f:%i",b->inL1[i],b->multL1[i],b->outL1[i]); 
   i++;
@@ -264,6 +269,10 @@ void brain_save(brain *b, FILE *file) {
  while(b->inL2[i] != AG_CONN_END) {
   fprintf(file,";%i:%f:%i",b->inL2[i],b->multL2[i],b->outL2[i]); 
   i++;
+ }
+ fprintf(file,";ME");
+ for( i = 0; i < AG_MEM_NUMB; i++) {
+  fprintf(file,";%i",b->mem[i]); 
  }
 }
 void brain_load(brain *b, char *str, int strLength) {
@@ -284,12 +293,7 @@ void brain_load(brain *b, char *str, int strLength) {
    while(str[ptr] != ';')
     ptr++;
   }
-  else if(str[ptr] == 'L' && str[ptr+1] == '1') { //Check for the ';' or missing it since there's actually two file formats, one starts with L and the other starts with the M and H stuff
-   lvl = 1;
-   ptr += 2; //Advance the pointer to the ';' character
-   brainPtr = 0;
-  }
-  else if(str[ptr] == ';' && str[ptr+1] == 'L' && str[ptr+2] == '1' ) { //Check for the ';' or missing it since there's actually two file formats, one starts with L and the other starts with the M and H stuff
+  else if(str[ptr] == ';' && str[ptr+1] == 'L' && str[ptr+2] == '1' ) { 
    lvl = 1;
    ptr += 3; //Advance the pointer to the ';' character
    brainPtr = 0;
@@ -300,7 +304,19 @@ void brain_load(brain *b, char *str, int strLength) {
    ptr += 3;
    brainPtr = 0;
   }
-  else if(str[ptr] == ';') { //This is clearly the beginning of a connection
+  else if(str[ptr] == ';' && str[ptr+1] == 'M' && str[ptr+2] == 'E') {
+   lvl = 3; //This is all memory, not actuall a new level
+   ptr += 3;
+   brainPtr = 0;
+  }
+  else if(str[ptr] == ';' && lvl == 3) { //Memory 
+   ptr++;
+   b->mem[brainPtr];
+   while(str[ptr] != ';')
+    ptr++;
+   brainPtr++;
+  }
+  else if(str[ptr] == ';' && (lvl == 1 || lvl == 2)) { //This is clearly the beginning of a connection
    ptr++;
    in = atoi(str+ptr);
    while(str[ptr] != ':')
