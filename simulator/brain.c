@@ -77,10 +77,10 @@ void brain_makeDecision(brain *br)
  b->brainSize = brainSize + i;
 }*/
 int brain_makeUpSpeciesHash() {
- return (unsigned long)((rand() / (float)RAND_MAX * SPECIES_HASH_INIT_MAX) + SPECIES_HASH_INIT_MIN);
+ return (unsigned long)((rand() / (float)RAND_MAX * SPECIES_HASH_INIT_SPREAD) + SPECIES_HASH_INIT_MIN);
 }
 unsigned long brain_augmentSpeciesHash(unsigned long speciesHash) {
- if( rand() < 0.5 )
+ if( (rand()/(float)RAND_MAX) < 0.5 )
   return (speciesHash + 1)%SPECIES_HASH_MAX;
  else
   if((long long)speciesHash - 1 < 0)

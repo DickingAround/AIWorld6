@@ -17,6 +17,9 @@ def detectSpecies(speciesStatList):
 			if(hashMin == -1):
 				hashMin = i[0] #Save the lowest value hash present
 	print "HashMin:%i, HashMax:%i"%(hashMin,hashMax)
+	if( hashMin == -1 or hashMax == -1):
+		print "Didn't find any agents"
+		return []
 	#Then run the kernel to find out the species
 	kernel = stats.gaussian_kde(speciesHashList)	
 	print "Finished building the kernel"
@@ -24,8 +27,10 @@ def detectSpecies(speciesStatList):
 	speciesList = []
 	speciesFound = 0
 	previousMin = hashMin
-	for i in range(hashMin,hashMax+1,(hashMax-hashMin)/10): #TODO: Checking the kernel is expensive. We need to be more intelligent about it.
-		print "Checking %i"%i
+	searchGrainularity = (hashMax-hashMin)/100
+	if(searchGrainularity < 1):
+		searchGrainularity = 1
+	for i in range(hashMin,hashMax+1,int(searchGrainularity)): #TODO: Checking the kernel is expensive. We need to be more intelligent about it.
 		if(kernel.evaluate(i) < kernel.evaluate(i+1) and kernel.evaluate(i) < kernel.evaluate(i-1)):
 			print "found min at %i"%i
 			speciesList.append([previousMin,i])

@@ -90,7 +90,7 @@
 //#define SPECIES_HASH_MIN 0 - assumed to be zero
 #define SPECIES_HASH_MAX 15300
 #define SPECIES_HASH_INIT_MIN 7000
-#define SPECIES_HASH_INIT_MAX 7100
+#define SPECIES_HASH_INIT_SPREAD 20
 
 //#define AG_HASH_MOD 50
 //#define AG_MAX_HASH 100000

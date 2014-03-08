@@ -1,14 +1,10 @@
 TODO:
-* The new UI
-** DONE - Add the simulation parameters
-** DONE - Add the singnal/energy 
-** Upgrade the species detection to use the new algorithm. (We may have to dive in and actually understand that algorithm in order to do this)
-*** DONE - Have the simulation program emit the per-hash metrics
-*** DONE - Have the UI program parse the metrics, do species calculations on them, and emit species data
-*** Make the new color tree
-*** Make the color based not on the brain hash but based on the hash color (is this already happening??) Should the color spectrum dynamically change so that agents on the ends are certain colors??
-
+* It looks like rand is an input. Let's make that work faster. (like an array of 10k random numbers and just cycle through them)
+* There's a lot of extra parts in the brain.c replications and connections that don't need to be tehre
 * Prove that the lack of communication is a connection mutation problem.
+* Make eating an constant and see if we still get predation
+* We should put positive pressure on the connections but then cost them? How do we make it latent in their genes??
+* Add memory
 * Add energy-give
 * Add terrain view to the UI
 * Add terrain deformation
