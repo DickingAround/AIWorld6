@@ -75,6 +75,7 @@ void simulationMonitor_addKilledByAttacksForHash(int hash, int x);
 void simulationMonitor_addKilledByStarvingForHash(int hash, int x);
 //unsigned long long simulationMonitor_getKilledByStarvingForSpecies(int species);
 
+// --------- PER AGENT METRICS -------------
 void simulationMonitor_addAveBrainSizeForHash(int hash, int x);
 //unsigned long long simulationMonitor_getAveBrainSizeForSpecies(int species);
 

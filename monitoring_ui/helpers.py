@@ -3,6 +3,7 @@ import time
 import sys
 import agent
 import location
+import speciesStat
 # -----------------
 # -- BRAIN COLOR --
 # -----------------
@@ -104,9 +105,11 @@ def getListOfSpeciesStats():
 	if(f == 0):
 		return []
 	speciesStats = [] #List of lists
+	i = 0
 	for line in f.readlines():
-		sl = line.split(',')
-		speciesStats.append(sl)
+		s = speciesStat.speciesStat(line,i)
+		speciesStats.append(s)
+		i += 1
 	return speciesStats	
 
 import os

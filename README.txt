@@ -4,8 +4,14 @@ TODO:
 ** DONE - Add the singnal/energy 
 ** Upgrade the species detection to use the new algorithm. (We may have to dive in and actually understand that algorithm in order to do this)
 *** DONE - Have the simulation program emit the per-hash metrics
-*** Have the UI program parse the metrics, do species calculations on them, and emit species data
+*** DONE - Have the UI program parse the metrics, do species calculations on them, and emit species data
+*** Make the new color tree
+*** Make the color based not on the brain hash but based on the hash color (is this already happening??) Should the color spectrum dynamically change so that agents on the ends are certain colors??
 
+* Prove that the lack of communication is a connection mutation problem.
+* Add energy-give
+* Add terrain view to the UI
+* Add terrain deformation
 * Add lineage to the agents
 * Show communication patterns
 

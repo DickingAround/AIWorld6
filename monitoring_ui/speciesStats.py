@@ -1,27 +1,53 @@
 import pygame
 import helpers
+import scipy.stats as stats
+import speciesStat
 #Draw the species stats in the color of the species
 
 def detectSpecies(speciesStatList):
-	#TODO: Run some sort of speciation code.
-	return [[0,10000]]
+	#First we need to change the species stats to be a list of hash values, not sums of the number in a given hash
+	speciesHashList = []
+	hashMin = -1
+	hashMax = -1
+	for i in enumerate(speciesStatList):
+		for j in range(0,int(i[1].getDecisions())): #The first value of the species stat list is how many of them there are
+			speciesHashList.append(i[0])
+		if(int(i[1].getDecisions()) >= 0.5):#Really, it's greater than 0 but it's a float value
+			hashMax = i[0] #Save the highest value hash present
+			if(hashMin == -1):
+				hashMin = i[0] #Save the lowest value hash present
+	print "HashMin:%i, HashMax:%i"%(hashMin,hashMax)
+	#Then run the kernel to find out the species
+	kernel = stats.gaussian_kde(speciesHashList)	
+	print "Finished building the kernel"
+	#Then walk through the list looking for where the minimas are, those minimas are the limits between species.
+	speciesList = []
+	speciesFound = 0
+	previousMin = hashMin
+	for i in range(hashMin,hashMax+1,(hashMax-hashMin)/10): #TODO: Checking the kernel is expensive. We need to be more intelligent about it.
+		print "Checking %i"%i
+		if(kernel.evaluate(i) < kernel.evaluate(i+1) and kernel.evaluate(i) < kernel.evaluate(i-1)):
+			print "found min at %i"%i
+			speciesList.append([previousMin,i])
+			previousMin = i
+	speciesList.append([previousMin,hashMax])
+	print "returning species list: ",speciesList
+	return speciesList
+	#return [[0,10000]]
 
 def collectStatsBySpecies(speciesStatList,speciesHashRangeList):
 	statsBySpecies = []
-	for speciesLimits in enumerate(speciesHashRangeList):
-		statsBySpecies.append([speciesLimits[1][0],speciesLimits[1][1]]) #First thing, save the species hash limits
-		#Init the metrics for this species to all zeros
-		for statNumber in range(0,len(speciesStatList[0])):
-			statsBySpecies[speciesLimits[0]].append(0)
+	for speciesLimits in enumerate(speciesHashRangeList): #For each species...
+		statsBySpecies.append(speciesStat.speciesStat(''))
+		statsBySpecies[speciesLimits[0]].hashMin = speciesLimits[1][0]
+		statsBySpecies[speciesLimits[0]].hashMax = speciesLimits[1][1] #First thing, save the species hash limits
 		#For each hash, get all the metrics
-		for hashNumber in range(speciesLimits[1][0],speciesLimits[1][1]):
-			for statNumber in range(0,len(speciesStatList[0])):
-				statsBySpecies[speciesLimits[0]][statNumber+2] += float(speciesStatList[hashNumber][statNumber])
+		for hashNumber in range(speciesLimits[1][0],speciesLimits[1][1]): #For each hash
+			for statNumber in range(0,len(speciesStatList[0].statList)): #For each stat
+				statsBySpecies[speciesLimits[0]].statList[statNumber] += float(speciesStatList[hashNumber].statList[statNumber])
 	return statsBySpecies
 	
-#TODO: This is almost certaintly wrong, fix it
-def drawSpeciesStats(window,x,y,speciesStats,positionNumber):
-	print "drawing species stat",x,y,positionNumber
+def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 	#Get the location to draw them in (we only draw up to four)
 	xOffset = 0
 	yOffset = 0	
@@ -35,19 +61,19 @@ def drawSpeciesStats(window,x,y,speciesStats,positionNumber):
 	elif(positionNumber >= 4):
 		return 0  #We only display 4
 	#Get the species color
-	color = helpers.getColorOfHash((speciesStats[0]+speciesStats[1])/2)
+	color = helpers.getColorOfHash((thisSpeciesStats.hashMin+thisSpeciesStats.hashMax)/2)
 	#Draw out the stats we care about
-	statList = [['numberOfAgents',speciesStats[2]]]
-	numberOfAgents = speciesStats[2]/speciesStats[13] #The number of decisions divided by the number of iterations 
-	statList.append(['aveAge',speciesStats[18]/numberOfAgents])
-	statList.append(['aveGeneration',speciesStats[19]/numberOfAgents])
-	statList.append(['aveEnergy',speciesStats[17]/numberOfAgents])
-	statList.append(['attacks',speciesStats[5]/speciesStats[2]])
-	statList.append(['grows',speciesStats[6]/speciesStats[2]])
-	statList.append(['asexReplications',speciesStats[7]/speciesStats[2]])
-	statList.append(['sexReplications',speciesStats[8]/speciesStats[2]])
-	statList.append(['speciesHashMin',speciesStats[0]])
-	statList.append(['speciesHashMax',speciesStats[1]])
+	numberOfAgents = thisSpeciesStats.getDecisions()/thisSpeciesStats.getSimReportSize() #The number of decisions divided by the number of iterations 
+	statList = [['avePopulation',numberOfAgents]]
+	statList.append(['aveAge',thisSpeciesStats.getAveAge()/thisSpeciesStats.getDecisions()])
+	statList.append(['aveGeneration',thisSpeciesStats.getAveGen()/thisSpeciesStats.getDecisions()])
+	statList.append(['aveEnergy',thisSpeciesStats.getAveEnergy()/thisSpeciesStats.getDecisions()])
+	statList.append(['attacks',thisSpeciesStats.getAttacks()/thisSpeciesStats.getDecisions()])
+	statList.append(['grows',thisSpeciesStats.getGrows()/thisSpeciesStats.getDecisions()])
+	statList.append(['asexReplications',thisSpeciesStats.getAsexReps()/thisSpeciesStats.getDecisions()])
+	statList.append(['sexReplications',thisSpeciesStats.getSexReps()/thisSpeciesStats.getDecisions()])
+	statList.append(['speciesHashMin',thisSpeciesStats.hashMin])
+	statList.append(['speciesHashMax',thisSpeciesStats.hashMax])
 	fontSize = 18
         font = pygame.font.Font(None,fontSize)
 	i = 0
@@ -66,7 +92,7 @@ def drawStats(window,x,y,speciesStatList):
 	speciesHashRangeList = detectSpecies(speciesStatList)
 	statsBySpecies = collectStatsBySpecies(speciesStatList,speciesHashRangeList)
 	print "statsBySpecies is", statsBySpecies
-	sortedStats = sorted(statsBySpecies, key=lambda k: k[0], reverse=True)
+	sortedStats = sorted(statsBySpecies, key=lambda k: k.getDecisions(), reverse=True)
 	for statList in enumerate(sortedStats):
 		print "About to draw some stats for", statList
 		drawSpeciesStats(window,x,y,statList[1],statList[0])

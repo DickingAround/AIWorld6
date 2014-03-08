@@ -1,6 +1,7 @@
 import pygame
 import agent
 from helpers import *
+import speciesStats
 
 #Just a color chart, forever scrolling, with how many things are in each bucket.
 class speciesTree():
@@ -8,32 +9,19 @@ class speciesTree():
 	duration = 300
 	width = 383 #If the colors are at 1530 grainularity, this will be about 4 different collors into one bin
 	agentCount  = [[0 for x in xrange(width)] for x in xrange(duration)] 	
-	agentAttacks = [0 for x in xrange(width)]
-	agentGrows = [0 for x in xrange(width)]
-	agentMoves = [0 for x in xrange(width)]
-	agentReplicates = [0 for x in xrange(width)]
-	agentEnergy = [0 for x in xrange(width)]
-	agentAge = [0 for x in xrange(width)]
-	agentGeneration = [0 for x in xrange(width)]
 
-def saveNewSetOfAgents(listOfAgents):
-	print "DIdn't do anything to save the list of agents"
-
-def drawTree(window,x,y):
-	#Save the agents
-	print "Just a test"	
-	#Show the tree
+#0:decisions, 1:Moves, 2:Turns, 3:Attacks, 4:Grows, 5:AsexReps, 6:SexReps, 7:FailedMoves, 8:FailedReps, 9:FailedAttacks, 10:FailedGrows, 11:SimReportSize, 12:KilledByAttack, 13:KilledByStarving, 14:AveBrainSize, 15:AveEnergy, 16:AveAge, 17:AveGen
+def drawTree(window,x,y,speciesStatList):
+	#Save the latest round of stats
+	prepNewSpeciesLevel()
+	for thisSpeciesStats in speciesStatList:
+		saveSpeciesData(thisSpeciesStats.getDecisions(),thisSpeciesStats.hashNumb)
+	#Draw the tree
+	drawSpeciesTree(window,x,y)	
 
 def resetSpeciesStatCounters():
 	for i in range(0,speciesTree.width):
 		speciesTree.agentCount[speciesTree.iterationsSeen][i] = 0
-		speciesTree.agentAttacks[i] = 0
-		speciesTree.agentGrows[i] = 0
-		speciesTree.agentMoves[i] = 0
-		speciesTree.agentReplicates[i] = 0
-		speciesTree.agentEnergy[i] = 0
-		speciesTree.agentAge[i] = 0
-		speciesTree.agentGeneration[i] = 0
 
 def prepNewSpeciesLevel():
 	#Clear this line
@@ -44,20 +32,10 @@ def prepNewSpeciesLevel():
 		speciesTree.agentCount[speciesTree.iterationsSeen][i] = 0
 	resetSpeciesStatCounters()
 
-def saveSpeciesData(e,a,gen,ld,bs):
-	numb = rgbToNumber(getBrainColor(bs))*speciesTree.width/maxRGBNumber
-	speciesTree.agentCount[speciesTree.iterationsSeen][numb] += 1
-	speciesTree.agentEnergy[numb] += e
-	speciesTree.agentAge[numb] += a
-	speciesTree.agentGeneration[numb] += gen
-	if(ld < 5):#This is just an encoding of the last decision
-		speciesTree.agentMoves[numb] += 1
-	elif(ld < 6):
-		speciesTree.agentAttacks[numb] += 1
-	elif(ld < 8):
-		speciesTree.agentReplicates[numb] += 1
-	elif(ld < 9):
-		speciesTree.agentGrows[numb] += 1
+def saveSpeciesData(c,hashNumb):
+	color = getColorOfHash(hashNumb)
+	numb = convertRGBToCountIndex(color)
+	speciesTree.agentCount[speciesTree.iterationsSeen][numb] += c
 
 #define AG_M_F 0 
 #define AG_M_L 1
@@ -69,7 +47,7 @@ def saveSpeciesData(e,a,gen,ld,bs):
 #define AG_R_F 7
 #define AG_GROW 8
 
-def detectSpeciesInGivenRound(roundsAgo):
+'''def detectSpeciesInGivenRound(roundsAgo):
 	speciesNumber = -1
 	gapNeeded = 5 #Min number of speaces between colors to count as different species
 	minNumb = 10 #Min number for this to be counted as occupied
@@ -109,10 +87,15 @@ def detectSpeciesInGivenRound(roundsAgo):
 			speciesList[speciesNumber][2] += count
 	#print speciesList
 	return speciesList
+'''
+def convertRGBToCountIndex(color):
+	#Take the color, convert it to a number, and then scale it relative to the conversion
+	return int(rgbToNumber(color)*speciesTree.width/maxRGBNumber)
+def convertCountIndexToRGB(n):
+	#Take the number, scale it relative to the conversion, then convert to a color
+	return numberToRGB(int((n)*maxRGBNumber/speciesTree.width))
 
-def convertCountIndexToRGB(c):
-	return numberToRGB(int((c+0.5)*maxRGBNumber/speciesTree.width))
-
+'''
 def drawSpeciesStats(window,x,y,species,i):
 	fontSize = 18
 	font = pygame.font.Font(None,fontSize)
@@ -152,9 +135,8 @@ def drawDetectedSpecies(window,x,y):
 			drawSpeciesStats(window,x,y,speciesList[i],i)	
 		else:
 			break
-
+'''
 def drawSpeciesTree(window,x,y):
-	#This is justo one row!!
 	for j in range(0,speciesTree.duration):
 		m = float(max(speciesTree.agentCount[(speciesTree.iterationsSeen-j)%speciesTree.duration]))
 		if not m == 0:
