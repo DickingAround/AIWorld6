@@ -147,7 +147,7 @@ void brain_makeConnLvlFromAsex(unsigned char *in, unsigned char inMax, unsigned 
  brain_fillRestWithNoOps(in,out,connMax,i);
 }
 void brain_considerMutatingConn(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, int i) { //Make sure the connections don't exceed the max
- if(rand() / (float)RAND_MAX < mutationRate) { //+x%?
+ if(rand() / (float)RAND_MAX < (mutationRate + AG_MUTATION_POSITIVE_PRESSURE_WEIGHT)) { //+x%?
   mult[i] = (1+mutationRate)*(rand()/(float)RAND_MAX)*mult[i]; 
   if(mult[i] > AG_MULT_MAX) {
    mult[i] = AG_MULT_MAX; 
@@ -186,7 +186,7 @@ int brain_considerRemovingAConn(unsigned char *in, unsigned char inMax, unsigned
 
 int brain_considerAddingAConn(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, int i) {
  int j;
- if(rand() / (float)RAND_MAX < mutationRate)
+ if(rand() / (float)RAND_MAX < (mutationRate + AG_MUTATION_POSITIVE_PRESSURE_CONN))
  {
   for(j = 0; j < (connMax-1); j++) { //Add a connection, but the last one is saved for a no-op
    if(j == i || (mult[j] < 0.0001 && mult[j] > -0.0001 && in[j] == 0 && out[j] == 0)) { //It must be a deleted connection from before or the end of the current brain
