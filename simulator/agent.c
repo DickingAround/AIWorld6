@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "agent.h"
 extern simulationManager sm;
+extern fastRand fr;
 
 void agent_kill(agent *ag) {
  if(ag == NULL)
@@ -19,7 +20,8 @@ void agent_gatherInputs(agent *ag) {
  int i,j,k;
  location *tmpLoc;
  // ---------- Static inputs -----------------------
- ag->br.inputs[AG_IN_RAND] = rand() / (float)RAND_MAX;
+ //ag->br.inputs[AG_IN_RAND] = rand() / (float)RAND_MAX;
+ ag->br.inputs[AG_IN_RAND] = fastRand_getRand(&fr); //This isn't thread safe, but it doesn't matter as long as it doesn't break and we get a value
  ag->br.inputs[AG_IN_CONST] = AG_INT_CONVERSION; //1 * the conversion
  // ---------- Location based inputs ---------------
  for(i = 0; i < 5; i++) {

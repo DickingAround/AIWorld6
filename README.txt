@@ -1,15 +1,15 @@
 TODO:
-* It looks like rand is an input. Let's make that work faster. (like an array of 10k random numbers and just cycle through them)
+* DONE - It looks like rand is an input. Let's make that work faster. (like an array of 10k random numbers and just cycle through them)
 * There's a lot of extra parts in the brain.c replications and connections that don't need to be tehre
-* Prove that the lack of communication is a connection mutation problem.
+* Prove that the lack of communication is a connection mutation problem. Like what if we change the connections to agressively increase, will we see communication???
 * Make eating an constant and see if we still get predation
 * We should put positive pressure on the connections but then cost them? How do we make it latent in their genes??
-* Add memory
+* DONE - Add memory
 * Add energy-give
 * Add terrain view to the UI
 * Add terrain deformation
-* Add lineage to the agents
-* Show communication patterns
+* DONE - Add lineage to the agents
+* DONE - Show communication patterns
 
 
 * Create the first test, running many iterations and then an *automatic* analysis of it. What metics were statistically significantly different? 

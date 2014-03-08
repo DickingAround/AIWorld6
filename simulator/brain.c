@@ -2,6 +2,7 @@
 #define brain_c
 #include "brain.h"
 #include <limits.h>
+extern fastRand fr;
 void brain_makeDecision(brain *br)
 {
  int i,max;

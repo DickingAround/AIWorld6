@@ -105,6 +105,11 @@
 #define DOWN 2
 #define LEFT 3
 
+//Fast rand settings
+// Note that fast rand array length is 100 longer because we're allowing space for multi-threading issues we've intentionally allowed for the sake of speed.
+#define FAST_RAND_LEN 10000
+#define FAST_RAND_ARRAY_LEN 10100
+
 #define INTELTESTS_FILE_LOC "./data_from_simulations/intelTests.txt" 
 #define MONITOR_FILE_LOC "./data_from_simulations/monitor.txt"
 #define SPECIES_STATS_FILE_LOC "./data_from_simulations/speciesStats.txt"

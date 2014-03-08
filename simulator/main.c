@@ -8,14 +8,17 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
+#include "fastRand.h"
 #include "simulationManager.h" //Includes Pthread.h
 #include "simulationMonitor.h"
 #include "agent.h"
 #include "location.h"
 #include "world.h"//includes location.h
 simulationManager sm;
+fastRand fr;
 void error_handler(int sig); 
 #include "quickSigmoid.c"
+#include "fastRand.c"
 #include "location.c"
 #include "world.c"
 #include "threadManager.c"
@@ -31,6 +34,7 @@ int main(int argc, char** argv)
  //srand(138159158); //9);
  srand(time(NULL));
  quickSigmoid_init();
+ fastRand_init(&fr);
  signal(SIGSEGV,error_handler);
  if(argc != 2) //Assume we're running tests now
   runTests();
