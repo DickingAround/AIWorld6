@@ -77,6 +77,16 @@ void brain_makeDecision(brain *br)
  b->speciesHash = hash; 
  b->brainSize = brainSize + i;
 }*/
+int brain_computeBrainSize(brain *b) {
+ int i = 0;
+ while(b->inL1[i] != AG_CONN_END) {
+  i++;
+ }
+ while(b->inL2[i] != AG_CONN_END) {
+  i++;
+ } 
+ b->brainSize = i;
+}
 int brain_makeUpSpeciesHash() {
  return (unsigned long)((rand() / (float)RAND_MAX * SPECIES_HASH_INIT_SPREAD) + SPECIES_HASH_INIT_MIN);
 }
@@ -106,9 +116,10 @@ void brain_fillRestWithNoOps(unsigned char *in, unsigned char *out, int connMax,
 }
 void brain_makeFromScratch(brain *newB) {
  newB->mutationRate = AG_MUTATION_RATE;
- brain_makeConnLvlFromScratch(newB->inL1,AG_INPUTS,newB->outL1,AG_MID_NODES,newB->multL1,newB->mutationRate,AG_CONNS_L1);  
- brain_makeConnLvlFromScratch(newB->inL2,AG_MID_NODES,newB->outL2,AG_OUTPUTS,newB->multL2,newB->mutationRate,AG_CONNS_L2);  
+ brain_makeConnLvlFromScratch(newB->inL1,AG_INPUTS_INIT,newB->outL1,AG_MIDS_INIT,newB->multL1,newB->mutationRate,AG_CONNS_L1);  
+ brain_makeConnLvlFromScratch(newB->inL2,AG_MIDS_INIT,newB->outL2,AG_OUTPUTS_INIT,newB->multL2,newB->mutationRate,AG_CONNS_L2);  
  newB->speciesHash = brain_makeUpSpeciesHash();
+ brain_computeBrainSize(newB);
 }
 void brain_makeConnLvlFromScratch(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax) {
  int i;
@@ -131,6 +142,7 @@ void brain_makeFromAsex(brain *newB, brain *b) {
  brain_makeConnLvlFromAsex(newB->inL1,AG_INPUTS,newB->outL1,AG_MID_NODES,newB->multL1,newB->mutationRate,AG_CONNS_L1,b->inL1,b->outL1,b->multL1); 
  brain_makeConnLvlFromAsex(newB->inL2,AG_MID_NODES,newB->outL2,AG_OUTPUTS,newB->multL2,newB->mutationRate,AG_CONNS_L2,b->inL2,b->outL2,b->multL2); 
  newB->speciesHash = brain_makeUpSpeciesHashFromParent(b);
+ brain_computeBrainSize(newB);
 }
 
 void brain_makeConnLvlFromAsex(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, unsigned char *oldIn, unsigned char *oldOut, float *oldMult) {
@@ -217,6 +229,7 @@ void brain_makeFromSex(brain *newB, brain *b, brain *c) {
  brain_makeConnLvlFromSex(newB->inL1,AG_INPUTS,newB->outL1,AG_MID_NODES,newB->multL1,newB->mutationRate,AG_CONNS_L1,b->inL1,b->outL1,b->multL1,c->inL1,c->outL1,c->multL1); 
  brain_makeConnLvlFromSex(newB->inL2,AG_MID_NODES,newB->outL2,AG_OUTPUTS,newB->multL2,newB->mutationRate,AG_CONNS_L2,b->inL2,b->outL2,b->multL2,c->inL2,c->outL2,c->multL2); 
  newB->speciesHash = brain_makeUpSpeciesHashFromParents(b,c);
+ brain_computeBrainSize(newB);
 }
 void brain_makeConnLvlFromSex(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, unsigned char *oldInA, unsigned char *oldOutA, float *oldMultA, unsigned char *oldInB, unsigned char *oldOutB, float *oldMultB) {
  int i = 0; //There is an important edge case here where the system might skip the rest of the connections in a brain if there's only a single no-op at the end.

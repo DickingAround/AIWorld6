@@ -10,9 +10,10 @@ def detectSpecies(speciesStatList):
 	hashMin = -1
 	hashMax = -1
 	for i in enumerate(speciesStatList):
-		for j in range(0,int(i[1].getDecisions())): #The first value of the species stat list is how many of them there are
+		numberOfAgents = int(i[1].getDecisions()/i[1].getSimReportSize()) 
+		for j in range(0,numberOfAgents): #The first value of the species stat list is how many of them there are
 			speciesHashList.append(i[0])
-		if(int(i[1].getDecisions()) >= 0.5):#Really, it's greater than 0 but it's a float value
+		if(numberOfAgents >= 0.5):#Really, it's greater than 0 but it's a float value
 			hashMax = i[0] #Save the highest value hash present
 			if(hashMin == -1):
 				hashMin = i[0] #Save the lowest value hash present
@@ -49,7 +50,10 @@ def collectStatsBySpecies(speciesStatList,speciesHashRangeList):
 		#For each hash, get all the metrics
 		for hashNumber in range(speciesLimits[1][0],speciesLimits[1][1]): #For each hash
 			for statNumber in range(0,len(speciesStatList[0].statList)): #For each stat
-				statsBySpecies[speciesLimits[0]].statList[statNumber] += float(speciesStatList[hashNumber].statList[statNumber])
+				if(statNumber == 11): #The sim duration is an exception
+					statsBySpecies[speciesLimits[0]].statList[statNumber] = float(speciesStatList[hashNumber].statList[statNumber])
+				else:
+					statsBySpecies[speciesLimits[0]].statList[statNumber] += float(speciesStatList[hashNumber].statList[statNumber])
 	return statsBySpecies
 	
 def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
@@ -73,6 +77,7 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 	statList.append(['aveAge',thisSpeciesStats.getAveAge()/thisSpeciesStats.getDecisions()])
 	statList.append(['aveGeneration',thisSpeciesStats.getAveGen()/thisSpeciesStats.getDecisions()])
 	statList.append(['aveEnergy',thisSpeciesStats.getAveEnergy()/thisSpeciesStats.getDecisions()])
+	statList.append(['aveBrainSize',thisSpeciesStats.getAveBrainSize()/thisSpeciesStats.getDecisions()])
 	statList.append(['attacks',thisSpeciesStats.getAttacks()/thisSpeciesStats.getDecisions()])
 	statList.append(['grows',thisSpeciesStats.getGrows()/thisSpeciesStats.getDecisions()])
 	statList.append(['asexReplications',thisSpeciesStats.getAsexReps()/thisSpeciesStats.getDecisions()])

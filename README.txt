@@ -1,10 +1,13 @@
 TODO:
-* DONE - It looks like rand is an input. Let's make that work faster. (like an array of 10k random numbers and just cycle through them)
+* DONE - Fix Show brain size
+* DONE - Add an init system that doesn't need so many connections
+* The communication still seems broken
+* DONE - The agent numbers aren't correct
+
 * There's a lot of extra parts in the brain.c replications and connections that don't need to be tehre
 * DONE (waiting on testing) - Prove that the lack of communication is a connection mutation problem. Like what if we change the connections to agressively increase, will we see communication???
 * Make eating an constant and see if we still get predation
 * We should put positive pressure on the connections but then cost them? How do we make it latent in their genes??
-* DONE - Add memory
 * Add energy-give
 * Add terrain view to the UI
 * Add terrain deformation

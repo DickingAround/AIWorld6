@@ -5,11 +5,11 @@
 
 //Simulation settings
 #define NUMBER_OF_THREADS 4
-#define SIM_ITERATIONS 50000000
-#define SIM_REPORT_INTERVAL 5000
+#define SIM_ITERATIONS 100000000
+#define SIM_REPORT_INTERVAL 20000
 #define SIM_INTEL_TEST_INTERVAL 100000
 #define SIM_SEED_INTERVAL 100
-#define SIM_SEED_DURATION 60000
+#define SIM_SEED_DURATION 100000
 #define SIM_SEED_ENERGY 20
 #define SIM_SEED_SIZE 30
 #define NUMBER_OF_SPECIES_RECORDED 3
@@ -27,7 +27,7 @@
 //Agent settings
 #define AG_MUTATION_RATE 0.10
 #define AG_MUTATION_POSITIVE_PRESSURE_CONN 0.01
-#define AG_MUTATION_POSITIVE_PRESSURE_WEIGHT 0.01
+#define AG_MUTATION_POSITIVE_PRESSURE_WEIGHT 0.05
 #define WORLD_PASS_COST_MULT 0.1
 #define WORLD_FOOD_MULT 1
 #define AG_MAX_ENERGY 10000
@@ -81,12 +81,15 @@
 #define AG_MULT_MAX 0x7F
 #define AG_MULT_MIN -0x7F
 #define AG_MULT_INIT_RANGE 0x2F
-
+//We have a range of initalization that's different from the max in an effort to collect the values
+#define AG_INPUTS_INIT 77 //Don't need to do signals or memory
+#define AG_MIDS_INIT 50 //Don't  need to use most middle connections
+#define AG_OUTPUTS_INIT 12 //Don't need to use memory
 #define AG_MID_NODES 100
-#define AG_CONNS_INIT 90
+#define AG_CONNS_INIT 50
 #define AG_CONNS_L1 500
 #define AG_CONNS_L2 500
-#define AG_CONN_END 130 //AG_CONN_END must be larger than the number of inputs or outputs
+#define AG_CONN_END 255 //AG_CONN_END must be larger than the number of inputs or outputs, maxes at 255 for u-char
 //Species detection systems
 //The color spectrum is 0 to 1530 (not including it)
 //#define SPECIES_HASH_MIN 0 - assumed to be zero
