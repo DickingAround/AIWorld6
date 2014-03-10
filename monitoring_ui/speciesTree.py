@@ -6,7 +6,7 @@ import speciesStats
 #Just a color chart, forever scrolling, with how many things are in each bucket.
 class speciesTree():
 	iterationsSeen = -1 #Get incremented immediately on prep
-	duration = 300
+	duration = 110
 	width = 383 #If the colors are at 1530 grainularity, this will be about 4 different collors into one bin
 	agentCount  = [[0 for x in xrange(width)] for x in xrange(duration)] 	
 

@@ -20,10 +20,23 @@ class location:
 	def drawSignal(self,window,xOffset,yOffset):
 		#print r,g,b
 		try:
-			if(self.p < -0.5): #Impassable terrain
-				window.set_at((self.xLoc+xOffset,self.yLoc+yOffset),(255,255,255))
-			else:
-				window.set_at((self.xLoc+xOffset,self.yLoc+yOffset),(int(abs(self.signals[0])*255),int(abs(self.signals[1])*255),int(abs(self.signals[2])*255)))
+			r = int(self.signals[0]+0.5)*255
+			if(r > 255):
+				r = 255
+			if(r < 0):
+				r = 0
+			g = int(self.signals[1]+0.5)*255
+			if(g > 255):
+				g = 255
+			if(g < 0):
+				g = 0
+			b = int(self.signals[2]+0.5)*255
+			if(b > 255):
+				b = 255
+			if(b < 0):
+				b = 0
+			window.set_at((self.xLoc+xOffset,self.yLoc+yOffset),(r,g,b))
+			#window.set_at((self.xLoc+xOffset,self.yLoc+yOffset),(int(abs(self.signals[0])*255),int(abs(self.signals[1])*255),int(abs(self.signals[2])*255)))
 		except:
 			print "Land maps crashed trying to parse this one"
 			print self.xLoc,self.yLoc,self.signals
