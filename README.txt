@@ -1,8 +1,10 @@
 TODO:
 * DONE - Fix Show brain size
 * DONE - Add an init system that doesn't need so many connections
-* The communication still seems broken
+* DONE - The communication still seems broken
 * DONE - The agent numbers aren't correct
+
+* Test! - If we have energy-take a constant vs. it being a function of size, do we still get speciation??
 
 * There's a lot of extra parts in the brain.c replications and connections that don't need to be tehre
 * DONE (waiting on testing) - Prove that the lack of communication is a connection mutation problem. Like what if we change the connections to agressively increase, will we see communication???
@@ -113,7 +115,7 @@ IMPLEMENTATION: Species
 * It's even ok to have a variable color spectrum I think. 
 * Now we have a speciation hash we trust. How do we use the species algorithm to learn about them?? We have the algorithm in python, we could try finding a version in C. We could implement a version in C. Is there any way we could gather the per-agent data in C and implement it later? Of course. But we'll have to emit the statistics based on the hash algorithm. We can't roll them up on species anymore. 
 
-IMPLEMENTAION: Agent function
+IMPLEMENTATION: Agent function
 * The world has to chang just enough to prevent long-term stagnation. Changing climate? Are we going to stick with the 'you must be alone to grow' concept? it does force long-term thought and movement past eachother... what are the alternatives? 
 * Allow agents to stack up - They can't all get energy from the same spot, but they can at least slide past eachother. 
 

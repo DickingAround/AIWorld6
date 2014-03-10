@@ -40,6 +40,7 @@ void brain_makeDecision(brain *br)
  //------- Signals ------
  //NOTE: Only need to apply sigmoid to the signals decisions are just a max calculation and memory is saved raw
  for(i = AG_SIGNAL; i < (AG_SIGNAL+AG_SIGNAL_NUMB); i++) {
+  //outs[i] = AG_INT_CONVERSION;
   outs[i] = quickSigmoid_Sigmoid(outs[i]);// Conversion must be done outsidethe brain, since this is an int/(float)AG_INT_CONVERSION;
   //if((float)outs[i]/(float)AG_INT_CONVERSION > 0.001 || (float)outs[i]/(float)AG_INT_CONVERSION < -0.001)
   //printf("Finally found a brain outputting %i, %i\n",i,outs[i]);
@@ -159,23 +160,35 @@ void brain_makeConnLvlFromAsex(unsigned char *in, unsigned char inMax, unsigned 
  brain_fillRestWithNoOps(in,out,connMax,i);
 }
 void brain_considerMutatingConn(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, int i) { //Make sure the connections don't exceed the max
- if(rand() / (float)RAND_MAX < (mutationRate + AG_MUTATION_POSITIVE_PRESSURE_WEIGHT)) { //+x%?
-  mult[i] = (1+mutationRate)*(rand()/(float)RAND_MAX)*mult[i]; 
-  if(mult[i] > AG_MULT_MAX) {
-   mult[i] = AG_MULT_MAX; 
-  }
+// if(out[i] != 9  && out[i] != 10 && out[i] != 11) { //delete a connection? (TODO: Remove this, we're not moding a conn if it's a signaling one)
+ float oldValue = mult[i]; 
+ if(rand() / (float)RAND_MAX < mutationRate) { //+x%?
+  mult[i] = (float)(1.0+mutationRate*(rand()/(float)RAND_MAX)+AG_MUTATION_POSITIVE_PRESSURE_WEIGHT)*mult[i]; 
+  /*if(out[i] == 9 || out[i] == 10 || out[i] == 11) { //delete a connection? (TODO: Remove this, we're not moding a conn if it's a signaling one)
+   if(oldValue*oldValue > mult[i]*mult[i])
+    printf("The old value was higher and I was supposed to add %f, %f, %f, %f\n",oldValue, mult[i], mutationRate,(float)(1.0+mutationRate+AG_MUTATION_POSITIVE_PRESSURE_WEIGHT));
+  }*/
  }
  if(rand() / (float)RAND_MAX < mutationRate) { //-x%?
-  mult[i] = (1-mutationRate)*(rand()/(float)RAND_MAX)*mult[i]; 
-  if(mult[i] < AG_MULT_MIN) {
-   mult[i] = AG_MULT_MIN; 
-  }
+  mult[i] = (float)(1.0-mutationRate*(rand()/(float)RAND_MAX)+AG_MUTATION_POSITIVE_PRESSURE_WEIGHT)*mult[i]; 
+  /*if(out[i] == 9 || out[i] == 10 || out[i] == 11) { //delete a connection? (TODO: Remove this, we're not moding a conn if it's a signaling one)
+   if(oldValue*oldValue > mult[i]*mult[i])
+    printf("The old value was higher and I was supposed to subtract %f, %f, %f, %f\n",oldValue, mult[i], mutationRate,(float)(1.0-mutationRate+AG_MUTATION_POSITIVE_PRESSURE_WEIGHT));
+  }*/
  }
+ if(mult[i] > AG_MULT_MAX) {
+  mult[i] = AG_MULT_MAX; 
+ }
+ if(mult[i] < AG_MULT_MIN) {
+  mult[i] = AG_MULT_MIN; 
+ }
+ //}
 }
 
 int brain_considerRemovingAConn(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, int i) {
  int connNumb = 0;
- if(rand() / (float)RAND_MAX < mutationRate) { //delete a connection?
+ //connNumb = (int)(rand() / (float)RAND_MAX * (float)i);
+ if((rand() / (float)RAND_MAX < mutationRate) ) { // && out[connNumb] != 9  && out[connNumb] != 10 && out[connNumb] != 11) { //delete a connection? (TODO: Remove this, we're not moding a conn if it's a signaling one)
   connNumb = (int)(rand() / (float)RAND_MAX * (float)i);
   in[connNumb] = 0;
   mult[connNumb] = 0; 
