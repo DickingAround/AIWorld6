@@ -17,4 +17,7 @@ void world_setupAgentList(world *w);
 agent* world_mallocAgent(world *w, int x, int y);
 void world_deleteAgent(world *w, agent *a);
 
+void world_load(world *w);
+void world_loadTwoWorlds(world *w);
+void world_load_detailed(world *w, char aOrB, unsigned int xMin, unsigned int xMax, unsigned int yMin, unsigned int yMax)
 #endif

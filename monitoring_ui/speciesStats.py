@@ -81,7 +81,8 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 	statList.append(['attacks',thisSpeciesStats.getAttacks()/thisSpeciesStats.getDecisions()])
 	statList.append(['grows',thisSpeciesStats.getGrows()/thisSpeciesStats.getDecisions()])
 	statList.append(['move/turn',(thisSpeciesStats.getMoves()+thisSpeciesStats.getTurns())/thisSpeciesStats.getDecisions()])
-	statList.append(['failedAttacks',thisSpeciesStats.getFailedAttacks()/thisSpeciesStats.getAttacks()])
+	if(thisSpeciesStats.getAttacks() != 0):
+		statList.append(['failedAttacks',thisSpeciesStats.getFailedAttacks()/thisSpeciesStats.getAttacks()])
 	statList.append(['killedByAttack',thisSpeciesStats.getKilledByAttack()])
 	statList.append(['killedByStarving',thisSpeciesStats.getKilledByStarving()])
 	statList.append(['asexReplications',thisSpeciesStats.getAsexReps()/thisSpeciesStats.getDecisions()])

@@ -112,7 +112,7 @@ void world_save(world *w) {
  }
  fclose(outFile);
 }
-void world_load_fromAOrB(world *w, char aOrB)
+void world_load_detailed(world *w, char aOrB, unsigned int xMin, unsigned int xMax, unsigned int yMin, unsigned int yMax)
 {
  FILE *inFile;
  char str[AG_MAX_BUFFER_NEEDED];
@@ -122,7 +122,7 @@ void world_load_fromAOrB(world *w, char aOrB)
  else
   inFile = fopen(WORLD_AGENTS_FILE_LOC_B,"r");
  while(fgets(str,AG_MAX_BUFFER_NEEDED,inFile) != NULL) {
-  agent_load(str,AG_MAX_BUFFER_NEEDED);  
+  agent_load(str,AG_MAX_BUFFER_NEEDED,xMin,xMax,yMin,yMax);  
  } 
  fclose(inFile);
 }
@@ -133,16 +133,20 @@ void world_load(world *w) {
  fgets(str,3,inFile);
  if(str[0] == 'a') {
   printf("Loading from a\n");
-  world_load_fromAOrB(w,'a'); 
+  world_load_detailed(w,'a',WORLD_BORDER,w->worldSize-WORLD_BORDER,WORLD_BORDER,w->worldSize-WORLD_BORDER); 
   printf("Loaded from a\n");
  }
  else if(str[0] == 'b') {
   printf("Loading from b\n");
-  world_load_fromAOrB(w,'b');
+  world_load_detailed(w,'b',WORLD_BORDER,w->worldSize-WORLD_BORDER,WORLD_BORDER,w->worldSize-WORLD_BORDER);
   printf("Loaded from a\n");
  }
  else
   printf("World didn't understand what file to load from %c\n",str[0]);
+}
+void world_loadTwoWorlds(world *w) { //The two world load assumes the worlds live in each of a and b
+ world_load_fromAOrB(w,'a',WORLD_BORDER,WORLD_SIZE/2,WORLD_BORDER,WORLD_SIZE-WORLD_BORDER);
+ world_load_fromAOrB(w,'b',WORLD_SIZE/2,WORLD_SIZE-WORLD_BORDER,WORLD_BORDER,WORLD_SIZE-WORLD_BORDER);
 }
 
 void world_setupAgentList(world *w) {

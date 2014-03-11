@@ -330,7 +330,7 @@ void agent_save(agent *a, FILE *file) {
  fprintf(file,"\n");
 }
 
-void agent_load(char *str, int strLength) {
+void agent_load(char *str, int strLength, unsigned int worldXMin, unsigned int worldXMax, unsigned int worldYMin, unsigned int worldYMax) {
  agent *a;
  int ptr, namePtr, xLoc, yLoc, facingDirection, age = 0, generation = 0;
  float energy;
@@ -361,7 +361,7 @@ void agent_load(char *str, int strLength) {
      //error_handler();  
     }
     a == NULL; //Next, make sure the agent fits in the world somewhere, in case we've resized the world since this save point
-    if(xLoc >= WORLD_BORDER && xLoc < sm.w.worldSize - WORLD_BORDER && yLoc >= WORLD_BORDER && yLoc < sm.w.worldSize - WORLD_BORDER)
+    if(xLoc >= worldXMin && xLoc < worldXMax && yLoc >= worldYMin && yLoc < worldYMax)
      a = world_mallocAgent(&sm.w,xLoc,yLoc);
     if(a != NULL) {
      a->energy = energy;

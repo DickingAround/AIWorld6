@@ -47,8 +47,11 @@ int main(int argc, char** argv)
    case 'c': //Continue simulation
     runSimulation(0); 
     break;
-   case 'r': //Run simulation
+   case 's': //Start/seed simulation
     runSimulation(1);
+    break;
+   case 'f': //Fight, combine two worlds worth of agents
+    runSimulation(2);
     break;
    case 'i': //Run the intel tests on whatever agents were last
     runIntelTests();

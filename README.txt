@@ -1,20 +1,21 @@
 TODO:
-* DONE - Fix Show brain size
-* DONE - Add an init system that doesn't need so many connections
-* DONE - The communication still seems broken
-* DONE - The agent numbers aren't correct
-
 * Test! - If we have energy-take a constant vs. it being a function of size, do we still get speciation??
 
+* Get the tests up and running again (preferrably without killing the exisitng simulation)
+* Build a testing suite to actually a/B test things (but how to measure the outcome??)
+* How will I detect if they're actually using the communication channels?? How can I measure what parts of their brain they're using at all?
+** Let's say I know the decision. I know the connections and values that went into it. (I don't know what went into choosing 'not it' though)
+** I could just give a map of what connections existed
+* I could make a brain-builder. An app that lets you design a brain and then it adds it to the system to see how it fairs
+* I could make a multi-machine version in which they share the agents you have in your world.
+* I could make a file-combiner, which mixes two different worlds together. Take file A and file B and half the world is one and half the world is the other. 
+
 * There's a lot of extra parts in the brain.c replications and connections that don't need to be tehre
-* DONE (waiting on testing) - Prove that the lack of communication is a connection mutation problem. Like what if we change the connections to agressively increase, will we see communication???
 * Make eating an constant and see if we still get predation
 * We should put positive pressure on the connections but then cost them? How do we make it latent in their genes??
 * Add energy-give
 * Add terrain view to the UI
 * Add terrain deformation
-* DONE - Add lineage to the agents
-* DONE - Show communication patterns
 
 
 * Create the first test, running many iterations and then an *automatic* analysis of it. What metics were statistically significantly different? 
@@ -111,6 +112,7 @@ IMPLEMENTATION: Species
 *** 1 conn: 2 - a,b,c,d		e
 *** 0 conn: 1 - a,b,c	d	e
 *** 3 conn: x - a b b	d	e
+* why not easier? Like just pick a number and either + or - from it over time??
 * Did a proof of concept and I bet this is going to work. The species do wander all over the damn place. So, now we're going to give every agent a number. And over time, that number is going to wander. Initially people get a set of numbers at random (across the spectrum of color). We let the numbers wander *anywhere*. When we display them, we hash them down. When we do species, we can look at the real numbers and run a clustering algorithm. (we may need to learn how to implement that algorithm). We'll probably also need a number-wander modifier. Perhaps they shouldn't be an int but instead a float?? Nah. With an int, we can still compress the color spectrum as much as we want.
 * It's even ok to have a variable color spectrum I think. 
 * Now we have a speciation hash we trust. How do we use the species algorithm to learn about them?? We have the algorithm in python, we could try finding a version in C. We could implement a version in C. Is there any way we could gather the per-agent data in C and implement it later? Of course. But we'll have to emit the statistics based on the hash algorithm. We can't roll them up on species anymore. 

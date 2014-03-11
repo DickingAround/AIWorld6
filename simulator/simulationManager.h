@@ -25,5 +25,5 @@ void simulationManager_runIterations_basic(int iterations);
 void simulationManager_runIntelligenceTests();
 void simulationManager_run(int newWorld);
 void simulationManager_load();
-
+void simulationManager_loadTwoWorlds();
 #endif

@@ -1,6 +1,6 @@
 import pygame
 from helpers import *
-
+'''
 def getLocData(loc):
 	try:
 		parts = loc.split(',')
@@ -34,3 +34,4 @@ def drawLandMaps(window,xOffset,yOffset,version):
 		x,y,p,f,s1,s2,s3 = getLocData(loc.strip())
 		if(not(x == 0 and y == 0 and p == 0 and f == 0)): #If the terrain was parsable
 			drawLocSignal(window,int(x)+xOffset,int(y)+yOffset,float(p),float(s1),float(s2),float(s3))
+'''

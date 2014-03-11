@@ -14,6 +14,8 @@ void simulationManager_run(int newWorld)
  world_createFromScratch(&(sm.w));
  if(newWorld == 0)
   simulationManager_load();
+ else if(newWorld == 2)
+  simulationManager_loadTwoWorlds();
  simulationManager_setupThreads();
  simulationManager_runIterations_advanced(SIM_ITERATIONS,SIM_SEED_INTERVAL,SIM_SEED_DURATION,SIM_INTEL_TEST_INTERVAL);
  simulationManager_cleanupThreads();
@@ -146,6 +148,10 @@ void simulationManager_runIntelligenceTests() {
 
 void simulationManager_load() {
  world_load(&sm.w); 
+}
+
+void simulationManager_loadTwoWorlds() {
+ world_loadTwoWorlds(&sm.w);
 }
 
 #endif
