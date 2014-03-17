@@ -112,11 +112,12 @@ void world_save(world *w) {
  }
  fclose(outFile);
 }
-void world_load_detailed(world *w, char aOrB, unsigned int xMin, unsigned int xMax, unsigned int yMin, unsigned int yMax)
+void world_load_detailed(world *w, char aOrB, int clear, int xMin, int xMax, int yMin, int yMax)
 {
  FILE *inFile;
  char str[AG_MAX_BUFFER_NEEDED];
- world_clear(w);
+ if(clear == 1)
+  world_clear(w);
  if(aOrB == 'a')
   inFile = fopen(WORLD_AGENTS_FILE_LOC_A,"r");
  else
@@ -133,20 +134,20 @@ void world_load(world *w) {
  fgets(str,3,inFile);
  if(str[0] == 'a') {
   printf("Loading from a\n");
-  world_load_detailed(w,'a',WORLD_BORDER,w->worldSize-WORLD_BORDER,WORLD_BORDER,w->worldSize-WORLD_BORDER); 
+  world_load_detailed(w,'a',1,WORLD_BORDER,w->worldSize-WORLD_BORDER,WORLD_BORDER,w->worldSize-WORLD_BORDER); 
   printf("Loaded from a\n");
  }
  else if(str[0] == 'b') {
   printf("Loading from b\n");
-  world_load_detailed(w,'b',WORLD_BORDER,w->worldSize-WORLD_BORDER,WORLD_BORDER,w->worldSize-WORLD_BORDER);
+  world_load_detailed(w,'b',1,WORLD_BORDER,w->worldSize-WORLD_BORDER,WORLD_BORDER,w->worldSize-WORLD_BORDER);
   printf("Loaded from a\n");
  }
  else
   printf("World didn't understand what file to load from %c\n",str[0]);
 }
 void world_loadTwoWorlds(world *w) { //The two world load assumes the worlds live in each of a and b
- world_load_fromAOrB(w,'a',WORLD_BORDER,WORLD_SIZE/2,WORLD_BORDER,WORLD_SIZE-WORLD_BORDER);
- world_load_fromAOrB(w,'b',WORLD_SIZE/2,WORLD_SIZE-WORLD_BORDER,WORLD_BORDER,WORLD_SIZE-WORLD_BORDER);
+ world_load_detailed(w,'a',1,WORLD_BORDER,WORLD_SIZE/2           ,WORLD_BORDER,WORLD_SIZE-WORLD_BORDER);
+ world_load_detailed(w,'b',0,WORLD_SIZE/2,WORLD_SIZE-WORLD_BORDER,WORLD_BORDER,WORLD_SIZE-WORLD_BORDER);
 }
 
 void world_setupAgentList(world *w) {
@@ -204,7 +205,7 @@ int world_test_stressLoadSave() {
  }
  world_save_toAOrB(&sm.w,'a');
  world_createFromScratch(&sm.w);
- world_load_fromAOrB(&sm.w,'a');
+ world_load_detailed(&sm.w,'a',1,0,1000,0,1000);
  for(i = 0; i < WORLD_SIZE; i++) {
   for(j = 0; j < WORLD_SIZE;j++) {
    if(sm.w.locs[i][j].a == NULL) {
@@ -239,7 +240,7 @@ int world_test_generalLoadSave() {
  agent_mallocAgent_fromScratch(2,3,10); 
  agent_mallocAgent_fromScratch(4,5,100); 
  world_save_toAOrB(&sm.w,'b');
- world_load_fromAOrB(&sm.w,'a');
+ world_load_detailed(&sm.w,'a',1,0,1000,0,1000);
  if(sm.w.locs[2][3].a != NULL || sm.w.locs[4][5].a != NULL) {
   printf("World test: Agents were still there after a load.\n"); 
   return 0;

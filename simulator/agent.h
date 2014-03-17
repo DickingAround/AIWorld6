@@ -29,6 +29,7 @@ void agent_R_F(agent *ag);
 void agent_GROW(agent *ag);
 
 void agent_save(agent *a, FILE *file);
-void agent_load(char *str, int strLength);
+//void agent_load(char *str, int strLength);
+void agent_load(char *str, int strLength, int worldXMin, int worldXMax, int worldYMin, int worldYMax);
 void agent_print(agent *a);
 #endif

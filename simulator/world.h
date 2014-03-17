@@ -19,5 +19,5 @@ void world_deleteAgent(world *w, agent *a);
 
 void world_load(world *w);
 void world_loadTwoWorlds(world *w);
-void world_load_detailed(world *w, char aOrB, unsigned int xMin, unsigned int xMax, unsigned int yMin, unsigned int yMax)
+void world_load_detailed(world *w, char aOrB, int clear, int xMin, int xMax, int yMin, int yMax);
 #endif

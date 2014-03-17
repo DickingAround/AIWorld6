@@ -83,7 +83,7 @@ void simulationManager_runIterations_advanced(int iterations, int seedInterval, 
   simulationManager_runAgentActions(); //Single-threaded
   actionMS += clock() - timerAction;
   #ifdef GO_SLOW
-  sleep(4);
+  sleep(GO_SLOW);
   #endif
  } 
 }

@@ -5,6 +5,31 @@ import speciesStat
 #Draw the species stats in the color of the species
 
 def detectSpecies(speciesStatList):
+	minNumber = 1
+	minDist = 10
+	speciesList = []
+	recordingSpeciesNow = 0
+	minHash = -1
+	distanceSinceLastSawSpecies = -1
+	for i in enumerate(speciesStatList):
+		numberOfAgents = int(i[1].getDecisions()/i[1].getSimReportSize())
+		if(recordingSpeciesNow == 0):#Not recording a species yet
+			if(numberOfAgents >= minNumber):
+				minHash = i[0]
+				distanceSinceLastSawSpecies = 0
+				recordingSpeciesNow = 1
+		else:#Recording species
+			if(numberOfAgents >= minNumber):
+				distanceSinceLastSawSpecies = 0
+			else:
+				distanceSinceLastSawSpecies += 1
+				if(distanceSinceLastSawSpecies >= minDist):
+					speciesList.append([minHash,i[0] - minDist])
+					recordingSpeciesNow = 0
+	return speciesList
+			
+ 
+def detectSpecies_KDE(speciesStatList):
 	#First we need to change the species stats to be a list of hash values, not sums of the number in a given hash
 	speciesHashList = []
 	hashMin = -1
@@ -28,9 +53,7 @@ def detectSpecies(speciesStatList):
 	speciesList = []
 	speciesFound = 0
 	previousMin = hashMin
-	searchGrainularity = (hashMax-hashMin)/100
-	if(searchGrainularity < 1):
-		searchGrainularity = 1
+	searchGrainularity = 1
 	for i in range(hashMin,hashMax+1,int(searchGrainularity)): #TODO: Checking the kernel is expensive. We need to be more intelligent about it.
 		if(kernel.evaluate(i) < kernel.evaluate(i+1) and kernel.evaluate(i) < kernel.evaluate(i-1)):
 			print "found min at %i"%i
@@ -45,15 +68,20 @@ def collectStatsBySpecies(speciesStatList,speciesHashRangeList):
 	statsBySpecies = []
 	for speciesLimits in enumerate(speciesHashRangeList): #For each species...
 		statsBySpecies.append(speciesStat.speciesStat(''))
+		statsBySpecies[speciesLimits[0]].hashMed = 0
 		statsBySpecies[speciesLimits[0]].hashMin = speciesLimits[1][0]
 		statsBySpecies[speciesLimits[0]].hashMax = speciesLimits[1][1] #First thing, save the species hash limits
 		#For each hash, get all the metrics
-		for hashNumber in range(speciesLimits[1][0],speciesLimits[1][1]): #For each hash
+		for hashNumber in range(speciesLimits[1][0],speciesLimits[1][1]+1): #For each hash
 			for statNumber in range(0,len(speciesStatList[0].statList)): #For each stat
+				if(statNumber == 0): #Record the number of agents as part of finding the hash med
+					statsBySpecies[speciesLimits[0]].hashMed += float(speciesStatList[hashNumber].statList[statNumber])*hashNumber
 				if(statNumber == 11): #The sim duration is an exception
 					statsBySpecies[speciesLimits[0]].statList[statNumber] = float(speciesStatList[hashNumber].statList[statNumber])
 				else:
 					statsBySpecies[speciesLimits[0]].statList[statNumber] += float(speciesStatList[hashNumber].statList[statNumber])
+		#print "about to compute the hashMed",statsBySpecies[speciesLimits[0]].hashMed,statsBySpecies[speciesLimits[0]].getDecisions() 
+		statsBySpecies[speciesLimits[0]].hashMed = statsBySpecies[speciesLimits[0]].hashMed / statsBySpecies[speciesLimits[0]].getDecisions() 
 	return statsBySpecies
 	
 def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
@@ -70,7 +98,7 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 	elif(positionNumber >= 4):
 		return 0  #We only display 4
 	#Get the species color
-	color = helpers.getColorOfHash((thisSpeciesStats.hashMin+thisSpeciesStats.hashMax)/2)
+	color = helpers.getColorOfHash(thisSpeciesStats.hashMed)
 	#Draw out the stats we care about
 	numberOfAgents = thisSpeciesStats.getDecisions()/thisSpeciesStats.getSimReportSize() #The number of decisions divided by the number of iterations 
 	statList = [['avePopulation',numberOfAgents]]
@@ -106,10 +134,10 @@ def drawStats(window,x,y,speciesStatList):
 	#Do clustering
 	speciesHashRangeList = detectSpecies(speciesStatList)
 	statsBySpecies = collectStatsBySpecies(speciesStatList,speciesHashRangeList)
-	print "statsBySpecies is", statsBySpecies
+	#print "statsBySpecies is", statsBySpecies
 	sortedStats = sorted(statsBySpecies, key=lambda k: k.getDecisions(), reverse=True)
 	for statList in enumerate(sortedStats):
-		print "About to draw some stats for", statList
+		#print "About to draw some stats for", statList
 		drawSpeciesStats(window,x,y,statList[1],statList[0])
 	
 '''	#Do stat printing

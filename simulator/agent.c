@@ -330,7 +330,7 @@ void agent_save(agent *a, FILE *file) {
  fprintf(file,"\n");
 }
 
-void agent_load(char *str, int strLength, unsigned int worldXMin, unsigned int worldXMax, unsigned int worldYMin, unsigned int worldYMax) {
+void agent_load(char *str, int strLength, int worldXMin, int worldXMax, int worldYMin, int worldYMax) {
  agent *a;
  int ptr, namePtr, xLoc, yLoc, facingDirection, age = 0, generation = 0;
  float energy;

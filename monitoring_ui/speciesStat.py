@@ -2,6 +2,7 @@ class speciesStat:
 	hashNumb = 0
 	statList = 0
 	hashMin = 0 #Not all species stats use these
+	hashMed = 0
 	hashMax = 0
 	#0:decisions, 1:Moves, 2:Turns, 3:Attacks, 4:Grows, 5:AsexReps, 6:SexReps, 7:FailedMoves, 8:FailedReps, 9:FailedAttacks, 10:FailedGrows, 11:SimReportSize, 12:KilledByAttack, 13:KilledByStarving, 14:AveBrainSize, 15:AveEnergy, 16:AveAge, 17:AveGen
 	def __init__(self,stringOfData='',hashNumb=0):
