@@ -268,7 +268,7 @@ void brain_makeConnLvlFromSex(unsigned char *in, unsigned char inMax, unsigned c
 // Saving and loading
 //---------------------
 void brain_print(brain *b) {
- int i = 0;
+int i = 0;
  printf("L1");
  while(b->inL1[i] != AG_CONN_END) {
   printf(",%i:%f:%i",b->inL1[i],b->multL1[i],b->outL1[i]); 
@@ -330,18 +330,25 @@ void brain_load(brain *b, char *str, int strLength) {
    brain_fillRestWithNoOps(b->inL1,b->outL1,AG_CONNS_L1,brainPtr);
    ptr += 3;
    brainPtr = 0;
+   //printf("Starting L2");
   }
   else if(str[ptr] == ';' && str[ptr+1] == 'M' && str[ptr+2] == 'E') {
    lvl = 3; //This is all memory, not actuall a new level
+   brain_fillRestWithNoOps(b->inL2,b->outL2,AG_CONNS_L2,brainPtr);
    ptr += 3;
    brainPtr = 0;
+   //printf("The memory seciton is '%s'",str+ptr);
   }
   else if(str[ptr] == ';' && lvl == 3) { //Memory 
    ptr++;
-   b->mem[brainPtr];
-   while(str[ptr] != ';')
+   b->mem[brainPtr] = atoi(str+ptr);
+   //printf("Loaded Mem con %i, %i from pt %i\n",brainPtr,b->mem[brainPtr],ptr);
+   while(str[ptr] != ';' && str[ptr] != '\n')
     ptr++;
    brainPtr++;
+   if(brainPtr > AG_MEM_NUMB) {
+    printf("The brain you loaded had too much memory, it is being compacted foolishly\n");
+   }
   }
   else if(str[ptr] == ';' && (lvl == 1 || lvl == 2)) { //This is clearly the beginning of a connection
    ptr++;
@@ -365,6 +372,7 @@ void brain_load(brain *b, char *str, int strLength) {
     b->inL2[brainPtr] = in;
     b->multL2[brainPtr] = mult;
     b->outL2[brainPtr] = out; 
+    //printf("The brain has conn %i,%f,%i\n",in,mult,out);
    }
    brainPtr++;
    if(lvl == 1 && brainPtr >= AG_CONNS_L1 - 1) {
@@ -381,13 +389,16 @@ void brain_load(brain *b, char *str, int strLength) {
    ptr++;
   }
  } 
- brain_fillRestWithNoOps(b->inL2,b->outL2,AG_CONNS_L2,brainPtr);
+ //printf("LMemSize:%i\n",brainPtr);
+ //brain_fillRestWithNoOps(b->inL2,b->outL2,AG_CONNS_L2,brainPtr);
  //brain_computeHash(b); We no longer compute the function, since it's a variable not basedo n the brain but based on geneology
 }
 //---------
 // Testing 
 //---------
 int brain_test() {
+ //if (brain_test_saveLoad() == 0)
+ // return 0;
  if (brain_test_makeDecision() == 0)
   return 0; 
  if (brain_test_seeding() == 0)
@@ -398,6 +409,10 @@ int brain_test() {
   return 0;
  return 1;
 }
+
+//int brain_test_saveLoad() {
+// return 0;
+//}
 
 int brain_test_seeding() {
  //Make a simple brain and show that it can process and return a normal result

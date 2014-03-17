@@ -1,7 +1,7 @@
 #define EXP_NO_COMMUNICATION
 
 //GO_SLOW makes the system wait x seconds between each action
-#define GO_SLOW 4
+#define GO_SLOW 5
 #define NUMBER_OF_THREADS 1
 #define SIM_ITERATIONS 1000
 #define SIM_REPORT_INTERVAL 1
