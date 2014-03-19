@@ -28,8 +28,11 @@ GETTING STARTED
 -----------------------------------
 * You will need to install 'sudo apt-get install python-pygame' which is use for the UI and rendering
 * You will need to install 'sudo apt-get install python-numpy python-scipy' which is used for the species differentiation and clustering in the python UI
-* You will need to install 'sudo apt-get libav-tools' which is used when turning all the images into a movie
-* You will need to install imageMagic which is used for turning all the images into a gif
+* You may want to install 'sudo apt-get libav-tools' which is used when turning all the images into a movie
+* You may want to install avconv for turning images into a movie
+* You may want to install openshot for joining movies and audio
+* You may want imageMagic which is used for turning all the images into a gif
+* You may want audacity to record audio over videos you make
 * Run the command 'bash make' to build and run the program.
 
 -----------------------------------

@@ -109,6 +109,8 @@ void agent_A_F(agent *ag) { //ATTACK
    agent_kill(otherAgent); //Other agent was already empty
   if(ag->energy <= 0)
    agent_kill(ag);
+  //This code does attack based on agent energy
+  /*
   if(ag->energy * AG_ATTACK_RATE >= otherAgent->energy) {
    ag->energy += otherAgent->energy * AG_ATTACK_EFF - 0.0001;
    agent_kill(otherAgent);
@@ -119,7 +121,19 @@ void agent_A_F(agent *ag) { //ATTACK
   else {
    ag->energy += ag->energy * AG_ATTACK_RATE * AG_ATTACK_EFF -0.0001;
    otherAgent->energy -= ag->energy * AG_ATTACK_RATE + 0.0001; 
+  }*/
+  //This code does attack for a set energy price
+  if(20 >= otherAgent->energy) {
+   ag->energy += otherAgent->energy * AG_ATTACK_EFF - 0.0001;
+   agent_kill(otherAgent);
+   #ifndef LESS_METRICS
+   simulationMonitor_addKilledByAttacksForHash(ag->br.speciesHash,1);
+   #endif
   }
+  else {
+   ag->energy += 20 * AG_ATTACK_EFF -0.0001;
+   otherAgent->energy -= 20 + 0.0001;   
+  } 
  }
  #ifndef LESS_METRICS
  else { //The other agent was empty
