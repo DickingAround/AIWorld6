@@ -48,19 +48,36 @@ void world_makeRandomTerrain(world *w)
  int x,y;
  for(x = 0; x < w->worldSize; x++) {
   for(y = 0; y < w->worldSize; y++) {
-   w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT;
-   w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT;
-   //No one can pass through the borders
+   //Make sure no one cane walk off the end of the world 
    if(x < w->worldBorder || y < w->worldBorder || x >= (w->worldSize - w->worldBorder) || y >= (w->worldSize - w->worldBorder)) {
     w->locs[x][y].p = PASS_IMPASSIBLE;
+   }  
+   #ifndef SIM_COMPLEX_WORLD_TERRAIN
+   w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT;
+   w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT;
+   #endif
+   #ifdef SIM_COMPLEX_WORLD_TERRAIN 
+   //Making the different parts of the world different styles
+   if(x < w->worldSize/2) { 
+    w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT;
    }
-   //No one can pass through the center cross, increasing the essential size of the world
-  /* if(x > (w->worldSize/2 - w->worldBorder) && x < (w->worldSize/2 + w->worldBorder) && y > 5*w->worldBorder && y < (w->worldSize-5*w->worldBorder) ) {
+   else {
+    w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT * 0.1;
+   }
+   if(y < w->worldSize/2) {
+    w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT;
+   }
+   else {
+    w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT * 10;
+   }
+   //Making barriers the split the world
+   /*if(x > (w->worldSize/2 - w->worldBorder) && x < (w->worldSize/2 + w->worldBorder) && y > 5*w->worldBorder && y < (w->worldSize-5*w->worldBorder) ) {
     w->locs[x][y].p = PASS_IMPASSIBLE;
    } 
    if(y > (w->worldSize/2 - w->worldBorder) && y < (w->worldSize/2 + w->worldBorder) && x > 5*w->worldBorder && x < (w->worldSize-5*w->worldBorder) ) {
     w->locs[x][y].p = PASS_IMPASSIBLE;
-   } */
+   }*/ 
+   #endif
   }
  }
 }

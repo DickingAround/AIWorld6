@@ -110,7 +110,7 @@ void agent_A_F(agent *ag) { //ATTACK
   if(ag->energy <= 0)
    agent_kill(ag);
   //This code does attack based on agent energy
-  /*
+  #ifndef SIM_CONSTANT_ATTACK_COST
   if(ag->energy * AG_ATTACK_RATE >= otherAgent->energy) {
    ag->energy += otherAgent->energy * AG_ATTACK_EFF - 0.0001;
    agent_kill(otherAgent);
@@ -121,9 +121,11 @@ void agent_A_F(agent *ag) { //ATTACK
   else {
    ag->energy += ag->energy * AG_ATTACK_RATE * AG_ATTACK_EFF -0.0001;
    otherAgent->energy -= ag->energy * AG_ATTACK_RATE + 0.0001; 
-  }*/
+  }
+  #endif
+  #ifdef SIM_CONSTANT_ATTACK_COST
   //This code does attack for a set energy price
-  if(20 >= otherAgent->energy) {
+  if(SIM_CONSTANT_ATTACK_COST >= otherAgent->energy) {
    ag->energy += otherAgent->energy * AG_ATTACK_EFF - 0.0001;
    agent_kill(otherAgent);
    #ifndef LESS_METRICS
@@ -131,9 +133,10 @@ void agent_A_F(agent *ag) { //ATTACK
    #endif
   }
   else {
-   ag->energy += 20 * AG_ATTACK_EFF -0.0001;
-   otherAgent->energy -= 20 + 0.0001;   
+   ag->energy += SIM_CONSTANT_ATTACK_COST * AG_ATTACK_EFF -0.0001;
+   otherAgent->energy -= SIM_CONSTANT_ATTACK_COST + 0.0001;   
   } 
+  #endif
  }
  #ifndef LESS_METRICS
  else { //The other agent was empty

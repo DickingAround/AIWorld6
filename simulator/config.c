@@ -21,7 +21,16 @@
 #define SIM_SEED_ENERGY 20
 #define SIM_SEED_SIZE 30
 
-#define NUMBER_OF_SPECIES_RECORDED 3
+//Special simulation functions
+
+//Otherwise the attack is a function of how much evergy an agent already has
+#define SIM_CONSTANT_ATTACK_COST 20
+
+//Otherwise the world is consistent in both passability and in terrain
+#define SIM_COMPLEX_WORLD_TERRAIN 
+
+
+
 //World settings
 #define AG_TOTAL_ALLOWED 60000
 #define AG_MAX_BUFFER_NEEDED 50000
