@@ -12,7 +12,10 @@ python ./monitoring_ui/main.py &
 #./main.exe -t
 #mv -f ./outputs/world_agents_bkp_a.txt ./outputs/world_agents_a.txt
 #mv -f ./outputs/world_agents_bkp_b.txt ./outputs/world_agents_b.txt
-#./main.exe -i
-./main.exe -r
+# START/SEED a new simulation
+./main.exe -s
+# CONTINUE an existing simulation
 #./main.exe -c
+# FIGHT between two worlds
+#./main.exe -f
 #sh ./buildImages
