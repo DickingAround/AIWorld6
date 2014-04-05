@@ -7,6 +7,7 @@
 #include "simulationMonitor.h"
 typedef struct simulationManager
 {
+ int seedWorld;
  long i;
  world w;
  pthread_t threads[NUMBER_OF_THREADS];

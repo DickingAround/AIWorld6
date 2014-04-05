@@ -12,7 +12,10 @@ void simulationManager_run(int newWorld)
 {
  //Load world, run all agent decisions, then act on all agent decisions, then do statistics gathering on this turn, then when it's all done do assessments
  world_createFromScratch(&(sm.w));
- if(newWorld == 0)
+ sm.seedWorld = 0;
+ if(newWorld == 1)
+  sm.seedWorld = 1;
+ else if(newWorld == 0)
   simulationManager_load();
  else if(newWorld == 2)
   simulationManager_loadTwoWorlds();
@@ -66,7 +69,7 @@ void simulationManager_runIterations_advanced(int iterations, int seedInterval, 
    decisionMS = 0;
    intelMS = 0; 
   } 
-  if(sm.i % seedInterval == 0 && sm.i < seedDuration) {
+  if(sm.i % seedInterval == 0 && sm.i < seedDuration && sm.seedWorld == 1) {
    timerSeed = clock(); 
    simulationManager_seedAgents();
    seedMS += clock() - timerSeed;

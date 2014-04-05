@@ -48,10 +48,6 @@ void world_makeRandomTerrain(world *w)
  int x,y;
  for(x = 0; x < w->worldSize; x++) {
   for(y = 0; y < w->worldSize; y++) {
-   //Make sure no one cane walk off the end of the world 
-   if(x < w->worldBorder || y < w->worldBorder || x >= (w->worldSize - w->worldBorder) || y >= (w->worldSize - w->worldBorder)) {
-    w->locs[x][y].p = PASS_IMPASSIBLE;
-   }  
    #ifndef SIM_COMPLEX_WORLD_TERRAIN
    w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT;
    w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT;
@@ -78,6 +74,10 @@ void world_makeRandomTerrain(world *w)
     w->locs[x][y].p = PASS_IMPASSIBLE;
    }*/ 
    #endif
+   //Make sure no one cane walk off the end of the world 
+   if(x < w->worldBorder || y < w->worldBorder || x >= (w->worldSize - w->worldBorder) || y >= (w->worldSize - w->worldBorder)) {
+    w->locs[x][y].p = PASS_IMPASSIBLE;
+   }  
   }
  }
 }

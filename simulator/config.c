@@ -29,8 +29,6 @@
 //Otherwise the world is consistent in both passability and in terrain
 #define SIM_COMPLEX_WORLD_TERRAIN 
 
-
-
 //World settings
 #define AG_TOTAL_ALLOWED 60000
 #define AG_MAX_BUFFER_NEEDED 50000
