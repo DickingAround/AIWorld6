@@ -12,7 +12,11 @@ typedef struct simulationMonitor
  int addedCon, didntAddCon, removedCon, didntRemoveCon;
  double speed, speedDecision, speedAction, speedSeed, speedIntelTests;
 
+ //We record a number of metrics for each species hash number
  unsigned long long perHashMetrics[SPECIES_HASH_MAX][SPECIES_NUMBER_OF_METRICS];
+
+ //We use a 'bias' when assigning new hash numbers in order to force them to spread out
+ float speciesHashBias[SPECIES_HASH_MAX];
  //We no longer computer the hash in the c code. We'll do that in the UI and gather all the metrics there. 
  //unsigned long long perSpeciesMetrics[SPECIES_TYPES_MAX][SPECIES_NUMBER_OF_METRICS];
 
@@ -31,6 +35,8 @@ typedef struct simulationMonitor
  // -- PER EXISTING AGENT METRICS BY SPECIES --
  //unsigned int species_aveEnergy[SPECIES_TYPES_MAX], species_aveAge[SPECIES_TYPES_MAX], species_aveGeneration[SPECIES_TYPES_MAX];
 } simulationMonitor; 
+
+float simulationMonitor_getBiasForSpeciesHash(int hash);
 
 void simulationMonitor_addDecisionsForHash(int hash, int x);
 unsigned long long simulationMonitor_getDecisionsForHash(int hash);

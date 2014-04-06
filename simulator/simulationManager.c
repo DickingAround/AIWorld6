@@ -47,44 +47,39 @@ void simulationManager_runIterations_basic(int iterations) {
 }
 void simulationManager_runIterations_advanced(int iterations, int seedInterval, int seedDuration, int intelTestInterval) {
  clock_t timerA, timerB, timerDecision, timerAction, timerSeed, timerIntel;
- double ms, decisionMS, actionMS, seedMS, intelMS;
  sm.i = 0;
  timerA = clock();
  for(; sm.i < iterations; sm.i++) {
   if(sm.i % SIM_REPORT_INTERVAL == 0) {
    printf("Sim has performed %lu intervals\n",sm.i);
    timerB = clock(); 
-   ms = timerB - timerA;
+   sm.smon.speed = timerB - timerA;
    timerA = clock();
-   sm.smon.speed = SIM_REPORT_INTERVAL/(ms/(float)CLOCKS_PER_SEC);
-   sm.smon.speedDecision = (decisionMS/(float)CLOCKS_PER_SEC);
-   sm.smon.speedAction = (actionMS/(float)CLOCKS_PER_SEC);
-   sm.smon.speedSeed = (seedMS/(float)CLOCKS_PER_SEC);
-   sm.smon.speedIntelTests = (intelMS/(float)CLOCKS_PER_SEC);
+   sm.smon.speed = SIM_REPORT_INTERVAL/(sm.smon.speed/(float)CLOCKS_PER_SEC);
+   sm.smon.speedDecision = (sm.smon.speedDecision/(float)CLOCKS_PER_SEC);
+   sm.smon.speedAction = (sm.smon.speedAction/(float)CLOCKS_PER_SEC);
+   sm.smon.speedSeed = (sm.smon.speedSeed/(float)CLOCKS_PER_SEC);
+   sm.smon.speedIntelTests = (sm.smon.speedIntelTests/(float)CLOCKS_PER_SEC);
    simulationMonitor_emitMonitors();
-   simulationMonitor_clear();
+   simulationMonitor_clear(); //Also computes the old median for use in replicating
    world_save(&(sm.w));
-   seedMS = 0;
-   actionMS = 0;
-   decisionMS = 0;
-   intelMS = 0; 
   } 
   if(sm.i % seedInterval == 0 && sm.i < seedDuration && sm.seedWorld == 1) {
    timerSeed = clock(); 
    simulationManager_seedAgents();
-   seedMS += clock() - timerSeed;
+   sm.smon.speedSeed += clock() - timerSeed;
   }
   if(sm.i % intelTestInterval == 0) {
    timerIntel = clock();
    simulationManager_runIntelligenceTests();
-   intelMS += clock() - timerIntel;
+   sm.smon.speedIntelTests += clock() - timerIntel;
   }
   timerDecision = clock();
   simulationManager_runAgentDecisions(); //Multi-threaded
-  decisionMS += clock() - timerDecision;
+  sm.smon.speedDecision += clock() - timerDecision;
   timerAction = clock();
   simulationManager_runAgentActions(); //Single-threaded
-  actionMS += clock() - timerAction;
+  sm.smon.speedAction += clock() - timerAction;
   #ifdef GO_SLOW
   sleep(GO_SLOW);
   #endif

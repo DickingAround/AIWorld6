@@ -24,6 +24,7 @@ void error_handler(int sig);
 #include "threadManager.c"
 #include "brain.c"
 #include "agent.c"
+#include "simulationMonitor.c"
 #include "simulationManager.c"//includes simulationManager.h
 void runTests();
 void runSimulation(int newWorld);
