@@ -205,15 +205,15 @@ void simulationMonitor_clear() {
   if(simulationMonitor_getDecisionsForHash(i) > 0) { //Don't do anything unless there's some decisions for this number
    weight = (float)simulationMonitor_getDecisionsForHash(i) / (float)totalDecisions;
    for(j=1 ; j<SPECIES_HASH_MAX/2-1 ; j++) {
-    sm.smon.speciesHashBias[(i+j)%SPECIES_HASH_MAX] += SPECIES_HASH_BIAS_STRENGTH * weight * ((((float)SPECIES_HASH_MAX/2.0) - (float)j)/((float)SPECIES_HASH_MAX/2.0));
-    sm.smon.speciesHashBias[(i-j)%SPECIES_HASH_MAX] -= SPECIES_HASH_BIAS_STRENGTH * weight * ((((float)SPECIES_HASH_MAX/2.0) - (float)j)/((float)SPECIES_HASH_MAX/2.0));
+    sm.smon.speciesHashBias[(SPECIES_HASH_MAX+i+j)%SPECIES_HASH_MAX] += SPECIES_HASH_BIAS_STRENGTH * weight * ((((float)SPECIES_HASH_MAX/2.0) - (float)j)/((float)SPECIES_HASH_MAX/2.0));
+    sm.smon.speciesHashBias[(SPECIES_HASH_MAX+i-j)%SPECIES_HASH_MAX] -= SPECIES_HASH_BIAS_STRENGTH * weight * ((((float)SPECIES_HASH_MAX/2.0) - (float)j)/((float)SPECIES_HASH_MAX/2.0));
    }
   }
  } 
- for(i=0;i<SPECIES_HASH_MAX;i+=50) {
+ /*for(i=0;i<SPECIES_HASH_MAX;i+=50) {
   printf("%i:%f,",i,simulationMonitor_getBiasForSpeciesHash(i));
  }
- printf("\n"); 
+ printf("\n"); */
  //Clear the basic parts of the simulation monitor
  sm.smon.speed = 0;
  sm.smon.speedDecision = 0;
