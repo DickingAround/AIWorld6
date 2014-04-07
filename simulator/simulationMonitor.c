@@ -225,6 +225,10 @@ void simulationMonitor_clear() {
    }
   }
  } 
+ for(i=0;i<SPECIES_HASH_MAX;i+=50) {
+  printf("%i:%f,",i,simulationMonitor_getBiasForSpeciesHash(i));
+ }
+ printf("\n");
 }
 /*void simulationMonitor_collectSpeciesMetrics(int speciesList[][2], int numberOfSpecies) {
  int speciesNumber,metricNumber,hashNumber;
