@@ -93,7 +93,7 @@ int brain_makeUpSpeciesHash() {
 }
 unsigned long brain_augmentSpeciesHash(unsigned long speciesHash) {
  //When picking the next species hash, we actually bias away from the expsiting species
- if( (2.0*rand()/(float)RAND_MAX - 1.0) + simulationMonitor_getBiasForSpeciesHash((int)speciesHash) < 0.0 )
+ if( (2.0*rand()/(float)RAND_MAX - 1.0) + simulationMonitor_getBiasForSpeciesHash((int)speciesHash) > 0.0 )
   return (speciesHash + 1)%SPECIES_HASH_MAX;
  else
   if((long long)speciesHash - 1 < 0)

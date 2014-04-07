@@ -193,21 +193,6 @@ void simulationMonitor_clear() {
  int i,j;
  unsigned long long totalDecisions;
  float weight;
- //Clear the basic parts of the simulation monitor
- sm.smon.speed = 0;
- sm.smon.speedDecision = 0;
- sm.smon.speedAction = 0;
- sm.smon.speedSeed = 0;
- sm.smon.speedIntelTests = 0;
- sm.smon.addedCon = 0;
- sm.smon.didntAddCon = 0;
- sm.smon.removedCon = 0;
- sm.smon.didntRemoveCon = 0;
- for(i=0;i<SPECIES_HASH_MAX;i++) {
-  for(j=0;j<SPECIES_NUMBER_OF_METRICS;j++) {
-   sm.smon.perHashMetrics[i][j] = 0;
-  }
- }
  //Compute the bias to use when giving new agents a hash number
  // Clear the old hash numbers, find the total decisions out there
  totalDecisions = 0;
@@ -228,7 +213,22 @@ void simulationMonitor_clear() {
  for(i=0;i<SPECIES_HASH_MAX;i+=50) {
   printf("%i:%f,",i,simulationMonitor_getBiasForSpeciesHash(i));
  }
- printf("\n");
+ printf("\n"); 
+ //Clear the basic parts of the simulation monitor
+ sm.smon.speed = 0;
+ sm.smon.speedDecision = 0;
+ sm.smon.speedAction = 0;
+ sm.smon.speedSeed = 0;
+ sm.smon.speedIntelTests = 0;
+ sm.smon.addedCon = 0;
+ sm.smon.didntAddCon = 0;
+ sm.smon.removedCon = 0;
+ sm.smon.didntRemoveCon = 0;
+ for(i=0;i<SPECIES_HASH_MAX;i++) {
+  for(j=0;j<SPECIES_NUMBER_OF_METRICS;j++) {
+   sm.smon.perHashMetrics[i][j] = 0;
+  }
+ }
 }
 /*void simulationMonitor_collectSpeciesMetrics(int speciesList[][2], int numberOfSpecies) {
  int speciesNumber,metricNumber,hashNumber;
