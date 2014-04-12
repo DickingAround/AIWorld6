@@ -1,5 +1,6 @@
 TODO:
 * Need to make a terrain and signal loader
+* Need to make a brian editor/render-er
 * Test! - If we have energy-take a constant vs. it being a function of size, do we still get speciation??
 
 * Get the tests up and running again (preferrably without killing the exisitng simulation)

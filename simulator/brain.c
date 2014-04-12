@@ -291,12 +291,20 @@ void brain_save(brain *b, FILE *file) {
  while(b->inL1[i] != AG_CONN_END) {
   fprintf(file,";%i:%f:%i",b->inL1[i],b->multL1[i],b->outL1[i]); 
   i++;
+  if(i >= AG_CONNS_L1) {
+   printf("Saving: Too many conns in this agent in L1 %i\n",i);
+   getchar();
+  }
  }
  fprintf(file,";L2");
  i = 0; 
  while(b->inL2[i] != AG_CONN_END) {
   fprintf(file,";%i:%f:%i",b->inL2[i],b->multL2[i],b->outL2[i]); 
   i++;
+  if(i >= AG_CONNS_L2) {
+   printf("Saving: Too many conns in this agent in L2 %i\n",i);
+   getchar();
+  }
  }
  fprintf(file,";ME");
  for( i = 0; i < AG_MEM_NUMB; i++) {
@@ -306,6 +314,8 @@ void brain_save(brain *b, FILE *file) {
 void brain_load(brain *b, char *str, int strLength) {
  int ptr, lvl, in, out, brainPtr;
  float mult;
+ brain_fillRestWithNoOps(b->inL1,b->outL1,AG_CONNS_L1,0);
+ brain_fillRestWithNoOps(b->inL2,b->outL2,AG_CONNS_L2,0);
  b->mutationRate = AG_MUTATION_RATE;
  ptr = 0;
  while(str[ptr] != '\n' && ptr < strLength) { //This is clearly the beginning of a designator
@@ -377,11 +387,15 @@ void brain_load(brain *b, char *str, int strLength) {
    }
    brainPtr++;
    if(lvl == 1 && brainPtr >= AG_CONNS_L1 - 1) {
-    printf("The brain you loaded was too big, it is being compacted foolishly\n");
+    printf("The brain you loaded was too big in L1, it is being compacted foolishly\n");
+    printf(str);
+    getchar();
     brainPtr = AG_CONNS_L1;
    } 
    if(lvl == 2 && brainPtr >= AG_CONNS_L2 - 1) {
-    printf("The brain you loaded was too big, it is being compacted foolishly\n");
+    printf("The brain you loaded was too big in L2, it is being compacted foolishly\n");
+    printf(str);
+    getchar();
     brainPtr = AG_CONNS_L2;
    }
   }
