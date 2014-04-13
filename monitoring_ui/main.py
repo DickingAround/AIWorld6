@@ -62,9 +62,9 @@ if __name__ == '__main__':
 			stage_main = time.clock()	
 			worldMaps.drawEnergy(window,600,0,listOfAgents) #200 x 230
 			stage_energy = time.clock()	
-			worldMaps.drawSignal(window,600,230,listOfLocations) #200 x 230, we leave 30 room for the labels
+			worldMaps.drawSignal(window,600,220,listOfLocations) #200 x 230, we leave 30 room for the labels
 			stage_signal = time.clock()	
-			speciesTree.drawTree(window,400,600,listOfSpeciesStats) #400 x 120, room out to 800 wide, remember to change the graph's functions
+			speciesTree.drawTree(window,610,440,listOfSpeciesStats) #510 x 280, room out to 800 wide, remember to change the graph's functions
 			stage_tree = time.clock()	
 			speciesStats.drawStats(window,810,0,listOfSpeciesStats) #480 x 720
 			stage_speciesStats = time.clock()	

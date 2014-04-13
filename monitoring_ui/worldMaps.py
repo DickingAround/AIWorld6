@@ -14,7 +14,7 @@ def drawEnergy(window,x,y,listOfAgents):
 	sur = font.render("Energy map (low:red,high:green)",1,(150,150,150))
 	window.blit(sur,(x,y+5))	
 	for a in listOfAgents:
-		a.drawEnergy(window,x,y+30)
+		a.drawEnergy(window,x,y+20)
 
 # -------------------
 # -- Map of signal --
@@ -24,7 +24,7 @@ def drawSignal(window,x,y,listOfLocations):
 	sur = font.render("Signal map",1,(150,150,150))
 	window.blit(sur,(x,y+5))	
 	for l in listOfLocations:
-		l.drawSignal(window,x,y+30)
+		l.drawSignal(window,x,y+20)
 
 # ---------------------------
 # -- Map of action/species --

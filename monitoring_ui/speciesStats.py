@@ -89,14 +89,19 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 	xOffset = 0
 	yOffset = 0	
 	if(positionNumber == 1):
-		yOffset = 350
+		yOffset = 220
 	elif(positionNumber == 2):
-		xOffset = 200	
+		xOffset = 140
 	elif(positionNumber == 3):
-		xOffset = 200
-		yOffset = 350
-	elif(positionNumber >= 4):
-		return 0  #We only display 4
+		xOffset = 140
+		yOffset = 220
+	elif(positionNumber == 4):
+		xOffset = 280
+	elif(positionNumber == 5):
+		xOffset = 280
+		yOffset = 220
+	elif(positionNumber >= 6):
+		return 0  #We only display 6
 	#Get the species color
 	color = helpers.getColorOfHash(thisSpeciesStats.hashMed)
 	#Draw out the stats we care about
@@ -117,7 +122,7 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 	statList.append(['sexReplications',thisSpeciesStats.getSexReps()/thisSpeciesStats.getDecisions()])
 	statList.append(['speciesHashMin',thisSpeciesStats.hashMin])
 	statList.append(['speciesHashMax',thisSpeciesStats.hashMax])
-	fontSize = 18
+	fontSize = 14
         font = pygame.font.Font(None,fontSize)
 	i = 0
 	for stat in statList:
