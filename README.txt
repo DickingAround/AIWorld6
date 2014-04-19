@@ -1,6 +1,17 @@
 TODO:
+* Make the world more complex
+** The complexity to add - Increase the size from 200x200 to 400x400, making 16 total regions.
+* Option C: Make 2 views - 1 is all about species, 1 is all about seeing the map.
+** M1: Make sure we can render an area
+** M1: Create a world-wide map and compress the areas, then rotate every x frames between the regions
+** M2: Make the species tree extra-big and move it to the left
+** M2: Make room for 9 different species
+** M2: Add a world-map, compress the existing maps
+** S: Make more complex terrain and increase world size 
+* Make a way to prove that they're using the signaling system
 * Need to make a terrain and signal loader
 * Need to make a brian editor/render-er
+
 * Test! - If we have energy-take a constant vs. it being a function of size, do we still get speciation??
 
 * Get the tests up and running again (preferrably without killing the exisitng simulation)
