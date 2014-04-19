@@ -175,13 +175,17 @@ class agent:
 		return []		
 
 
-	def drawAgent(self,window,x,y,spacing):
-		speciesColor = self.getSpeciesColor()
-		points = self.getPointsToDraw() #Gives both species set and the decision set
-	 	for point in points: 
-			window.set_at((x+self.xLoc*spacing+point[0],y+self.yLoc*spacing+point[1]),speciesColor)
+	def drawAgent(self,window,mapProps):
+		if(mapProps.compression == 0):
+			speciesColor = self.getSpeciesColor()
+			window.set_at((mapProps.uiX+self.xLoc,mapProps.uiY+self.yLoc),speciesColor)
+		elif(self.xLoc >= mapProps.worldMinX and self.yLoc >= mapProps.worldMinY and self.xLoc < mapProps.worldMaxX and self.yLoc < mapProps.worldMaxY):
+			speciesColor = self.getSpeciesColor()
+			points = self.getPointsToDraw() #Gives both species set and the decision set
+	 		for point in points: 
+				window.set_at((mapProps.uiX+self.xLoc*mapProps.compression+point[0],mapProps.uiY+self.yLoc*mapProps.compression+point[1]),speciesColor)
 
-	def drawEnergy(self,window,x,y):
+	def drawEnergy(self,window,mapProps):
 		#Want to increase in color from green to red as they get stronger (red:255,0,0 green:0,255,0)
 		if(self.energy < 1000): #All Red-to-yellow ratio
 			r = 255
@@ -201,7 +205,7 @@ class agent:
 			b = 255
 		try:
 			#pygame.draw.rect(window,(r,g,b),(x*size+xOffset,y*size+yOffset,size,size))  
-			window.set_at((x+self.xLoc,y+self.yLoc),(r,g,b));
+			window.set_at((mapProps.uiX+self.xLoc,mapProps.uiY+self.yLoc),(r,g,b));
 		except:
 			print "Problem with the agent's energy color:"
 			print self.energy

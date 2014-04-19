@@ -88,7 +88,20 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 	#Get the location to draw them in (we only draw up to four)
 	xOffset = 0
 	yOffset = 0	
-	if(positionNumber == 1):
+	if(positionNumber == 0):
+		xOffset = 0
+		yOffset = 0
+	elif(positionNumber == 1):
+		xOffset = 140
+	elif(positionNumber == 2):
+		xOffset = 280
+	elif(positionNumber == 4):
+		xOffset = 420
+	elif(positionNumber == 5):
+		xoffset = 560
+	elif(positionNumber >= 6):
+		return 0 #last one goes to 700
+	'''if(positionNumber == 1):
 		yOffset = 220
 	elif(positionNumber == 2):
 		xOffset = 140
@@ -101,7 +114,8 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 		xOffset = 280
 		yOffset = 220
 	elif(positionNumber >= 6):
-		return 0  #We only display 6
+		return 0  #We only display 6'''
+	
 	#Get the species color
 	color = helpers.getColorOfHash(thisSpeciesStats.hashMed)
 	#Draw out the stats we care about

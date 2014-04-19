@@ -45,36 +45,6 @@ def numberToRGB(number):
 
 def getColorOfHash(number):
 	return numberToRGB(number) #This is where we'd modify the equation. 
-"""	
-def getBrainColor(brainString):
-	#L1;4:5.4:3;L2;3:4:2,2	
-	try:
-		parts = brainString.split(';')
-		level = 0
-		tot = 0	
-		i = 0	
-		for part in parts:
-			if(part == "L1"):
-				level = 1
-				i = 0
-			elif(part == "L2"):
-				level = 2
-				i = 0
-			else:
-				conn = part.split(':')
-				if(level == 1):
-					i += 1
-					tot += int(conn[0])%50 #make it all inthe same range so it doesn't get too far off...
-					tot += int(conn[2])%50
-				elif(level == 2):
-					i += 1
-					tot += int(conn[0])%50
-					tot += ((int(conn[2]))*i)%50 #There are few outputs, but why the fuck use 'i'?
-		return numberToRGB(int(tot/2.0)%maxRGBNumber)
-	except:
-		print "GetBrainColor: Unexpected error: %i,%i,%i"%(tot,maxRGBNumber,int(tot/4.0)%maxRGBNumber), sys.exc_info()[0]
-		return (0,0,0)
-"""
 
 # -------------------------
 # -- Simple Data Getters --
@@ -129,61 +99,33 @@ def getListOfSimulationStats(f):
 	return simulationStatList
 
 
-"""def getAgentData(line):
- 	try:
-		pairs = line.split(' ')
-		for pair in pairs:
-			stat = pair.split(',')
-			if(stat[0] == 'xLoc'):
-				x = int(stat[1])
-			if(stat[0] == 'yLoc'):
-				y = int(stat[1])
-			if(stat[0] == 'energy'): 
-				e = float(stat[1])
-			if(stat[0] == 'latestDecision'):
-				ld = int(stat[1])
-			if(stat[0] == 'br'):
-				bs = stat[1]
-			if(stat[0] == 'age'):
-				a = int(stat[1])
-			if(stat[0] == 'generation'):
-				gen = int(stat[1])
-		return [x,y,e,a,gen,ld,bs]
-	except:
-		print "Failed to understand agent"
-		return [-1,-1,-1,-1,-1,-1]
-# -----------
-# -- STATS --
-# -----------
-def getStats():
-	try:
-		listOfStats = []
-		f = open("./data_from_simulations/monitor.txt")
-		line = list(f)[-1] #We only want the last line
-		pairs = line.split(' ');
-		for pair in pairs:
-			stat = pair.split(',')
-			if(len(stat) >= 2):
-				listOfStats.append([stat[0],stat[1]])
-		return listOfStats
-	except:
-		print "UI Error: I'm not finding the monitor file"
-		return 0 #The file might be corrupt because we're in the middle of reading it. That's ok, we'll just wait.
+# ---------------------
+# -- SCREEN HANDLING --
+# ---------------------
+def clearDisplay(window):
+	window.fill((0,0,0))
 
-def findStat(name,statList):
-	try:
-		for stat in statList:
-			if(stat[0] == name):
-				return stat[1]
-		print "UI Error: Didn't find the stat you wanted"
-		return None
-	except:
-		print "IU Error: Took an error when looking up a stat"
-		return None	
-"""
+def saveScreen(window,name):
+	pygame.image.save(window,"./images_and_video/%04d.png"%name)
+
 # -------------------
 # -- FILE HANDLING --
 # -------------------
+def checkDataVersion():
+	try:
+		f = open("./data_from_simulations/world_whichFileToUse.txt")
+		s = f.readlines()
+		f.close()
+		if(s[0] == checkDataVersion.lastVersion):
+			return 'x'
+		else:
+			checkDataVersion.lastVersion = s[0];
+			return s[0]
+	except:
+		print "Didn't find which file to use"
+		return 'x'
+checkDataVersion.lastVersion = 'c';
+
 def getLocationFile(version):
 	try:
 		if(version == 'a'):

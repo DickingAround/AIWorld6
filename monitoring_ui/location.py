@@ -17,7 +17,7 @@ class location:
 		else:
 			print "Location data wasn't the right size:%i, %s"%(len(parts),stringOfData)
 
-	def drawSignal(self,window,xOffset,yOffset):
+	def drawSignal(self,window,mapProps):
 		#print r,g,b
 		try:
 			r = int(self.signals[0]+0.5)*255
@@ -35,7 +35,7 @@ class location:
 				b = 255
 			if(b < 0):
 				b = 0
-			window.set_at((self.xLoc+xOffset,self.yLoc+yOffset),(r,g,b))
+			window.set_at((self.xLoc+mapProps.uiX,self.yLoc+mapProps.uiY),(r,g,b))
 			#window.set_at((self.xLoc+xOffset,self.yLoc+yOffset),(int(abs(self.signals[0])*255),int(abs(self.signals[1])*255),int(abs(self.signals[2])*255)))
 		except:
 			print "Land maps crashed trying to parse this one"
