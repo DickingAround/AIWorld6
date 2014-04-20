@@ -16,6 +16,18 @@ class location:
 			self.signals = [float(parts[4]),float(parts[5]),float(parts[6])]
 		else:
 			print "Location data wasn't the right size:%i, %s"%(len(parts),stringOfData)
+	
+	def drawBarrier(self,window,mapProps):
+		if(self.p < -0.5): #If passability is -1
+			if(mapProps.compression == 0):
+				window.set_at((self.xLoc+mapProps.uiX,self.yLoc+mapProps.uiY),(155,155,155))
+			else:
+				col = (155,155,155)
+				points = [[-1,-1],[0,-1],[1,-1],[-1,0],[0,0],[1,0],[-1,1],[0,1],[1,1]]
+				for point in points:
+					res = mapProps.convertToLocationInUI([self.xLoc,self.yLoc],point)
+					if(res != None):
+                                		window.set_at((res[0],res[1]),col)
 
 	def drawSignal(self,window,mapProps):
 		#print r,g,b

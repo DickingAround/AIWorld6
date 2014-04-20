@@ -2,13 +2,7 @@ TODO:
 * Make the world more complex
 ** The complexity to add - Increase the size from 200x200 to 400x400, making 16 total regions.
 * Option C: Make 2 views - 1 is all about species, 1 is all about seeing the map.
-** M1: Make sure we can render an area - DONE
-** M1: Create a world-wide map and compress the areas - DONE
 ** M1: then rotate every x frames between the regions
-** M2: Make the species tree extra-big and move it to the left - DONE
-** M2: Make room for 9 different species - DONE
-** M2: Add a world-map, compress the existing maps - DONE
-** S: Make more complex terrain and increase world size 
 * Make a way to prove that they're using the signaling system
 * Need to make a terrain and signal loader
 * Need to make a brian editor/render-er

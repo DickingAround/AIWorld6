@@ -178,12 +178,18 @@ class agent:
 	def drawAgent(self,window,mapProps):
 		if(mapProps.compression == 0):
 			speciesColor = self.getSpeciesColor()
-			window.set_at((mapProps.uiX+self.xLoc,mapProps.uiY+self.yLoc),speciesColor)
+			res = mapProps.convertToLocationInUI([self.xLoc,self.yLoc],[0,0])
+			if(res != None):
+				window.set_at((res[0],res[1]),speciesColor)
+			#window.set_at((mapProps.uiX+self.xLoc,mapProps.uiY+self.yLoc),speciesColor)
 		elif(self.xLoc >= mapProps.worldMinX and self.yLoc >= mapProps.worldMinY and self.xLoc < mapProps.worldMaxX and self.yLoc < mapProps.worldMaxY):
 			speciesColor = self.getSpeciesColor()
 			points = self.getPointsToDraw() #Gives both species set and the decision set
 	 		for point in points: 
-				window.set_at((mapProps.uiX+self.xLoc*mapProps.compression+point[0],mapProps.uiY+self.yLoc*mapProps.compression+point[1]),speciesColor)
+				res = mapProps.convertToLocationInUI([self.xLoc,self.yLoc],point)
+				if(res != None):
+					window.set_at((res[0],res[1]),speciesColor)
+				#window.set_at((mapProps.uiX+self.xLoc*mapProps.compression+point[0],mapProps.uiY+self.yLoc*mapProps.compression+point[1]),speciesColor)
 
 	def drawEnergy(self,window,mapProps):
 		#Want to increase in color from green to red as they get stronger (red:255,0,0 green:0,255,0)

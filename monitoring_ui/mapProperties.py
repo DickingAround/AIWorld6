@@ -15,3 +15,14 @@ class mapProperties:
 		self.worldMaxX = wmaxx
 		self.worldMaxY = wmaxy
 		self.compression = comp
+
+	def convertToLocationInUI(self,thisPoint,offsetPoint):
+		#print thisPoint, self.worldMinX, self.worldMaxX, self.worldMinY, self.worldMaxY
+		if(self.compression == 0):
+			comp = 1
+		else:
+			comp = self.compression
+		if(thisPoint[0] >= self.worldMinX and thisPoint[1] >= self.worldMinY and thisPoint[0] < self.worldMaxX and thisPoint[1] < self.worldMaxY):		
+			return [self.uiX+(thisPoint[0]-self.worldMinX)*comp+offsetPoint[0],self.uiY+(thisPoint[1]-self.worldMinY)*comp+offsetPoint[1]]
+		else:
+			return None 
