@@ -75,7 +75,7 @@ if __name__ == '__main__':
 			print "RenderTimes: map:%f, energy:%f, signal:%f, speciesTree:%f, speciesStats:%f, simulationStats:%f"%(stage_main - stage_start, stage_energy - stage_main, stage_signal - stage_energy, stage_tree - stage_signal, stage_speciesStats - stage_tree, stage_simulationStats - stage_speciesStats)
 			pygame.display.flip()	
 			if(imgNumb < imgMax):
-				#helpers.saveScreen(window,imgNumb)
+				helpers.saveScreen(window,imgNumb)
 				imgNumb += 1
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:

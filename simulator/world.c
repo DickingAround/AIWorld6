@@ -53,18 +53,25 @@ void world_makeRandomTerrain(world *w)
    w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT;
    #endif
    #ifdef SIM_COMPLEX_WORLD_TERRAIN 
-   //Making the different parts of the world different styles
-   if(x < w->worldSize/2) { 
-    w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT;
-   }
-   else {
+   //Making the different parts of the world different styles. Breif ascii map below to describe them (F is low food, P is low passability)
+   // __ P  P  __
+   // F  FP FP F
+   // F  FP FP F   <-- Lower half also has random obstacles
+   // __ P  P  __
+   if(x >= w->worldSize*0.25 && x < w->worldSize*0.75) { 
     w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT * 0.1;
    }
-   if(y < w->worldSize/2) {
-    w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT;
+   else {
+    w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT;
+   }
+   if(y >= w->worldSize*0.25 && y < w->worldSize*0.75) {
+    w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT * 10;
    }
    else {
-    w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT * 10;
+    w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT;
+   }
+   if(y >= w->worldSize*0.5 && rand()/(float)RAND_MAX < 0.05) {
+    w->locs[x][y].p = PASS_IMPASSIBLE;
    }
    //Making barriers the split the world
    /*if(x > (w->worldSize/2 - w->worldBorder) && x < (w->worldSize/2 + w->worldBorder) && y > 5*w->worldBorder && y < (w->worldSize-5*w->worldBorder) ) {
