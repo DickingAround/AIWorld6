@@ -10,28 +10,6 @@ import speciesStats
 import simulationStats
 import mapProperties
 #import simulationStats
-'''
-def clearDisplay(window):
-	window.fill((0,0,0))
-
-def checkDataVersion():
-	try:
-		f = open("./data_from_simulations/world_whichFileToUse.txt")
-		s = f.readlines()
-		f.close()
-		if(s[0] == checkDataVersion.lastVersion):
-			return 'x'
-		else:
-			checkDataVersion.lastVersion = s[0];
-			return s[0]
-        except:
-		print "Didn't find which file to use"
-                return 'x'
-checkDataVersion.lastVersion = 'c';
-
-def saveScreen(window,name):
-	pygame.image.save(window,"./images_and_video/%04d.png"%name)
-'''
 if __name__ == '__main__':
         import sys
 	displayX = 1280 #300 for text, 450 more for graphs (750), 900-1200 is time graphs
@@ -60,7 +38,7 @@ if __name__ == '__main__':
 			stage_speciesStats = time.clock()
 			print "LoadParseTimes: listOfAgents:%f, listOfLocations:%f, simStats:%f, speciesStats:%f"%(stage_loadAgents - stage_start, stage_loadLocations - stage_loadAgents, stage_loadSimulationStats - stage_loadLocations, stage_speciesStats - stage_loadSimulationStats)
 			stage_start = time.clock()	
-			worldMaps.drawAgents(window,mapProperties.mapProperties(0,0, 0,0, 0,0 ,0),listOfAgents) #600 x 600, spacing = 3
+			worldMaps.drawAgents(window,mapProperties.mapProperties(0,0, 0,0, 0,0 ,0),listOfAgents,listOfLocations) #600 x 600, spacing = 3
 			stage_main = time.clock()	
 			worldMaps.drawEnergy(window,mapProperties.mapProperties(400,0, 0,0, 0,0, 0),listOfAgents) #200 x 230
 			stage_energy = time.clock()	
