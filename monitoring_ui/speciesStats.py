@@ -94,9 +94,9 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 		xOffset = 140
 	elif(positionNumber == 2):
 		xOffset = 280
-	elif(positionNumber == 4):
+	elif(positionNumber == 3):
 		xOffset = 420
-	elif(positionNumber == 5):
+	elif(positionNumber == 4):
 		xOffset = 560
 	else:
 		return 0 #last one goes to 700
