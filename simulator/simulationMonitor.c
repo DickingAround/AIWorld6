@@ -204,9 +204,9 @@ void simulationMonitor_clear() {
  for(i=0;i<SPECIES_HASH_MAX;i++) {
   if(simulationMonitor_getDecisionsForHash(i) > 0) { //Don't do anything unless there's some decisions for this number
    weight = (float)simulationMonitor_getDecisionsForHash(i) / (float)totalDecisions;
-   for(j=1 ; j<30-1 ; j++) {
-    sm.smon.speciesHashBias[(SPECIES_HASH_MAX+i+j)%SPECIES_HASH_MAX] += SPECIES_HASH_BIAS_STRENGTH * weight * ((30.0 - (float)j)/30.0);
-    sm.smon.speciesHashBias[(SPECIES_HASH_MAX+i-j)%SPECIES_HASH_MAX] -= SPECIES_HASH_BIAS_STRENGTH * weight * ((30.0 - (float)j)/30.0);
+   for(j=1 ; j<SPECIES_HASH_BIAS_DIST-1 ; j++) {
+    sm.smon.speciesHashBias[(SPECIES_HASH_MAX+i+j)%SPECIES_HASH_MAX] += SPECIES_HASH_BIAS_STRENGTH * weight * (((float)SPECIES_HASH_BIAS_DIST - (float)j)/(float)SPECIES_HASH_BIAS_DIST);
+    sm.smon.speciesHashBias[(SPECIES_HASH_MAX+i-j)%SPECIES_HASH_MAX] -= SPECIES_HASH_BIAS_STRENGTH * weight * (((float)SPECIES_HASH_BIAS_DIST - (float)j)/(float)SPECIES_HASH_BIAS_DIST);
    }
   }
  } 
@@ -218,6 +218,8 @@ void simulationMonitor_clear() {
  sm.smon.speed = 0;
  sm.smon.speedDecision = 0;
  sm.smon.speedAction = 0;
+ sm.smon.speedActionTurn = 0;
+ sm.smon.speedGrow = 0;
  sm.smon.speedSeed = 0;
  sm.smon.speedIntelTests = 0;
  sm.smon.addedCon = 0;
@@ -291,7 +293,7 @@ void simulationMonitor_writeMetricsFile() {
  fprintf(outFile,"time,");
  simulationMonitor_writeTimeStamp(outFile); //TimeStamp doesn't write spaces so you'll need one of those
  fprintf(outFile," treatment,%s",sm.treatment);
- fprintf(outFile," iterations,%lu speed,%f speedD,%f speedA,%f speedS,%f",sm.i,sm.smon.speed,sm.smon.speedDecision,sm.smon.speedAction,sm.smon.speedSeed);
+ fprintf(outFile," iterations,%lu speed,%f speedDT,%f speedAT,%f speedA,%f speedG,%f speedS,%f",sm.i,sm.smon.speed,sm.smon.speedDecision,sm.smon.speedActionTurn,sm.smon.speedAction,sm.smon.speedGrow,sm.smon.speedSeed);
  if((sm.smon.addedCon + sm.smon.didntAddCon) != 0)
   fprintf(outFile," addConRate,%f",(float)sm.smon.addedCon/(float)(sm.smon.addedCon + sm.smon.didntAddCon));
  if((sm.smon.removedCon + sm.smon.didntRemoveCon) != 0)

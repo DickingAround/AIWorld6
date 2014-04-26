@@ -1,8 +1,8 @@
 TODO:
-* Make the world more complex
-** The complexity to add - Increase the size from 200x200 to 400x400, making 16 total regions.
-* Option C: Make 2 views - 1 is all about species, 1 is all about seeing the map.
-** M1: then rotate every x frames between the regions
+* Increase the speed
+** Find a way to parallize the action threads (striping??)
+** Just instrument the action phase
+
 * Make a way to prove that they're using the signaling system
 * Need to make a terrain and signal loader
 * Need to make a brian editor/render-er

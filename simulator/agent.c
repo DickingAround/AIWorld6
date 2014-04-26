@@ -73,12 +73,10 @@ void agent_performDecidedAction(agent *ag) {
  //------ Save signals -------
  for(i = 0; i < AG_SIGNAL_NUMB; i++) { //Perform the signals
   sm.w.locs[ag->xLoc][ag->yLoc].s[i] = (float)(ag->br.outputs[AG_SIGNAL+i])/(float)AG_INT_CONVERSION;
-  //if(ag->br.outputs[AG_SIGNAL+i] < -0.001 || ag->br.outputs[AG_SIGNAL+i] > 0.001)
-   //printf("Found outputs being printed %i, %i %i, %i, %f\n",AG_SIGNAL+i,ag->xLoc,ag->yLoc,ag->br.outputs[AG_SIGNAL+i],(float)(ag->br.outputs[AG_SIGNAL+i])/(float)AG_INT_CONVERSION);
  }
  //------ Save memory --------
  // This can and is done inside the brain because it doesn't affect the others, thus there are no race conditions when doing it in parallel 
- //------ Save decision ------
+ //------ Run decision ------
  switch(ag->br.latestDecision) {//Each of these is it's own function because they're in the tight loop and every comparison statement counts
   case(AG_M_F):  agent_M_F(ag); break;
   case(AG_M_L):  agent_M_L(ag); break;
@@ -252,6 +250,8 @@ void agent_R_F(agent* ag) {
 }
 void agent_GROW(agent *ag) {
  int i,j;
+ clock_t timer;
+ timer = clock();
  #ifndef LESS_METRICS
   simulationMonitor_addGrowsForHash(ag->br.speciesHash,1);
  #endif
@@ -267,6 +267,7 @@ void agent_GROW(agent *ag) {
   }
  }
  ag->energy += AG_GROW_RATE * sm.w.locs[ag->xLoc][ag->yLoc].f;
+ sm.smon.speedGrow += clock() - timer;
 }
 //---------------------------------------
 // Creation and reproduction

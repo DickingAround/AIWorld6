@@ -79,7 +79,7 @@ void simulationManager_runIterations_advanced(int iterations, int seedInterval, 
   sm.smon.speedDecision += clock() - timerDecision;
   timerAction = clock();
   simulationManager_runAgentActions(); //Single-threaded
-  sm.smon.speedAction += clock() - timerAction;
+  sm.smon.speedActionTurn += clock() - timerAction;
   #ifdef GO_SLOW
   sleep(GO_SLOW);
   #endif
@@ -112,6 +112,7 @@ void simulationManager_runAgentDecisions() { //Multi-threaded
 void simulationManager_runAgentActions() { //Single threaded
  int i;
  int j,k;
+ clock_t timerA;
  for(i = 0; i < sm.w.numbAgents && sm.w.agents[i].status != AG_STATUS_END_OF_LIST; i++) {
   if(sm.w.agents[i].status == AG_STATUS_ALIVE) {
    if(sm.w.agents[i].energy >= AG_MAX_ENERGY) {
@@ -131,10 +132,12 @@ void simulationManager_runAgentActions() { //Single threaded
     simulationMonitor_addAveEnergyForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].energy);
     simulationMonitor_addAveBrainSizeForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].br.brainSize);
     //TODO: Remove this if it never fires 
-    if(sm.w.agents[i].generation < 0 || sm.w.agents[i].age < 0 || sm.w.agents[i].energy < 0 || sm.w.agents[i].br.brainSize < 0)
-     printf("Problem with an agent giving metrics.. gen:%lu, age:%lu, ene:%f, brain:%i\n",sm.w.agents[i].generation, sm.w.agents[i].age, sm.w.agents[i].energy, sm.w.agents[i].br.brainSize );
+    //if(sm.w.agents[i].generation < 0 || sm.w.agents[i].age < 0 || sm.w.agents[i].energy < 0 || sm.w.agents[i].br.brainSize < 0)
+    // printf("Problem with an agent giving metrics.. gen:%lu, age:%lu, ene:%f, brain:%i\n",sm.w.agents[i].generation, sm.w.agents[i].age, sm.w.agents[i].energy, sm.w.agents[i].br.brainSize );
     #endif
+    timerA = clock();
     agent_performDecidedAction(&(sm.w.agents[i]));
+    sm.smon.speedAction += clock() - timerA;
    }
   }
  }

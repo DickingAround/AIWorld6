@@ -90,7 +90,6 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 	yOffset = 0	
 	if(positionNumber == 0):
 		xOffset = 0
-		yOffset = 0
 	elif(positionNumber == 1):
 		xOffset = 140
 	elif(positionNumber == 2):
@@ -98,8 +97,8 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 	elif(positionNumber == 4):
 		xOffset = 420
 	elif(positionNumber == 5):
-		xoffset = 560
-	elif(positionNumber >= 6):
+		xOffset = 560
+	else:
 		return 0 #last one goes to 700
 	'''if(positionNumber == 1):
 		yOffset = 220

@@ -1,2 +1,5 @@
 git fetch --all
 git fetch --hard origin/master
+
+git reset --hard
+git pull
