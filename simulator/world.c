@@ -33,6 +33,7 @@ void world_createFromScratch(world *w)
 
 void world_clear(world *w) {
  int x,y;
+ w->lastEmptyAgent = 0;
  w->worldSize = WORLD_SIZE;
  w->worldBorder = WORLD_BORDER;
  w->numbAgents = AG_TOTAL_ALLOWED;
@@ -184,18 +185,21 @@ void world_setupAgentList(world *w) {
 }
 agent* world_mallocAgent(world *w,int x,int y) {
  int i; //always start at zero, anything after that one is a null.
+ agent *ag;
  if(w->locs[x][y].a != NULL) {
   printf("You tried to allocate an agent on an occupied space?! %i %i\n",x,y);
   //error_handler(); //This will output the error but not stop the program 
   return NULL; 
  }
  for(i = 0; i < w->numbAgents; i++) {
-  if(w->agents[i].status == AG_STATUS_DEAD || w->agents[i].status == AG_STATUS_END_OF_LIST) {
-   w->agents[i].status = AG_STATUS_ALIVE;
-   w->agents[i].xLoc = x;
-   w->agents[i].yLoc = y;
-   w->locs[x][y].a = &(w->agents[i]);
-   return &(w->agents[i]);
+  ag = w->agents + (i+w->lastEmptyAgent)%(w->numbAgents);
+  if(ag->status == AG_STATUS_DEAD || ag->status == AG_STATUS_END_OF_LIST) {
+   ag->status = AG_STATUS_ALIVE;
+   ag->xLoc = x;
+   ag->yLoc = y;
+   w->locs[x][y].a = ag;
+   w->lastEmptyAgent = (i+w->lastEmptyAgent)%(w->numbAgents);
+   return ag;
   }
  }
  return NULL;

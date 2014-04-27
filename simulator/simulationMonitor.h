@@ -10,7 +10,8 @@
 typedef struct simulationMonitor
 {
  int addedCon, didntAddCon, removedCon, didntRemoveCon;
- double speed, speedDecision, speedActionTurn, speedAction, speedGrow, speedSeed, speedIntelTests;
+ double speed, speedDecision, speedActionTurn, speedAction, speedGrow, speedMove, speedAttack, speedReplicate, speedSeed, speedIntelTests;
+ double speedRMalloc, speedRBuild;
 
  //We record a number of metrics for each species hash number
  unsigned long long perHashMetrics[SPECIES_HASH_MAX][SPECIES_NUMBER_OF_METRICS];

@@ -220,6 +220,11 @@ void simulationMonitor_clear() {
  sm.smon.speedAction = 0;
  sm.smon.speedActionTurn = 0;
  sm.smon.speedGrow = 0;
+ sm.smon.speedMove = 0;
+ sm.smon.speedAttack = 0;
+ sm.smon.speedReplicate = 0;
+ sm.smon.speedRMalloc = 0;
+ sm.smon.speedRBuild = 0;
  sm.smon.speedSeed = 0;
  sm.smon.speedIntelTests = 0;
  sm.smon.addedCon = 0;
@@ -290,10 +295,22 @@ void simulationMonitor_writeMetricsFile() {
  FILE *outFile;
  //Output the file
  outFile = fopen(MONITOR_FILE_LOC,"a");
+ sm.smon.speed = SIM_REPORT_INTERVAL/(sm.smon.speed/(float)CLOCKS_PER_SEC);
+ sm.smon.speedDecision = (sm.smon.speedDecision/(float)CLOCKS_PER_SEC);
+ sm.smon.speedAction = (sm.smon.speedAction/(float)CLOCKS_PER_SEC);
+ sm.smon.speedSeed = (sm.smon.speedSeed/(float)CLOCKS_PER_SEC);
+ sm.smon.speedIntelTests = (sm.smon.speedIntelTests/(float)CLOCKS_PER_SEC);
+ sm.smon.speedActionTurn = (sm.smon.speedActionTurn/(float)CLOCKS_PER_SEC);
+ sm.smon.speedGrow = (sm.smon.speedGrow/(float)CLOCKS_PER_SEC);
+ sm.smon.speedMove = (sm.smon.speedMove/(float)CLOCKS_PER_SEC);
+ sm.smon.speedAttack = (sm.smon.speedAttack/(float)CLOCKS_PER_SEC);
+ sm.smon.speedReplicate = (sm.smon.speedReplicate/(float)CLOCKS_PER_SEC);
+ sm.smon.speedRMalloc = (sm.smon.speedRMalloc/(float)CLOCKS_PER_SEC);
+ sm.smon.speedRBuild = (sm.smon.speedRBuild/(float)CLOCKS_PER_SEC);
  fprintf(outFile,"time,");
  simulationMonitor_writeTimeStamp(outFile); //TimeStamp doesn't write spaces so you'll need one of those
  fprintf(outFile," treatment,%s",sm.treatment);
- fprintf(outFile," iterations,%lu speed,%f speedDT,%f speedAT,%f speedA,%f speedG,%f speedS,%f",sm.i,sm.smon.speed,sm.smon.speedDecision,sm.smon.speedActionTurn,sm.smon.speedAction,sm.smon.speedGrow,sm.smon.speedSeed);
+ fprintf(outFile," iterations,%lu speed,%f speedDT,%f speedAT,%f speedA,%f speedG,%f speedM,%f speedAk,%f speedRe,%f speedReMal,%f speedReBu,%f speedS,%f",sm.i,sm.smon.speed,sm.smon.speedDecision,sm.smon.speedActionTurn,sm.smon.speedAction,sm.smon.speedGrow,sm.smon.speedMove,sm.smon.speedAttack,sm.smon.speedReplicate,sm.smon.speedRMalloc,sm.smon.speedRBuild,sm.smon.speedSeed);
  if((sm.smon.addedCon + sm.smon.didntAddCon) != 0)
   fprintf(outFile," addConRate,%f",(float)sm.smon.addedCon/(float)(sm.smon.addedCon + sm.smon.didntAddCon));
  if((sm.smon.removedCon + sm.smon.didntRemoveCon) != 0)

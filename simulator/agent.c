@@ -70,6 +70,7 @@ void agent_makeDecision(agent *ag) {
  
 void agent_performDecidedAction(agent *ag) {
  int i;
+ clock_t timer;
  //------ Save signals -------
  for(i = 0; i < AG_SIGNAL_NUMB; i++) { //Perform the signals
   sm.w.locs[ag->xLoc][ag->yLoc].s[i] = (float)(ag->br.outputs[AG_SIGNAL+i])/(float)AG_INT_CONVERSION;
@@ -77,16 +78,17 @@ void agent_performDecidedAction(agent *ag) {
  //------ Save memory --------
  // This can and is done inside the brain because it doesn't affect the others, thus there are no race conditions when doing it in parallel 
  //------ Run decision ------
+ timer = clock();
  switch(ag->br.latestDecision) {//Each of these is it's own function because they're in the tight loop and every comparison statement counts
-  case(AG_M_F):  agent_M_F(ag); break;
-  case(AG_M_L):  agent_M_L(ag); break;
-  case(AG_M_R):  agent_M_R(ag); break;
-  case(AG_T_L):  agent_T_L(ag); break;
-  case(AG_T_R):  agent_T_R(ag); break;
-  case(AG_A_F):  agent_A_F(ag); break;
-  case(AG_R):    agent_R(ag);   break;
-  case(AG_R_F):  agent_R_F(ag); break;
-  case(AG_GROW): agent_GROW(ag); break;
+  case(AG_M_F):  agent_M_F(ag);  sm.smon.speedMove      += clock() - timer; break;
+  case(AG_M_L):  agent_M_L(ag);  sm.smon.speedMove      += clock() - timer; break;
+  case(AG_M_R):  agent_M_R(ag);  sm.smon.speedMove      += clock() - timer; break;
+  case(AG_T_L):  agent_T_L(ag);  sm.smon.speedMove      += clock() - timer; break;
+  case(AG_T_R):  agent_T_R(ag);  sm.smon.speedMove      += clock() - timer; break;
+  case(AG_A_F):  agent_A_F(ag);  sm.smon.speedAttack    += clock() - timer; break;
+  case(AG_R):    agent_R(ag);    sm.smon.speedReplicate += clock() - timer; break;
+  case(AG_R_F):  agent_R_F(ag);  sm.smon.speedReplicate += clock() - timer; break;
+  case(AG_GROW): agent_GROW(ag); sm.smon.speedGrow      += clock() - timer; break;
  }
 }
 void agent_A_F(agent *ag) { //ATTACK
@@ -250,8 +252,6 @@ void agent_R_F(agent* ag) {
 }
 void agent_GROW(agent *ag) {
  int i,j;
- clock_t timer;
- timer = clock();
  #ifndef LESS_METRICS
   simulationMonitor_addGrowsForHash(ag->br.speciesHash,1);
  #endif
@@ -267,7 +267,6 @@ void agent_GROW(agent *ag) {
   }
  }
  ag->energy += AG_GROW_RATE * sm.w.locs[ag->xLoc][ag->yLoc].f;
- sm.smon.speedGrow += clock() - timer;
 }
 //---------------------------------------
 // Creation and reproduction
@@ -326,14 +325,24 @@ agent* agent_mallocAgent_checkAndMake(agent *a) {
  return newA;
 }
 void agent_mallocAgent_fromAsex(agent *a) {
+ clock_t timer;
+ timer = clock();
  agent *newA = agent_mallocAgent_checkAndMake(a);
+ sm.smon.speedRMalloc += clock() - timer;
+ timer = clock();
  if(newA != NULL)
   brain_makeFromAsex(&(newA->br),&(a->br));
+ sm.smon.speedRBuild += clock() - timer;
 }
 void agent_mallocAgent_fromSex(agent *a, agent *b) {
+ clock_t timer;
+ timer = clock();
  agent *newA = agent_mallocAgent_checkAndMake(a);
+ sm.smon.speedRMalloc += clock() - timer;
+ timer = clock();
  if(newA != NULL)
   brain_makeFromSex(&(newA->br),&(a->br),&(b->br));
+ sm.smon.speedRBuild += clock() - timer;
 }
 void agent_print(agent *a) {
  printf("Agent: %i,%i facting:%i, ene:%f, status:%i\n",a->xLoc,a->yLoc,a->facingDirection,a->energy,a->status);

@@ -55,11 +55,6 @@ void simulationManager_runIterations_advanced(int iterations, int seedInterval, 
    timerB = clock(); 
    sm.smon.speed = timerB - timerA;
    timerA = clock();
-   sm.smon.speed = SIM_REPORT_INTERVAL/(sm.smon.speed/(float)CLOCKS_PER_SEC);
-   sm.smon.speedDecision = (sm.smon.speedDecision/(float)CLOCKS_PER_SEC);
-   sm.smon.speedAction = (sm.smon.speedAction/(float)CLOCKS_PER_SEC);
-   sm.smon.speedSeed = (sm.smon.speedSeed/(float)CLOCKS_PER_SEC);
-   sm.smon.speedIntelTests = (sm.smon.speedIntelTests/(float)CLOCKS_PER_SEC);
    simulationMonitor_emitMonitors();
    simulationMonitor_clear(); //Also computes the old median for use in replicating
    world_save(&(sm.w));
