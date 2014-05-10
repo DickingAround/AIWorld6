@@ -60,18 +60,18 @@ void world_makeRandomTerrain(world *w)
    // F  FP FP F   <-- Lower half also has random obstacles
    // __ P  P  __
    if(x >= w->worldSize*0.25 && x < w->worldSize*0.75) { 
-    w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT * 0.1;
+    w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT * 0.01;
    }
    else {
     w->locs[x][y].f = rand() / (float)RAND_MAX * WORLD_FOOD_MULT;
    }
    if(y >= w->worldSize*0.25 && y < w->worldSize*0.75) {
-    w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT * 10;
+    w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT * 100;
    }
    else {
     w->locs[x][y].p = rand() / (float)RAND_MAX * WORLD_PASS_COST_MULT;
    }
-   if(y >= w->worldSize*0.5 && rand()/(float)RAND_MAX < 0.05) {
+   if(y >= w->worldSize*0.5 && rand()/(float)RAND_MAX < WORLD_BARRIER_DENSITY) {
     w->locs[x][y].p = PASS_IMPASSIBLE;
    }
    //Making barriers the split the world

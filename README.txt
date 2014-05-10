@@ -1,7 +1,8 @@
 TODO:
 * Increase the speed
-** Find a way to parallize the action threads (striping??)
-** Just instrument the action phase
+** It's the new agent creation:
+1. save the last place someone died as the next one to use. Or perhaps loop through forever.
+2. Just have a cache  
 
 * Make a way to prove that they're using the signaling system
 * Need to make a terrain and signal loader
@@ -57,6 +58,9 @@ Experiments that have been coded:
 * More communication - NOT IMPLEMENTED
 * Only sexual or only asexual reproduction - NOT IMPLEMENTED (should be just another call to asex) 
 
+Running remotely:
+screen -d bash make
+screen -dmSL main_aiworld bash make
 -----------------------------------
 IMPLEMENTATION
 -----------------------------------
