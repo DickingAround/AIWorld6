@@ -140,12 +140,21 @@ def drawSpeciesTree(window,x,y):
 	for j in range(0,speciesTree.duration):
 		m = float(max(speciesTree.agentCount[(speciesTree.iterationsSeen-j)%speciesTree.duration]))
 		if not m == 0:
+			m = m / 3
 			for i in range(0,speciesTree.width):
 				color = convertCountIndexToRGB(i) #numberToRGB(int((i+0.5)*maxRGBNumber/speciesTree.width)) 
-				tmp = [int(t * (speciesTree.agentCount[(speciesTree.iterationsSeen-j)%speciesTree.duration][i] / m)) for t in color]
+				count = speciesTree.agentCount[(speciesTree.iterationsSeen-j)%speciesTree.duration][i]
+				tmp = [int(t * min(count/m,1.0)) for t in color]
 				r = tmp[0]
 				g = tmp[1]
 				b = tmp[2]
+				if r >= 255:
+					r = 255
+				if g >= 255:
+					g = 255
+				if b >= 255:
+					b = 255
+				
 				colorWithIntensity = (r,g,b)
 				try:
 					window.set_at((x+i,y+j),colorWithIntensity);
