@@ -5,22 +5,21 @@ extern simulationManager sm;
 void simulationManager_thread_runDecisions(simulationManager_thread_control *tc, functiontype decisionFunction);
 void simulationManager_thread_gatherInputs(simulationManager_thread_control *tc);
 void *simulationManager_thread_run(void *ptr) {
- int i;
- double j; 
- j = 0;
+ clock_t timerA; 
  simulationManager_thread_control* tc = (simulationManager_thread_control*)ptr; 
- while(tc->done == 0)
+ while(tc->done == 0) //The done flag is used to kill threads permanently. Otherwise they look for work forever.
  {
-  if(tc->runAgentDecision == 1) {
-   /*for(i = 0; i < 10000000; i++) {
-    j = j / 2 + i;
-   } */
+  if(tc->runAgentDecision == 1) { //The run decision flag indicates there's work to do
+   timerA = clock(); 
    simulationManager_thread_runDecisions(tc,agent_gatherInputs);
+   sm.smon.speedDecisionInputs += clock() - timerA;
+   timerA = clock();
    simulationManager_thread_runDecisions(tc,agent_makeDecision);
+   sm.smon.speedDecisionThink += clock() - timerA;
    tc->runAgentDecision = 0;
   }
   else if (tc->runAgentAction == 1) {
-  ; //For now the main thread will handle all actions
+  ; //For now, until I know how to multi-thread the action turn the main thread will handle all actions
   }
   notifyParentOfWorkCompleted(tc); //This will block 
  }

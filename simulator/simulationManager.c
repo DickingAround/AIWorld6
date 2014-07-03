@@ -105,27 +105,29 @@ void simulationManager_runAgentDecisions() { //Multi-threaded
  simulationManager_signalThreadsToGo(); //Thread is also expected to gather inputs
 }
 void simulationManager_runAgentActions() { //Single threaded
+ agent ag;
  int i;
  int j,k;
  clock_t timerA;
  for(i = 0; i < sm.w.numbAgents && sm.w.agents[i].status != AG_STATUS_END_OF_LIST; i++) {
-  if(sm.w.agents[i].status == AG_STATUS_ALIVE) {
-   if(sm.w.agents[i].energy >= AG_MAX_ENERGY) {
-    sm.w.agents[i].energy = AG_MAX_ENERGY;
+  ag = sm.w.agents[i];
+  if(ag.status == AG_STATUS_ALIVE) {
+   if(ag.energy >= AG_MAX_ENERGY) {
+    ag.energy = AG_MAX_ENERGY;
    } 
-   if(sm.w.agents[i].energy <= 0) {
+   if(ag.energy <= 0) {
     agent_kill(&(sm.w.agents[i]));
     #ifndef LESS_METRICS 
-    simulationMonitor_addKilledByStarvingForHash(sm.w.agents[i].br.speciesHash,1);
+    simulationMonitor_addKilledByStarvingForHash(ag.br.speciesHash,1);
     #endif
    }
    else {
     #ifndef LESS_METRICS
-    simulationMonitor_addDecisionsForHash(sm.w.agents[i].br.speciesHash,1);
-    simulationMonitor_addAveGenerationForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].generation);
-    simulationMonitor_addAveAgeForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].age);
-    simulationMonitor_addAveEnergyForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].energy);
-    simulationMonitor_addAveBrainSizeForHash(sm.w.agents[i].br.speciesHash,sm.w.agents[i].br.brainSize);
+    simulationMonitor_addDecisionsForHash(ag.br.speciesHash,1);
+    simulationMonitor_addAveGenerationForHash(ag.br.speciesHash,ag.generation);
+    simulationMonitor_addAveAgeForHash(ag.br.speciesHash,ag.age);
+    simulationMonitor_addAveEnergyForHash(ag.br.speciesHash,ag.energy);
+    simulationMonitor_addAveBrainSizeForHash(ag.br.speciesHash,ag.br.brainSize);
     //TODO: Remove this if it never fires 
     //if(sm.w.agents[i].generation < 0 || sm.w.agents[i].age < 0 || sm.w.agents[i].energy < 0 || sm.w.agents[i].br.brainSize < 0)
     // printf("Problem with an agent giving metrics.. gen:%lu, age:%lu, ene:%f, brain:%i\n",sm.w.agents[i].generation, sm.w.agents[i].age, sm.w.agents[i].energy, sm.w.agents[i].br.brainSize );
