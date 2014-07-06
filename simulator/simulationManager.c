@@ -131,10 +131,12 @@ void simulationManager_runAgentActions() { //Single threaded
     //TODO: Remove this if it never fires 
     //if(sm.w.agents[i].generation < 0 || sm.w.agents[i].age < 0 || sm.w.agents[i].energy < 0 || sm.w.agents[i].br.brainSize < 0)
     // printf("Problem with an agent giving metrics.. gen:%lu, age:%lu, ene:%f, brain:%i\n",sm.w.agents[i].generation, sm.w.agents[i].age, sm.w.agents[i].energy, sm.w.agents[i].br.brainSize );
-    #endif
     timerA = clock();
+    #endif
     agent_performDecidedAction(&(sm.w.agents[i]));
+    #ifndef LESS_METRICS
     sm.smon.speedAction += clock() - timerA;
+    #endif
    }
   }
  }

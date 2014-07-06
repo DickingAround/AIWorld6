@@ -32,7 +32,7 @@ void runIntelTests();
 void runExperiment();
 int main(int argc, char** argv)
 {
- //srand(138159158); //9);
+ srand(138159158); //9);
  srand(time(NULL));
  quickSigmoid_init();
  fastRand_init(&fr);
@@ -92,7 +92,6 @@ void runTests()
  world *w;
  w = &(sm.w);
  
- /*
  if(threadManager_test() == 1)
    printf("Passed: Thread manager tests\n");
  else
@@ -105,7 +104,7 @@ void runTests()
    printf("Passed: Brain tests\n");
  else
    printf("Failed: Brain tests\n");
- if(agent_test() == 1)
+/* if(agent_test() == 1)
    printf("Passed: Agent tests\n");
  else
    printf("Failed: Agent tests\n");

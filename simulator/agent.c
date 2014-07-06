@@ -12,9 +12,9 @@ void agent_kill(agent *ag) {
  world_deleteAgent(&sm.w, ag); 
  ag->energy = -1;
 }
-
+/*
 //----------------------------
-// Inputs and decision making
+// Inputs and decision making: ORIGIONAL
 //----------------------------
 void agent_gatherInputs(agent *ag) {
  int i,j,k;
@@ -58,6 +58,56 @@ void agent_gatherInputs(agent *ag) {
  // ------------ Memory -------------
  for( i = 0; i < AG_MEM_NUMB; i++) {
   ag->br.inputs[AG_IN_MEM+i] = ag->br.mem[i]; //Memory is always in it's raw, post conversion form
+ }
+}
+*/
+//----------------------------
+// Inputs and decision making: OPTIMIZED
+//----------------------------
+void agent_gatherInputs(agent *ag) {
+ int i,j,k;
+ brain* br;
+ location *tmpLoc;
+ br = &(ag->br);
+ // ---------- Static inputs -----------------------
+ //ag->br.inputs[AG_IN_RAND] = rand() / (float)RAND_MAX;
+ br->inputs[AG_IN_RAND] = fastRand_getRand(&fr); //This isn't thread safe, but it doesn't matter as long as it doesn't break and we get a value
+ br->inputs[AG_IN_CONST] = AG_INT_CONVERSION; //1 * the conversion
+ // ---------- Location based inputs ---------------
+ for(i = 0; i < 5; i++) {
+  for(j = 0; j < 5; j++) {
+   if(ag->facingDirection == DOWN) //Set the location we're talking about
+    tmpLoc = &(sm.w.locs[ag->xLoc-1+i][ag->yLoc-2+j]);
+   if(ag->facingDirection == UP)
+    tmpLoc = &(sm.w.locs[ag->xLoc+1-i][ag->yLoc+2-j]);
+   if(ag->facingDirection == LEFT)
+    tmpLoc = &(sm.w.locs[ag->xLoc-2+j][ag->yLoc+1-i]);
+   if(ag->facingDirection == RIGHT)
+    tmpLoc = &(sm.w.locs[ag->xLoc+2-j][ag->yLoc-1+i]);
+   br->inputs[AG_IN_FOOD+i*5+j]  = tmpLoc->f*AG_INT_CONVERSION;  
+   br->inputs[AG_IN_PASS+i*5+j]  = tmpLoc->p*AG_INT_CONVERSION;  
+   if(tmpLoc->a == NULL) {
+    br->inputs[AG_IN_AGENE+i*5+j] = 0;
+   }
+   else {
+    if(tmpLoc->a->energy/20 > AG_INPUT_MAX)//Special case check to make sure the energy number isn't over the limits of the math
+     br->inputs[AG_IN_AGENE+i*5+j] = AG_INPUT_MAX*AG_INT_CONVERSION;
+    else
+     br->inputs[AG_IN_AGENE+i*5+j] = tmpLoc->a->energy/20*AG_INT_CONVERSION;  //Energy is reduced cuz its a big number ususally
+   }
+   for(k = 0; k < AG_SIGNAL_NUMB; k++) { //Signals
+    #ifndef EXP_NO_COMMUNICATION
+    br->inputs[AG_IN_SIGNAL+AG_INPUT_TYPE_SIZE*k+i*5+j] = tmpLoc->s[k]*AG_INT_CONVERSION;  
+    #endif
+    #ifdef EXP_NO_COMMUNICATION
+    br->inputs[AG_IN_SIGNAL+AG_INPUT_TYPE_SIZE*k+i*5+j] = 0;  
+    #endif
+   }
+  }
+ }
+ // ------------ Memory -------------
+ for( i = 0; i < AG_MEM_NUMB; i++) {
+  br->inputs[AG_IN_MEM+i] = br->mem[i]; //Memory is always in it's raw, post conversion form
  }
 }
 

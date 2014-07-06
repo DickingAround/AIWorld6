@@ -161,21 +161,12 @@ void brain_makeConnLvlFromAsex(unsigned char *in, unsigned char inMax, unsigned 
  brain_fillRestWithNoOps(in,out,connMax,i);
 }
 void brain_considerMutatingConn(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, int i) { //Make sure the connections don't exceed the max
-// if(out[i] != 9  && out[i] != 10 && out[i] != 11) { //delete a connection? (TODO: Remove this, we're not moding a conn if it's a signaling one)
  float oldValue = mult[i]; 
  if(rand() / (float)RAND_MAX < mutationRate) { //+x%?
   mult[i] = (float)(1.0+mutationRate*(rand()/(float)RAND_MAX)+AG_MUTATION_POSITIVE_PRESSURE_WEIGHT)*mult[i]; 
-  /*if(out[i] == 9 || out[i] == 10 || out[i] == 11) { //delete a connection? (TODO: Remove this, we're not moding a conn if it's a signaling one)
-   if(oldValue*oldValue > mult[i]*mult[i])
-    printf("The old value was higher and I was supposed to add %f, %f, %f, %f\n",oldValue, mult[i], mutationRate,(float)(1.0+mutationRate+AG_MUTATION_POSITIVE_PRESSURE_WEIGHT));
-  }*/
  }
  if(rand() / (float)RAND_MAX < mutationRate) { //-x%?
   mult[i] = (float)(1.0-mutationRate*(rand()/(float)RAND_MAX)+AG_MUTATION_POSITIVE_PRESSURE_WEIGHT)*mult[i]; 
-  /*if(out[i] == 9 || out[i] == 10 || out[i] == 11) { //delete a connection? (TODO: Remove this, we're not moding a conn if it's a signaling one)
-   if(oldValue*oldValue > mult[i]*mult[i])
-    printf("The old value was higher and I was supposed to subtract %f, %f, %f, %f\n",oldValue, mult[i], mutationRate,(float)(1.0-mutationRate+AG_MUTATION_POSITIVE_PRESSURE_WEIGHT));
-  }*/
  }
  if(mult[i] > AG_MULT_MAX) {
   mult[i] = AG_MULT_MAX; 
@@ -183,7 +174,6 @@ void brain_considerMutatingConn(unsigned char *in, unsigned char inMax, unsigned
  if(mult[i] < AG_MULT_MIN) {
   mult[i] = AG_MULT_MIN; 
  }
- //}
 }
 
 int brain_considerRemovingAConn(unsigned char *in, unsigned char inMax, unsigned char *out, unsigned char outMax, float *mult, float mutationRate, int connMax, int i) {
@@ -459,7 +449,7 @@ int brain_test_checkIfNormalish(brain *b) {
 }
 int brain_test_asex() {
  brain b, newB;
- int i;
+ int i,j;
  brain_makeFromScratch(&b);
  //Test that a zero mutation brain is still the same
  b.mutationRate = 0;
@@ -480,9 +470,10 @@ int brain_test_asex() {
  }
  //Test that a high mutation brain does change
  brain_makeFromScratch(&b);
- b.mutationRate = 10;
+ b.mutationRate = 1.0;
  brain_makeFromAsex(&newB,&b);
  for(i = 0; i < AG_CONNS_L1 && newB.inL1[i] != AG_CONN_END; i++) {
+  //printf("How does the brain look? %i - %i,%i\t%i,%i\t%f,%f\n",i,newB.inL2[i],b.inL2[i],newB.outL2[i],b.outL2[i],newB.multL2[i],b.multL2[i]);
   if(newB.multL1[i] == b.multL1[i]) {
    printf("Brain: Asexual replication test failed on L1 not changing in entry %i\n",i);
    return 0; 
@@ -494,8 +485,15 @@ int brain_test_asex() {
    return 0; 
   }
  } 
- i = AG_CONNS_INIT;
- if(newB.inL2[i] == AG_CONN_END) {
+ j = 0;
+ for(i = 0; i < AG_CONNS_L2 && newB.inL2[i] != AG_CONN_END; i++) {
+  //It should have modified a connection before getting to the end, but it will also delete one and in doing so write over the one it deleted. So look for a connection that's inputs and outputs (not just weights) changed.
+  if(newB.inL2[i] != b.inL2[i]) {
+   j = 1;
+   break;
+  }
+ }
+ if(j == 0) { //Didn't find a connection that changed
   printf("Brain: Asexual replication test failed to make another connection when it should have.\n");
   printf("%i,%i\t%i,%i\t%f,%f\n",newB.inL2[i],b.inL2[i],newB.outL2[i],b.outL2[i],newB.multL2[i],b.multL2[i]);
   return 0; 
