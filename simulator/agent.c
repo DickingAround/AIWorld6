@@ -121,10 +121,12 @@ void agent_makeDecision(agent *ag) {
 void agent_performDecidedAction(agent *ag) {
  int i;
  clock_t timer;
+ timer = clock();
  //------ Save signals -------
  for(i = 0; i < AG_SIGNAL_NUMB; i++) { //Perform the signals
   sm.w.locs[ag->xLoc][ag->yLoc].s[i] = (float)(ag->br.outputs[AG_SIGNAL+i])/(float)AG_INT_CONVERSION;
  }
+ sm.smon.speedSignals += clock() - timer;
  //------ Save memory --------
  // This can and is done inside the brain because it doesn't affect the others, thus there are no race conditions when doing it in parallel 
  //------ Run decision ------

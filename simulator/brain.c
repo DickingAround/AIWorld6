@@ -433,6 +433,7 @@ int brain_test_checkIfNormalish(brain *b) {
  }
  brain_makeDecision(b);
  for(i = 0; i < AG_OUTPUTS_DECISIONS; i++) {
+  printf("Brain: Output found was %i\t%f\n",i,b->outputs[i]/(float)AG_INT_CONVERSION);
   average += b->outputs[i]/(float)AG_INT_CONVERSION;
  }
  if(average /(float)AG_OUTPUTS_DECISIONS > 0.5 || average /(float)AG_OUTPUTS_DECISIONS < -0.5) {
