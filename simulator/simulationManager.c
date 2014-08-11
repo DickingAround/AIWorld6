@@ -109,8 +109,10 @@ void simulationManager_runAgentActions() { //Single threaded
  int i;
  int j,k;
  clock_t timerA;
+ //world w = sm.w;
  for(i = 0; i < sm.w.numbAgents && sm.w.agents[i].status != AG_STATUS_END_OF_LIST; i++) {
-  ag = sm.w.agents[i];
+  timerA = clock();
+  ag = sm.w.agents[i]; 
   if(ag.status == AG_STATUS_ALIVE) {
    if(ag.energy >= AG_MAX_ENERGY) {
     ag.energy = AG_MAX_ENERGY;
@@ -120,6 +122,7 @@ void simulationManager_runAgentActions() { //Single threaded
     #ifndef LESS_METRICS 
     simulationMonitor_addKilledByStarvingForHash(ag.br.speciesHash,1);
     #endif
+    sm.smon.speedActionKillMax += clock() - timerA;
    }
    else {
     simulationMonitor_addDecisionsForHash(ag.br.speciesHash,1);
@@ -129,6 +132,7 @@ void simulationManager_runAgentActions() { //Single threaded
     simulationMonitor_addAveEnergyForHash(ag.br.speciesHash,ag.energy);
     simulationMonitor_addAveBrainSizeForHash(ag.br.speciesHash,ag.br.brainSize);
     #endif 
+    sm.smon.speedActionKillMax += clock() - timerA;
     //TODO: Remove this if it never fires 
     //if(sm.w.agents[i].generation < 0 || sm.w.agents[i].age < 0 || sm.w.agents[i].energy < 0 || sm.w.agents[i].br.brainSize < 0)
     // printf("Problem with an agent giving metrics.. gen:%lu, age:%lu, ene:%f, brain:%i\n",sm.w.agents[i].generation, sm.w.agents[i].age, sm.w.agents[i].energy, sm.w.agents[i].br.brainSize );
