@@ -20,8 +20,8 @@
 #define SIM_SEED_DURATION 200000
 #define SIM_SEED_ENERGY 20
 #define SIM_SEED_SIZE 30
-#define LESS_METRICS //Define this to remove all per-agent metrics and accelerate the simulation
-
+#define LESS_METRICS //Define this to remove most per-agent metrics and accelerate the simulation
+#define LESS_TIMERS //Define this to remove most timers 
 //Special simulation functions
 
 //Otherwise the attack is a function of how much evergy an agent already has

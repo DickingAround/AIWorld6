@@ -109,7 +109,7 @@ void simulationManager_runAgentActions() { //Single threaded
  int i;
  int j,k;
  clock_t timerA;
- //world w = sm.w;
+ world *w = &(sm.w);
  for(i = 0; i < sm.w.numbAgents && sm.w.agents[i].status != AG_STATUS_END_OF_LIST; i++) {
   timerA = clock();
   ag = sm.w.agents[i]; 

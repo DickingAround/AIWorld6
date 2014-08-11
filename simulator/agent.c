@@ -120,27 +120,67 @@ void agent_makeDecision(agent *ag) {
  
 void agent_performDecidedAction(agent *ag) {
  int i;
+ #ifndef LESS_TIMERS
  clock_t timer;
  timer = clock();
+ #endif
  //------ Save signals -------
  for(i = 0; i < AG_SIGNAL_NUMB; i++) { //Perform the signals
   sm.w.locs[ag->xLoc][ag->yLoc].s[i] = (float)(ag->br.outputs[AG_SIGNAL+i])/(float)AG_INT_CONVERSION;
  }
+ #ifndef LESS_TIMERS
  sm.smon.speedSignals += clock() - timer;
  //------ Save memory --------
  // This can and is done inside the brain because it doesn't affect the others, thus there are no race conditions when doing it in parallel 
  //------ Run decision ------
  timer = clock();
+ #endif
  switch(ag->br.latestDecision) {//Each of these is it's own function because they're in the tight loop and every comparison statement counts
-  case(AG_M_F):  agent_M_F(ag);  sm.smon.speedMove      += clock() - timer; break;
-  case(AG_M_L):  agent_M_L(ag);  sm.smon.speedMove      += clock() - timer; break;
-  case(AG_M_R):  agent_M_R(ag);  sm.smon.speedMove      += clock() - timer; break;
-  case(AG_T_L):  agent_T_L(ag);  sm.smon.speedMove      += clock() - timer; break;
-  case(AG_T_R):  agent_T_R(ag);  sm.smon.speedMove      += clock() - timer; break;
-  case(AG_A_F):  agent_A_F(ag);  sm.smon.speedAttack    += clock() - timer; break;
-  case(AG_R):    agent_R(ag);    sm.smon.speedReplicate += clock() - timer; break;
-  case(AG_R_F):  agent_R_F(ag);  sm.smon.speedReplicate += clock() - timer; break;
-  case(AG_GROW): agent_GROW(ag); sm.smon.speedGrow      += clock() - timer; break;
+  case(AG_M_F):  agent_M_F(ag);  
+   #ifndef LESS_TIMERS
+   sm.smon.speedMove      += clock() - timer;
+   #endif
+   break;
+  case(AG_M_L):  agent_M_L(ag);
+   #ifndef LESS_TIMERS
+   sm.smon.speedMove      += clock() - timer; 
+   #endif
+   break;
+  case(AG_M_R):  agent_M_R(ag); 
+   #ifndef LESS_TIMERS
+   sm.smon.speedMove      += clock() - timer; 
+   #endif
+   break;
+  case(AG_T_L):  agent_T_L(ag); 
+   #ifndef LESS_TIMERS
+   sm.smon.speedMove      += clock() - timer; 
+   #endif
+   break;
+  case(AG_T_R):  agent_T_R(ag); 
+   #ifndef LESS_TIMERS
+   sm.smon.speedMove      += clock() - timer; 
+   #endif
+   break;
+  case(AG_A_F):  agent_A_F(ag);  
+   #ifndef LESS_TIMERS
+   sm.smon.speedAttack    += clock() - timer; 
+   #endif
+   break;
+  case(AG_R):    agent_R(ag);   
+   #ifndef LESS_TIMERS
+   sm.smon.speedReplicate += clock() - timer;
+   #endif
+   break;
+  case(AG_R_F):  agent_R_F(ag); 
+   #ifndef LESS_TIMERS
+   sm.smon.speedReplicate += clock() - timer; 
+   #endif
+   break;
+  case(AG_GROW): agent_GROW(ag); 
+   #ifndef LESS_TIMERS
+   sm.smon.speedGrow      += clock() - timer; 
+   #endif
+   break;
  }
 }
 void agent_A_F(agent *ag) { //ATTACK
@@ -377,24 +417,36 @@ agent* agent_mallocAgent_checkAndMake(agent *a) {
  return newA;
 }
 void agent_mallocAgent_fromAsex(agent *a) {
+ #ifndef LESS_TIMERS
  clock_t timer;
  timer = clock();
+ #endif
  agent *newA = agent_mallocAgent_checkAndMake(a);
+ #ifndef LESS_TIMERS
  sm.smon.speedRMalloc += clock() - timer;
  timer = clock();
+ #endif
  if(newA != NULL)
   brain_makeFromAsex(&(newA->br),&(a->br));
+ #ifndef LESS_TIMERS
  sm.smon.speedRBuild += clock() - timer;
+ #endif
 }
 void agent_mallocAgent_fromSex(agent *a, agent *b) {
+ #ifndef LESS_TIMERS
  clock_t timer;
  timer = clock();
+ #endif
  agent *newA = agent_mallocAgent_checkAndMake(a);
+ #ifndef LESS_TIMERS
  sm.smon.speedRMalloc += clock() - timer;
  timer = clock();
+ #endif
  if(newA != NULL)
   brain_makeFromSex(&(newA->br),&(a->br),&(b->br));
+ #ifndef LESS_TIMERS
  sm.smon.speedRBuild += clock() - timer;
+ #endif
 }
 void agent_print(agent *a) {
  printf("Agent: %i,%i facting:%i, ene:%f, status:%i\n",a->xLoc,a->yLoc,a->facingDirection,a->energy,a->status);
