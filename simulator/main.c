@@ -113,9 +113,9 @@ void runTests()
  else
    printf("Failed: World tests\n");*/
  if(simulationMonitor_test() == 1)
-   printf("Passed: IntelTest tests\n");
+   printf("Passed: Simulation Monitor tests (should not have passed)\n");
  else
-   printf("Failed: IntelTest tests\n");
+   printf("Failed: Simulation Monitor tests (not implemented)\n");
 }
 void error_handler(int sig) {
   void *array[40];

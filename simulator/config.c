@@ -12,9 +12,10 @@
 #define SIM_SEED_SIZE 30
 */
 //Simulation settings
-#define NUMBER_OF_THREADS 4
+#define NUMBER_OF_THREADS 3
 #define SIM_ITERATIONS 10000000
 #define SIM_REPORT_INTERVAL 10000
+#define SIM_SAVE_TIME_INTERVAL 3600
 #define SIM_INTEL_TEST_INTERVAL 100000
 #define SIM_SEED_INTERVAL 100
 #define SIM_SEED_DURATION 200000
@@ -31,7 +32,7 @@
 #define SIM_COMPLEX_WORLD_TERRAIN 
 
 //World settings
-#define AG_TOTAL_ALLOWED 100000
+#define AG_TOTAL_ALLOWED 5000
 #define AG_MAX_BUFFER_NEEDED 50000
 #define AG_STATUS_ALIVE 1
 #define AG_STATUS_DEAD 0
@@ -40,7 +41,7 @@
 #define PASS_IMPASSIBLE_INIT -1
 #define PASS_IMPASSIBLE -1
 #define WORLD_BORDER 3
-#define WORLD_SIZE 400
+#define WORLD_SIZE 100
 //Agent settings
 #define AG_MUTATION_RATE 0.10
 #define AG_MUTATION_POSITIVE_PRESSURE_CONN 0.00 //How much do we want more connections? Allow them to decline (which happens at zero)

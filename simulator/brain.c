@@ -428,6 +428,7 @@ int brain_test_seeding() {
 int brain_test_checkIfNormalish(brain *b) {
  int i;
  float average;
+ average = 0;
  for(i = 0; i < AG_INPUTS; i++) {
   b->inputs[i] = i; 
  }

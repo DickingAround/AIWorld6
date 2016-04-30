@@ -46,9 +46,10 @@ void simulationManager_runIterations_basic(int iterations) {
  }
 }
 void simulationManager_runIterations_advanced(int iterations, int seedInterval, int seedDuration, int intelTestInterval) {
- clock_t timerA, timerB, timerDecision, timerAction, timerSeed, timerIntel;
+ clock_t timerA, timerB, timerDecision, timerAction, timerSeed, timerIntel, timerSave;
  sm.i = 0;
  timerA = clock();
+ timerSave = clock();
  for(; sm.i < iterations; sm.i++) {
   if(sm.i % SIM_REPORT_INTERVAL == 0) {
    printf("Sim has performed %lu intervals\n",sm.i);
@@ -57,7 +58,10 @@ void simulationManager_runIterations_advanced(int iterations, int seedInterval, 
    timerA = clock();
    simulationMonitor_emitMonitors();
    simulationMonitor_clear(); //Also computes the old median for use in replicating
+  }
+  if(clock() - timerSave > SIM_SAVE_TIME_INTERVAL) {
    world_save(&(sm.w));
+   timerSave = clock();
   } 
   if(sm.i % seedInterval == 0 && sm.i < seedDuration && sm.seedWorld == 1) {
    timerSeed = clock(); 
