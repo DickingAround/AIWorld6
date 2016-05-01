@@ -135,6 +135,7 @@ def drawSpeciesStats(window,x,y,thisSpeciesStats,positionNumber):
 	statList.append(['sexReplications',thisSpeciesStats.getSexReps()/thisSpeciesStats.getDecisions()])
 	statList.append(['speciesHashMin',thisSpeciesStats.hashMin])
 	statList.append(['speciesHashMax',thisSpeciesStats.hashMax])
+	statList.append(['killedByAge',thisSpeciesStats.hashMax])
 	fontSize = 14
         font = pygame.font.Font(None,fontSize)
 	i = 0

@@ -113,6 +113,11 @@ void simulationMonitor_addAveAgeForHash(int hash, int x){
 
 void simulationMonitor_addAveGenerationForHash(int hash, int x){
  sm.smon.perHashMetrics[hash][17] += x;}
+
+
+
+void simulationMonitor_addKilledByAgeForHash(int hash, int x){
+ sm.smon.perHashMetrics[hash][18] += x;}
 //unsigned long long simulationMonitor_getAveGenerationForSpecies(int species){
 // return sm.smon.perSpeciesMetrics[species][17];}
 

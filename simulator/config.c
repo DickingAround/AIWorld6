@@ -15,7 +15,7 @@
 #define NUMBER_OF_THREADS 3
 #define SIM_ITERATIONS 10000000
 #define SIM_REPORT_INTERVAL 10000
-#define SIM_SAVE_TIME_INTERVAL 3600
+#define SIM_SAVE_TIME_INTERVAL 1800 //30mins
 #define SIM_INTEL_TEST_INTERVAL 100000
 #define SIM_SEED_INTERVAL 100
 #define SIM_SEED_DURATION 200000
@@ -32,7 +32,7 @@
 #define SIM_COMPLEX_WORLD_TERRAIN 
 
 //World settings
-#define AG_TOTAL_ALLOWED 5000
+#define AG_TOTAL_ALLOWED 1000
 #define AG_MAX_BUFFER_NEEDED 50000
 #define AG_STATUS_ALIVE 1
 #define AG_STATUS_DEAD 0
@@ -42,7 +42,10 @@
 #define PASS_IMPASSIBLE -1
 #define WORLD_BORDER 3
 #define WORLD_SIZE 100
+
 //Agent settings
+#define AG_ENABLE_AGE_LIMIT
+#define AG_MAX_AGE 100000
 #define AG_MUTATION_RATE 0.10
 #define AG_MUTATION_POSITIVE_PRESSURE_CONN 0.00 //How much do we want more connections? Allow them to decline (which happens at zero)
 #define AG_MUTATION_POSITIVE_PRESSURE_WEIGHT 0.01 //How much do we want higher weights?
@@ -106,8 +109,8 @@
 #define AG_OUTPUTS_INIT 9 //Don't need to use memory or signal
 #define AG_MID_NODES 100
 #define AG_CONNS_INIT 50
-#define AG_CONNS_L1 500
-#define AG_CONNS_L2 500
+#define AG_CONNS_L1 2000
+#define AG_CONNS_L2 2000
 #define AG_CONN_END 255 //AG_CONN_END must be larger than the number of inputs or outputs, maxes at 255 for u-char
 //Species detection systems
 //The color spectrum is 0 to 1530 (not including it)
@@ -123,7 +126,7 @@
 //#define SPECIES_DETECTION_POPULATION_MIN 1
 //#define SPECIES_DETECTION_POPULATION_DIF_MIN 6
 //#define SPECIES_TYPES_MAX 1000
-#define SPECIES_NUMBER_OF_METRICS 18
+#define SPECIES_NUMBER_OF_METRICS 19
 //Values for making decisions
 #define AG_INT_CONVERSION 0xFFFF
 #define UP 0

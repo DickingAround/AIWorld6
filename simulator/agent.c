@@ -367,7 +367,8 @@ agent* agent_mallocAgent(int x, int y, float e, unsigned long gen) {
  agent *a; 
  a = world_mallocAgent(&(sm.w),x,y); 
  if(a == NULL) {
-  printf("Didn't get an agent, returning NULL\n");
+  //This is now an expected case, many agents, sparse world
+  //printf("Didn't get an agent, returning NULL\n");
   return NULL;
  }
  a->energy = e;

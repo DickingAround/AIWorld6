@@ -76,6 +76,8 @@ void simulationMonitor_addFailedGrowsForHash(int hash, int x);
 void simulationMonitor_addKilledBySeedingForHash(int hash, int x);
 //unsigned long long simulationMonitor_getKilledBySeedingForSpecies(int species);
 
+void simulationMonitor_addKilledByAgeForHash(int hash, int x);
+
 void simulationMonitor_addKilledByAttacksForHash(int hash, int x);
 //unsigned long long simulationMonitor_getKilledByAttacksForSpecies(int species);
 

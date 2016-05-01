@@ -59,7 +59,7 @@ void simulationManager_runIterations_advanced(int iterations, int seedInterval, 
    simulationMonitor_emitMonitors();
    simulationMonitor_clear(); //Also computes the old median for use in replicating
   }
-  if(clock() - timerSave > SIM_SAVE_TIME_INTERVAL) {
+  if((clock() - timerSave)/CLOCKS_PER_SEC > SIM_SAVE_TIME_INTERVAL) {
    world_save(&(sm.w));
    timerSave = clock();
   } 
@@ -122,7 +122,18 @@ void simulationManager_runAgentActions() { //Single threaded
   if(ag.status == AG_STATUS_ALIVE) {
    if(ag.energy >= AG_MAX_ENERGY) {
     ag.energy = AG_MAX_ENERGY;
-   } 
+   }
+   #ifdef AG_ENABLE_AGE_LIMIT
+   if(ag.age > AG_MAX_AGE) {
+    agent_kill(&(sm.w.agents[i]));
+    #ifndef LESS_METRICS 
+    simulationMonitor_addKilledByAgeForHash(ag.br.speciesHash,1);
+    #endif
+    #ifndef LESS_TIMERS
+    sm.smon.speedActionKillMax += clock() - timerA;
+    #endif 
+   }
+   #endif 
    if(ag.energy <= 0) {
     agent_kill(&(sm.w.agents[i]));
     #ifndef LESS_METRICS 

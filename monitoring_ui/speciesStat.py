@@ -51,3 +51,5 @@ class speciesStat:
 		return self.statList[16]	
 	def getAveGen(self):
 		return self.statList[17]	
+	def getKilledByAge(self):
+		return self.statList[18]	
