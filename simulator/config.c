@@ -21,8 +21,8 @@
 #define SIM_SEED_DURATION 200000
 #define SIM_SEED_ENERGY 20
 #define SIM_SEED_SIZE 30
-#define LESS_METRICS //Define this to remove most per-agent metrics and accelerate the simulation
-#define LESS_TIMERS //Define this to remove most timers 
+//#define LESS_METRICS //Define this to remove most per-agent metrics and accelerate the simulation
+//#define LESS_TIMERS //Define this to remove most timers 
 //Special simulation functions
 
 //Otherwise the attack is a function of how much evergy an agent already has
@@ -139,13 +139,13 @@
 #define FAST_RAND_LEN 10000
 #define FAST_RAND_ARRAY_LEN 10100
 
-#define INTELTESTS_FILE_LOC "./data_from_simulations/intelTests.txt" 
-#define MONITOR_FILE_LOC "./data_from_simulations/monitor.txt"
-#define SPECIES_STATS_FILE_LOC "./data_from_simulations/speciesStats.txt"
-#define SPECIES_HIST_FILE_LOC "./data_from_simulations/speciesHist.txt"
+#define INTELTESTS_FILE_LOC "/media/user/RaidDrive/CharliesStuff/production/AIWorld6/data_from_simulations/intelTests.txt" 
+#define MONITOR_FILE_LOC "/media/user/RaidDrive/CharliesStuff/production/AIWorld6/data_from_simulations/monitor.txt"
+#define SPECIES_STATS_FILE_LOC "/media/user/RaidDrive/CharliesStuff/production/AIWorld6/data_from_simulations/speciesStats.txt"
+#define SPECIES_HIST_FILE_LOC "/media/user/RaidDrive/CharliesStuff/production/AIWorld6/data_from_simulations/speciesHist.txt"
 //The world files switch off between A and B in order to maintain consistency in case we kill the process in the middle of saving. We only have to do this for things we might load from.
-#define WORLD_AGENTS_FILE_LOC_A "./data_from_simulations/world_agents_a.txt"
-#define WORLD_AGENTS_FILE_LOC_B "./data_from_simulations/world_agents_b.txt"
-#define WORLD_LOCS_FILE_LOC_A "./data_from_simulations/world_locs_a.txt"
-#define WORLD_LOCS_FILE_LOC_B "./data_from_simulations/world_locs_b.txt"
-#define WORLD_WHICH_FILE_TO_USE_FILE_LOC "./data_from_simulations/world_whichFileToUse.txt"
+#define WORLD_AGENTS_FILE_LOC_A "/media/user/RaidDrive/CharliesStuff/production/AIWorld6/data_from_simulations/world_agents_a.txt"
+#define WORLD_AGENTS_FILE_LOC_B "/media/user/RaidDrive/CharliesStuff/production/AIWorld6/data_from_simulations/world_agents_b.txt"
+#define WORLD_LOCS_FILE_LOC_A "/media/user/RaidDrive/CharliesStuff/production/AIWorld6/data_from_simulations/world_locs_a.txt"
+#define WORLD_LOCS_FILE_LOC_B "/media/user/RaidDrive/CharliesStuff/production/AIWorld6/data_from_simulations/world_locs_b.txt"
+#define WORLD_WHICH_FILE_TO_USE_FILE_LOC "/media/user/RaidDrive/CharliesStuff/production/AIWorld6/data_from_simulations/world_whichFileToUse.txt"
